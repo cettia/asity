@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.cettia.platform</groupId>
+        <artifactId>cettia-platform-parent</artifactId>
+        <version>1.0.0-Alpha1-SNAPSHOT</version>
+    </parent>
+    <artifactId>cettia-platform-test</artifactId>
+    <name>Cettia Platform/Test</name>
+    <dependencies>
+        <dependency>
+            <groupId>io.cettia.platform</groupId>
+            <artifactId>cettia-platform-action</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.cettia.platform</groupId>
+            <artifactId>cettia-platform-http</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.cettia.platform</groupId>
+            <artifactId>cettia-platform-websocket</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-client</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-client</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+</project>
