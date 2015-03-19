@@ -8,7 +8,7 @@
     <groupId>io.cettia.platform</groupId>
     <artifactId>cettia-platform-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0-Alpha1</version>
+    <version>1.0.0-Alpha2-SNAPSHOT</version>
     <name>Cettia Platform</name>
     <url>http://cettia.io/projects/cettia-java-platform</url>
     <inceptionYear>2015</inceptionYear>
@@ -36,7 +36,7 @@
         <url>https://github.com/cettia/cettia-java-platform</url>
         <connection>scm:git:git@github.com:cettia/cettia-java-platform.git</connection>
         <developerConnection>scm:git:git@github.com:cettia/cettia-java-platform.git</developerConnection>
-        <tag>1.0.0-Alpha1</tag>
+        <tag>HEAD</tag>
     </scm>
     <developers>
         <developer>

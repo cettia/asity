@@ -3,7 +3,7 @@
     <parent>
         <groupId>io.cettia.platform</groupId>
         <artifactId>cettia-platform-parent</artifactId>
-        <version>1.0.0-Alpha1</version>
+        <version>1.0.0-Alpha2-SNAPSHOT</version>
     </parent>
     <artifactId>cettia-platform-bridge-vertx2</artifactId>
     <name>Cettia Platform/Bridge/Vert.x 2</name>
