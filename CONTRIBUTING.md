@@ -2,7 +2,7 @@ GitHub Issue Tracker is used to track bug reports, feature requests and pull req
 
 Before opening a new issue, please check if the same issue already has been reported. For a complicated bug, please make sure to specify the followings. The less informations you provided, the lower priority it will get.
 
-* Cettia version
+* Asity version
 * What you were trying to
 * Expected output
 * Bare minimum steps, code or working demo to reproduce

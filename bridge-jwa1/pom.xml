@@ -1,24 +1,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>io.cettia.platform</groupId>
-        <artifactId>cettia-platform-parent</artifactId>
+        <groupId>io.cettia.asity</groupId>
+        <artifactId>asity-parent</artifactId>
         <version>1.0.0-Alpha2-SNAPSHOT</version>
     </parent>
-    <artifactId>cettia-platform-bridge-jwa1</artifactId>
-    <name>Cettia Platform/Bridge/Java WebSocket API 1</name>
+    <artifactId>asity-bridge-jwa1</artifactId>
+    <name>Asity/Bridge/Java WebSocket API 1</name>
     <dependencies>
         <dependency>
-            <groupId>io.cettia.platform</groupId>
-            <artifactId>cettia-platform-action</artifactId>
+            <groupId>io.cettia.asity</groupId>
+            <artifactId>asity-action</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.cettia.platform</groupId>
-            <artifactId>cettia-platform-websocket</artifactId>
+            <groupId>io.cettia.asity</groupId>
+            <artifactId>asity-websocket</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.cettia.platform</groupId>
-            <artifactId>cettia-platform-test</artifactId>
+            <groupId>io.cettia.asity</groupId>
+            <artifactId>asity-test</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

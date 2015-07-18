@@ -5,11 +5,11 @@
         <artifactId>oss-parent</artifactId>
         <version>7</version>
     </parent>
-    <groupId>io.cettia.platform</groupId>
-    <artifactId>cettia-platform-parent</artifactId>
+    <groupId>io.cettia.asity</groupId>
+    <artifactId>asity-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-Alpha2-SNAPSHOT</version>
-    <name>Cettia Platform</name>
+    <name>Asity</name>
     <url>http://cettia.io/projects/cettia-java-platform</url>
     <inceptionYear>2015</inceptionYear>
     <modules>
@@ -33,9 +33,9 @@
         </license>
     </licenses>
     <scm>
-        <url>https://github.com/cettia/cettia-java-platform</url>
-        <connection>scm:git:git@github.com:cettia/cettia-java-platform.git</connection>
-        <developerConnection>scm:git:git@github.com:cettia/cettia-java-platform.git</developerConnection>
+        <url>https://github.com/cettia/asity</url>
+        <connection>scm:git:git@github.com:cettia/asity.git</connection>
+        <developerConnection>scm:git:git@github.com:cettia/asity.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
     <developers>
@@ -47,7 +47,7 @@
     </developers>
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/cettia/cettia-java-platform/issues</url>
+        <url>https://github.com/cettia/asity/issues</url>
     </issueManagement>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -62,23 +62,23 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>io.cettia.platform</groupId>
-                <artifactId>cettia-platform-action</artifactId>
+                <groupId>io.cettia.asity</groupId>
+                <artifactId>asity-action</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.cettia.platform</groupId>
-                <artifactId>cettia-platform-http</artifactId>
+                <groupId>io.cettia.asity</groupId>
+                <artifactId>asity-http</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.cettia.platform</groupId>
-                <artifactId>cettia-platform-websocket</artifactId>
+                <groupId>io.cettia.asity</groupId>
+                <artifactId>asity-websocket</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.cettia.platform</groupId>
-                <artifactId>cettia-platform-test</artifactId>
+                <groupId>io.cettia.asity</groupId>
+                <artifactId>asity-test</artifactId>
                 <version>${project.version}</version>
                 <scope>test</scope>
             </dependency>
@@ -202,7 +202,7 @@
                 <version>2.10.1</version>
                 <configuration>
                     <bottom><![CDATA[Copyright ${project.inceptionYear}, <a href="https://cettia.io">The Cettia Project</a>]]></bottom>
-                    <packagesheader>cettia</packagesheader>
+                    <packagesheader>asity</packagesheader>
                     <links>
                         <link>http://docs.oracle.com/javaee/7/api/</link>
                         <link>http://atmosphere.github.io/atmosphere/apidocs/</link>
