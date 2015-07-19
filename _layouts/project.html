@@ -1,0 +1,14 @@
+---
+layout: default
+---
+
+{% assign array = {{page.path | split:"/"}} %}
+{% capture topbarURL %}{{array[0]}}/topbar.html{% endcapture %}
+{% include {{topbarURL}} %}
+<div class="row">
+    <div class="large-12 columns">
+        <div id="content">
+        {{ content}}
+        </div>
+    </div>
+</div>

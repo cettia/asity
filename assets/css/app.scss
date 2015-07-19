@@ -1,0 +1,57 @@
+---
+---
+
+@import "normalize";
+@import "settings";
+@import "foundation";
+@import url("//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic,700italic");
+
+code {
+  font-size: 0.875rem;
+}
+h1, h2, h3, h4, h5, h6 {
+  code {
+    font-size: 0.875em;
+  }
+}
+a {
+  code {
+    color: inherit;
+  }
+}
+pre {
+  background-color: $code-background-color;
+  border-color: $code-border-color;
+  border-style: $code-border-style;
+  border-width: $code-border-size;
+  margin-bottom: $paragraph-margin-bottom;
+
+  code {
+    border: none;
+    display: block;
+    padding: 0.375rem 0.625rem;
+  }
+}
+.version-dropdown code {
+  border: inherit;
+  background: inherit;
+  font-size: inherit;
+}
+.copyright {
+  color: #777;
+  p, ul {
+    font-size: 0.875rem;
+  }
+}
+article {
+  .information {
+    color: #888;
+    .post-author {
+      height: 24px;
+      display: inline-block;
+    }
+  }
+}
+#content, .content {
+  margin-top: 2rem;
+}

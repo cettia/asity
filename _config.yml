@@ -1,0 +1,13 @@
+name: Asity
+description: Asity, TODO the real-time web application framework.
+url: http://asity.cettia.io/
+relative_permalinks: false
+markdown: redcarpet
+redcarpet:
+  extensions:
+    - hard_wrap
+    - no_intra_emphasis
+    - autolink
+    - strikethrough
+    - fenced_code_blocks
+    - tables
