@@ -6,7 +6,7 @@ title: Asity
 <h1>Asity</h1>
 <h4 class="subheader">Build I/O framework-agnostic applications on the JVM</h4>
 
-Asity is a lightweight abstraction layer for I/O frameworks which is designed to build applications that can run on any full-stack framework, any micro framework or any raw server for the JVM.
+Asity is a lightweight abstraction layer for I/O frameworks which is designed to build applications that can run on any full-stack framework, any micro framework or any raw server on the JVM.
 
 Atmosphere 2, Grizzly 2, Java WebSocket API 1, Netty 4, Play 2, Servlet 3, Vert.x 2 are now supported.
 
@@ -39,57 +39,33 @@ public class EchoHandler {
     // Asity supports Java 7+
     // For better readability, public final fields and lambda expressions in Java 8 are used here
     public final Action<ServerHttpExchange> httpAction = (ServerHttpExchange http) -> {
-        // Get the request header, content-type, and set it to the response header, content-type 
+        // Copies the content-type header of the request to the response
         http.setHeader("content-type", http.header("content-type"));
-        // When a chunk is read from the request body
-        http.onchunk((ByteBuffer bytes) -> {
-            // Writes a read chunk to the response body
-            http.write(bytes);
-        });
-        // When the request is fully read
-        http.onend((Void $) -> {
-            System.out.println("The end of request");
-            // Ends the response
-            http.end();
-        });
+        // When a chunk is read from the request body, writes it to the response body
+        http.onchunk((ByteBuffer bytes) -> http.write(bytes));
+        // When the request is fully read, ends the response
+        http.onend((Void $) -> http.end());
         // Reads the request body as binary to circumvent encoding issue
         http.readAsBinary();
-        // When the response is fully written
-        http.onfinish((Void $) -> {
-            System.out.println("The end of response");
-        });
-        // When some error happens in the request-response exchange
-        http.onerror((Throwable t) -> {
-            t.printStackTrace();
-        });
-        // When the underlying connection is terminated
-        http.onclose((Void $) -> {
-            System.out.println("The end of request-response exchange");
-        });
+        // When the response is fully written and ends,
+        http.onfinish((Void $) -> System.out.println("on finish"));
+        // When some error happens in the request-response exchange,
+        http.onerror((Throwable t) -> t.printStackTrace());
+        // When the underlying connection is terminated,
+        http.onclose((Void $) -> System.out.println("on close"));
     };
     public final Action<ServerWebSocket> websocketAction = (ServerWebSocket ws) -> {
-        // When a text frame is arrived
-        ws.ontext((String data) -> {
-            // Sends it back
-            ws.send(data);
-        });
-        // When a binary frame is arrived
-        ws.onbinary((ByteBuffer bytes) -> {
-            // Sends it back
-            ws.send(bytes);
-        });
-        // When some error happens in the connection
-        ws.onerror((Throwable t) -> {
-            t.printStackTrace();
-        });
-        // When the connection is closed for any reason
-        ws.onclose((Void $) -> {
-            System.out.println("The end of connection");
-        });
+        // When a text frame is arrived, sends it back
+        ws.ontext((String data) -> ws.send(data));
+        // When a binary frame is arrived, sends it back
+        ws.onbinary((ByteBuffer bytes) -> ws.send(bytes));
+        // When some error happens in the connection,
+        ws.onerror((Throwable t) -> t.printStackTrace());
+        // When the connection is closed for any reason,
+        ws.onclose((Void $) -> System.out.println("on close"));
     };
 }
 ```
-
 Now to run this handler on the specific platform, we need to wrap HTTP resources and WebSocket resources provided by that specific platform into `ServerHttpExchange` and `ServerWebSocket` and feed them into an instance of `EchoHandler`. A module playing such roles is called bridge and various bridges are provided which matches well with each platform's usage.
 
 For example, to run `EchoHandler` on an implementation of Servlet 3 and Java WebSocket API 1 such as Jetty 9 and Tomcat 8, you need Servlet 3 bridge and Java WebSocket API 1 bridge. Let's add the following bridge dependencies.
