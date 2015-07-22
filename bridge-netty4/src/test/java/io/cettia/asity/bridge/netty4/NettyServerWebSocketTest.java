@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 The Cettia Project
+ * Copyright 2015 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,9 @@ import java.net.URI;
 
 import org.junit.Test;
 
+/**
+ * @author Donghwan Kim
+ */
 public class NettyServerWebSocketTest extends ServerWebSocketTest {
 
     EventLoopGroup bossGroup;

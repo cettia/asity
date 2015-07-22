@@ -201,7 +201,6 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.10.1</version>
                 <configuration>
-                    <bottom><![CDATA[Copyright ${project.inceptionYear}, <a href="https://cettia.io">The Cettia Project</a>]]></bottom>
                     <packagesheader>asity</packagesheader>
                     <links>
                         <link>http://docs.oracle.com/javaee/7/api/</link>
