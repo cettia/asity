@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
     <version>1.0.0-Beta1-SNAPSHOT</version>
     <name>Asity</name>
-    <url>http://cettia.io/projects/cettia-java-platform</url>
+    <url>http://asity.cettia.io</url>
     <inceptionYear>2015</inceptionYear>
     <modules>
         <module>action</module>
