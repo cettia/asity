@@ -26,7 +26,7 @@ title: Asity Reference
 ---
 
 ## Installation
-Asity requires Java 7 and is distributed through Maven Central. TODO note about Lambda expressions in Java 8
+Asity requires Java 7 and is distributed through Maven Central.
 
 * **To run application on platform**
 
