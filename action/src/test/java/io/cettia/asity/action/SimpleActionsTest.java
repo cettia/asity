@@ -22,7 +22,7 @@ import io.cettia.asity.action.Actions.Options;
 /**
  * @author Donghwan Kim
  */
-public class SimpleActionsTest extends ActionsTest {
+public class SimpleActionsTest extends ActionsTestBase {
 
     @Override
     protected <T> Actions<T> createActions() {

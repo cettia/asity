@@ -19,44 +19,25 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import io.cettia.asity.action.Action;
-import io.cettia.asity.action.Actions;
-import io.cettia.asity.action.VoidAction;
 import io.cettia.asity.action.Actions.Options;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
 
 /**
  * @author Donghwan Kim
  */
-public abstract class ActionsTest {
+public abstract class ActionsTestBase {
 
     @Test
-    public void options() {
-        Actions.Options options = new Actions.Options().unique(true);
-        Actions<Void> actions = createActions(options);
-        final AtomicInteger count = new AtomicInteger();
-        VoidAction action = new VoidAction() {
-            @Override
-            public void on() {
-                assertThat(count.getAndIncrement(), is(0));
-            }
-        };
-        options.unique(false);
-        actions.add(action).add(action).fire();
-    }
-
-    @Test
-    public void add() {
-        // default, unique, memory
+    public void testAdd() {
         Actions<String> actions = null;
         MemoryAction<String> action = null;
 
+        // default
         actions = createActions();
         action = new MemoryAction<>();
         actions.add(action).add(action).fire("A");
@@ -64,6 +45,7 @@ public abstract class ActionsTest {
         actions.add(action);
         assertThat(action.memory(), contains("A", "A"));
 
+        // unique
         actions = createActions(new Actions.Options().unique(true));
         action = new MemoryAction<>();
         actions.add(action).add(action).fire("A");
@@ -71,6 +53,7 @@ public abstract class ActionsTest {
         actions.add(action);
         assertThat(action.memory(), contains("A"));
 
+        // memory
         actions = createActions(new Actions.Options().memory(true));
         action = new MemoryAction<>();
         actions.add(action).fire("A");
@@ -80,11 +63,11 @@ public abstract class ActionsTest {
     }
 
     @Test
-    public void fire() {
-        // default, once
+    public void testFire() {
         Actions<String> actions = null;
         MemoryAction<String> action = null;
 
+        // default
         actions = createActions();
         action = new MemoryAction<>();
         actions.add(action);
@@ -97,6 +80,7 @@ public abstract class ActionsTest {
         assertThat(actions.fired(), is(true));
         assertThat(action.memory(), contains("H", "A"));
 
+        // once
         actions = createActions(new Actions.Options().once(true));
         action = new MemoryAction<>();
         actions.add(action);
@@ -111,10 +95,11 @@ public abstract class ActionsTest {
     }
 
     @Test
-    public void disable() {
-        Actions<Void> actions = createActions();
+    public void testDisable() {
+        Actions<Void> actions = null;
         Action<Void> action = new EmptyAction<>();
-
+        
+        actions = createActions();
         actions.add(action);
         assertThat(actions.disabled(), is(false));
         actions.disable();
@@ -138,12 +123,12 @@ public abstract class ActionsTest {
                 actions2.disable();
             }
         })
-                .add(action2).fire("A");
+        .add(action2).fire("A");
         assertThat(action2.memory(), contains("A"));
     }
 
     @Test
-    public void emptyMethod() {
+    public void testEmpty() {
         Actions<Void> actions = createActions();
 
         assertThat(actions.has(), is(false));
@@ -154,7 +139,7 @@ public abstract class ActionsTest {
     }
 
     @Test
-    public void remove() {
+    public void testRemove() {
         Actions<Void> actions = createActions();
         Action<Void> actionA = new EmptyAction<>();
         Action<Void> actionB = new EmptyAction<>();
@@ -168,7 +153,7 @@ public abstract class ActionsTest {
     }
 
     @Test
-    public void has() {
+    public void testHas() {
         Actions<Void> actions = createActions();
         Action<Void> actionA = new EmptyAction<>();
         Action<Void> actionB = new EmptyAction<>();
@@ -186,13 +171,12 @@ public abstract class ActionsTest {
 
     protected abstract <T> Actions<T> createActions(Options options);
 
-    static class EmptyAction<A> implements Action<A> {
+    private static class EmptyAction<A> implements Action<A> {
         @Override
-        public void on(A object) {
-        }
+        public void on(A object) {}
     }
 
-    static class MemoryAction<T> implements Action<T> {
+    private static class MemoryAction<T> implements Action<T> {
         private List<T> list = new ArrayList<>();
 
         @Override
