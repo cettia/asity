@@ -90,7 +90,7 @@ public abstract class ServerHttpExchangeTest {
     protected abstract void stopServer() throws Exception;
 
     @Test
-    public void uri() {
+    public void testURI() {
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
@@ -102,7 +102,7 @@ public abstract class ServerHttpExchangeTest {
     }
 
     @Test
-    public void method() {
+    public void testMethod() {
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
@@ -120,7 +120,7 @@ public abstract class ServerHttpExchangeTest {
     }
 
     @Test
-    public void header() {
+    public void testHeader() {
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
@@ -142,7 +142,7 @@ public abstract class ServerHttpExchangeTest {
     }
 
     @Test
-    public void read_text() {
+    public void testReadText() {
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
@@ -173,7 +173,7 @@ public abstract class ServerHttpExchangeTest {
     }
 
     @Test
-    public void readAsText() {
+    public void testReadAsText() {
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
@@ -204,7 +204,7 @@ public abstract class ServerHttpExchangeTest {
     }
 
     @Test
-    public void readAsText_charset() {
+    public void testReadAsTextWithCharset() {
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
@@ -235,7 +235,7 @@ public abstract class ServerHttpExchangeTest {
     }
 
     @Test
-    public void read_binary() {
+    public void testReadBinary() {
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
@@ -268,7 +268,7 @@ public abstract class ServerHttpExchangeTest {
     }
 
     @Test
-    public void readAsBinary() {
+    public void testReadAsBinary() {
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
@@ -301,7 +301,7 @@ public abstract class ServerHttpExchangeTest {
     }
 
     @Test
-    public void onbody_with_text() {
+    public void testOnbodyWithText() {
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
@@ -325,7 +325,7 @@ public abstract class ServerHttpExchangeTest {
     }
 
     @Test
-    public void onbody_with_binary() {
+    public void testOnbodyWithBinary() {
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
@@ -349,7 +349,7 @@ public abstract class ServerHttpExchangeTest {
     }
 
     @Test
-    public void setStatus() {
+    public void testSetStatus() {
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
@@ -367,7 +367,7 @@ public abstract class ServerHttpExchangeTest {
     }
 
     @Test
-    public void setHeader() {
+    public void testSetHeader() {
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
@@ -388,7 +388,7 @@ public abstract class ServerHttpExchangeTest {
     }
 
     @Test
-    public void write_text() {
+    public void testWriteText() {
         final CountDownLatch latch = new CountDownLatch(1);
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
@@ -427,7 +427,7 @@ public abstract class ServerHttpExchangeTest {
     }
 
     @Test
-    public void write_text_charset() {
+    public void testWriteTextWithCharset() {
         final CountDownLatch latch = new CountDownLatch(1);
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
@@ -464,7 +464,7 @@ public abstract class ServerHttpExchangeTest {
     }
 
     @Test
-    public void write_binary() {
+    public void testWriteBinary() {
         final CountDownLatch latch = new CountDownLatch(1);
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
@@ -505,7 +505,7 @@ public abstract class ServerHttpExchangeTest {
     }
 
     @Test
-    public void end() {
+    public void testEnd() {
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
@@ -522,7 +522,7 @@ public abstract class ServerHttpExchangeTest {
     }
 
     @Test
-    public void onclose() {
+    public void testOnclose() {
         performer.onserver(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
@@ -542,11 +542,6 @@ public abstract class ServerHttpExchangeTest {
         })
         .send();
     }
-
-    // TODO
-    // Now errorAction depends on the underlying platform so that it's not easy
-    // to test. However, with the consistent exception hierarchy, it might be
-    // possible in the future.
 
     protected class Performer {
 

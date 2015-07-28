@@ -88,6 +88,6 @@ public class ServletServerHttpExchangeTest extends ServerHttpExchangeTest {
     @Override
     @Test
     @Ignore
-    public void onclose() {}
+    public void testOnclose() {}
 
 }

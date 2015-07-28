@@ -81,7 +81,7 @@ public abstract class ServerWebSocketTest {
     protected abstract void stopServer() throws Exception;
 
     @Test
-    public void uri() {
+    public void testURI() {
         performer.onserver(new Action<ServerWebSocket>() {
             @Override
             public void on(ServerWebSocket ws) {
@@ -93,7 +93,7 @@ public abstract class ServerWebSocketTest {
     }
 
     @Test
-    public void close() {
+    public void testClose() {
         performer.clientListener(new WebSocketAdapter() {
             @Override
             public void onWebSocketClose(int statusCode, String reason) {
@@ -110,7 +110,7 @@ public abstract class ServerWebSocketTest {
     }
 
     @Test
-    public void close_idempotent() {
+    public void testIdempotentClose() {
         performer.clientListener(new WebSocketAdapter() {
             @Override
             public void onWebSocketClose(int statusCode, String reason) {
@@ -128,7 +128,7 @@ public abstract class ServerWebSocketTest {
     }
 
     @Test
-    public void send_text() {
+    public void testSendTextFrame() {
         performer.clientListener(new WebSocketAdapter() {
             @Override
             public void onWebSocketText(String message) {
@@ -146,7 +146,7 @@ public abstract class ServerWebSocketTest {
     }
 
     @Test
-    public void send_binary() {
+    public void testSendBinaryFrame() {
         performer.clientListener(new WebSocketAdapter() {
             @Override
             public void onWebSocketBinary(byte[] payload, int offset, int len) {
@@ -164,7 +164,7 @@ public abstract class ServerWebSocketTest {
     }
 
     @Test
-    public void send_text_and_binary() {
+    public void testSendTextFrameAndBinaryFrameTogether() {
         performer.clientListener(new WebSocketAdapter() {
             boolean done;
             @Override
@@ -196,7 +196,7 @@ public abstract class ServerWebSocketTest {
     }
 
     @Test
-    public void ontext() {
+    public void testOntext() {
         performer.clientListener(new WebSocketAdapter() {
             @Override
             public void onWebSocketConnect(Session sess) {
@@ -229,7 +229,7 @@ public abstract class ServerWebSocketTest {
     }
 
     @Test
-    public void onbinary() {
+    public void testOnbinary() {
         performer.clientListener(new WebSocketAdapter() {
             @Override
             public void onWebSocketConnect(Session sess) {
@@ -262,7 +262,7 @@ public abstract class ServerWebSocketTest {
     }
 
     @Test
-    public void ontext_and_onbinary() {
+    public void testOntextAndOnbinary() {
         performer.clientListener(new WebSocketAdapter() {
             @Override
             public void onWebSocketConnect(Session sess) {
@@ -322,7 +322,7 @@ public abstract class ServerWebSocketTest {
     }
 
     @Test
-    public void onclose_by_server() {
+    public void testOncloseByServer() {
         performer.onserver(new Action<ServerWebSocket>() {
             @Override
             public void on(final ServerWebSocket ws) {
@@ -339,7 +339,7 @@ public abstract class ServerWebSocketTest {
     }
 
     @Test
-    public void onclose_by_client() {
+    public void testOncloseByClient() {
         performer.clientListener(new WebSocketAdapter() {
             @Override
             public void onWebSocketConnect(Session sess) {
@@ -359,11 +359,6 @@ public abstract class ServerWebSocketTest {
         })
         .connect();
     }
-
-    // TODO
-    // Now errorAction depends on the underlying platform so that it's not easy
-    // to test. However, with the consistent exception hierarchy, it might be
-    // possible in the future.
 
     protected class Performer {
 
