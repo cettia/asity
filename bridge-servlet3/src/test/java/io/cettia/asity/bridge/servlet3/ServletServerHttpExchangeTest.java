@@ -15,12 +15,9 @@
  */
 package io.cettia.asity.bridge.servlet3;
 
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertThat;
 import io.cettia.asity.action.Action;
-import io.cettia.asity.bridge.servlet3.AsityServlet;
 import io.cettia.asity.http.ServerHttpExchange;
-import io.cettia.asity.test.ServerHttpExchangeTest;
+import io.cettia.asity.test.ServerHttpExchangeTestBase;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
@@ -30,6 +27,7 @@ import javax.servlet.ServletRegistration;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.jetty.client.api.Response;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -39,12 +37,12 @@ import org.junit.Test;
 /**
  * @author Donghwan Kim
  */
-public class ServletServerHttpExchangeTest extends ServerHttpExchangeTest {
+public class ServletServerHttpExchangeTest extends ServerHttpExchangeTestBase {
 
-    Server server;
+    private Server server;
 
     @Override
-    protected void startServer() throws Exception {
+    protected void startServer(int port, final Action<ServerHttpExchange> requestAction) throws Exception {
         server = new Server();
         ServerConnector connector = new ServerConnector(server);
         connector.setPort(port);
@@ -54,10 +52,10 @@ public class ServletServerHttpExchangeTest extends ServerHttpExchangeTest {
             @Override
             public void contextInitialized(ServletContextEvent event) {
                 ServletContext context = event.getServletContext();
-                Servlet servlet = new AsityServlet().onhttp(performer.serverAction());
+                Servlet servlet = new AsityServlet().onhttp(requestAction);
                 ServletRegistration.Dynamic reg = context.addServlet(AsityServlet.class.getName(), servlet);
                 reg.setAsyncSupported(true);
-                reg.addMapping("/test");
+                reg.addMapping(TEST_URI);
             }
 
             @Override
@@ -73,16 +71,17 @@ public class ServletServerHttpExchangeTest extends ServerHttpExchangeTest {
     }
 
     @Test
-    public void unwrap() {
-        performer.onserver(new Action<ServerHttpExchange>() {
+    public void unwrap() throws Throwable {
+        requestAction(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
-                assertThat(http.unwrap(HttpServletRequest.class), instanceOf(HttpServletRequest.class));
-                assertThat(http.unwrap(HttpServletResponse.class), instanceOf(HttpServletResponse.class));
-                performer.start();
+                assertTrue(http.unwrap(HttpServletRequest.class) instanceof HttpServletRequest);
+                assertTrue(http.unwrap(HttpServletResponse.class) instanceof HttpServletResponse);
+                resume();
             }
-        })
-        .send();
+        });
+        client.newRequest(uri()).send(new Response.Listener.Adapter());
+        await();
     }
 
     @Override

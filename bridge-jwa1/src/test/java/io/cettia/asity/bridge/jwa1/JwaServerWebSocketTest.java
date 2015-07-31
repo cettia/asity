@@ -15,12 +15,11 @@
  */
 package io.cettia.asity.bridge.jwa1;
 
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertThat;
 import io.cettia.asity.action.Action;
-import io.cettia.asity.bridge.jwa1.AsityServerEndpoint;
-import io.cettia.asity.test.ServerWebSocketTest;
+import io.cettia.asity.test.ServerWebSocketTestBase;
 import io.cettia.asity.websocket.ServerWebSocket;
+
+import java.net.URI;
 
 import javax.websocket.Session;
 import javax.websocket.server.ServerContainer;
@@ -30,18 +29,19 @@ import javax.websocket.server.ServerEndpointConfig.Configurator;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
 import org.junit.Test;
 
 /**
  * @author Donghwan Kim
  */
-public class JwaServerWebSocketTest extends ServerWebSocketTest {
+public class JwaServerWebSocketTest extends ServerWebSocketTestBase {
 
     Server server;
 
     @Override
-    protected void startServer() throws Exception {
+    protected void startServer(int port, final Action<ServerWebSocket> websocketAction) throws Exception {
         server = new Server();
         ServerConnector connector = new ServerConnector(server);
         connector.setPort(port);
@@ -49,11 +49,11 @@ public class JwaServerWebSocketTest extends ServerWebSocketTest {
         ServletContextHandler handler = new ServletContextHandler();
         server.setHandler(handler);
         ServerContainer container = WebSocketServerContainerInitializer.configureContext(handler);
-        ServerEndpointConfig config = ServerEndpointConfig.Builder.create(AsityServerEndpoint.class, "/test")
+        ServerEndpointConfig config = ServerEndpointConfig.Builder.create(AsityServerEndpoint.class, TEST_URI)
         .configurator(new Configurator() {
             @Override
             public <T> T getEndpointInstance(Class<T> endpointClass) throws InstantiationException {
-                return endpointClass.cast(new AsityServerEndpoint().onwebsocket(performer.serverAction()));
+                return endpointClass.cast(new AsityServerEndpoint().onwebsocket(websocketAction));
             }
         })
         .build();
@@ -62,15 +62,16 @@ public class JwaServerWebSocketTest extends ServerWebSocketTest {
     }
 
     @Test
-    public void unwrap() {
-        performer.onserver(new Action<ServerWebSocket>() {
+    public void unwrap() throws Throwable {
+        websocketAction(new Action<ServerWebSocket>() {
             @Override
             public void on(ServerWebSocket ws) {
-                assertThat(ws.unwrap(Session.class), instanceOf(Session.class));
-                performer.start();
+                assertTrue(ws.unwrap(Session.class) instanceof Session);
+                resume();
             }
-        })
-        .connect();
+        });
+        client.connect(new WebSocketAdapter(), URI.create(uri()));
+        await();
     }
 
     @Override

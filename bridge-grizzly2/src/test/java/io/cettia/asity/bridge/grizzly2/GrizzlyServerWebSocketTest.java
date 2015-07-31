@@ -15,33 +15,52 @@
  */
 package io.cettia.asity.bridge.grizzly2;
 
-import io.cettia.asity.bridge.grizzly2.AsityWebSocketApplication;
-import io.cettia.asity.test.ServerWebSocketTest;
+import io.cettia.asity.action.Action;
+import io.cettia.asity.test.ServerWebSocketTestBase;
+import io.cettia.asity.websocket.ServerWebSocket;
 
+import java.net.URI;
+
+import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.NetworkListener;
+import org.glassfish.grizzly.websockets.WebSocket;
 import org.glassfish.grizzly.websockets.WebSocketAddOn;
 import org.glassfish.grizzly.websockets.WebSocketEngine;
+import org.junit.Test;
 
 /**
  * @author Donghwan Kim
  */
-public class GrizzlyServerWebSocketTest extends ServerWebSocketTest {
+public class GrizzlyServerWebSocketTest extends ServerWebSocketTestBase {
 
     HttpServer server;
 
     @Override
-    protected void startServer() throws Exception {
+    protected void startServer(int port, Action<ServerWebSocket> websocketAction) throws Exception {
         server = HttpServer.createSimpleServer(null, port);
         NetworkListener listener = server.getListener("grizzly");
         listener.registerAddOn(new WebSocketAddOn());
-        WebSocketEngine.getEngine().register("", "/test", new AsityWebSocketApplication().onwebsocket(performer.serverAction()));
+        WebSocketEngine.getEngine().register("", TEST_URI, new AsityWebSocketApplication().onwebsocket(websocketAction));
         server.start();
     }
 
     @Override
     protected void stopServer() throws Exception {
         server.shutdownNow();
+    }
+
+    @Test
+    public void unwrap() throws Throwable {
+        websocketAction(new Action<ServerWebSocket>() {
+            @Override
+            public void on(ServerWebSocket ws) {
+                assertTrue(ws.unwrap(WebSocket.class) instanceof WebSocket);
+                resume();
+            }
+        });
+        client.connect(new WebSocketAdapter(), URI.create(uri()));
+        await();
     }
 
 }

@@ -15,12 +15,9 @@
  */
 package io.cettia.asity.bridge.netty4;
 
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertThat;
 import io.cettia.asity.action.Action;
-import io.cettia.asity.bridge.netty4.AsityServerCodec;
 import io.cettia.asity.http.ServerHttpExchange;
-import io.cettia.asity.test.ServerHttpExchangeTest;
+import io.cettia.asity.test.ServerHttpExchangeTestBase;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
@@ -38,19 +35,20 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.net.URI;
 
+import org.eclipse.jetty.client.api.Response;
 import org.junit.Test;
 
 /**
  * @author Donghwan Kim
  */
-public class NettyServerHttpExchangeTest extends ServerHttpExchangeTest {
+public class NettyServerHttpExchangeTest extends ServerHttpExchangeTestBase {
 
-    EventLoopGroup bossGroup;
-    EventLoopGroup workerGroup;
-    ChannelGroup channels;
+    private EventLoopGroup bossGroup;
+    private EventLoopGroup workerGroup;
+    private ChannelGroup channels;
 
     @Override
-    protected void startServer() {
+    protected void startServer(int port, final Action<ServerHttpExchange> requestAction) throws Exception {
         bossGroup = new NioEventLoopGroup();
         workerGroup = new NioEventLoopGroup();
         channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
@@ -70,10 +68,10 @@ public class NettyServerHttpExchangeTest extends ServerHttpExchangeTest {
                 .addLast(new AsityServerCodec() {
                     @Override
                     protected boolean accept(HttpRequest req) {
-                        return URI.create(req.getUri()).getPath().equals("/test");
+                        return URI.create(req.getUri()).getPath().equals(TEST_URI);
                     }
                 }
-                .onhttp(performer.serverAction()));
+                .onhttp(requestAction));
             }
         });
         channels.add(bootstrap.bind(port).channel());
@@ -87,17 +85,18 @@ public class NettyServerHttpExchangeTest extends ServerHttpExchangeTest {
     }
 
     @Test
-    public void unwrap() {
-        performer.onserver(new Action<ServerHttpExchange>() {
+    public void unwrap() throws Throwable {
+        requestAction(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
-                assertThat(http.unwrap(ChannelHandlerContext.class), instanceOf(ChannelHandlerContext.class));
-                assertThat(http.unwrap(HttpRequest.class), instanceOf(HttpRequest.class));
-                assertThat(http.unwrap(HttpResponse.class), instanceOf(HttpResponse.class));
-                performer.start();
+                assertTrue(http.unwrap(ChannelHandlerContext.class) instanceof ChannelHandlerContext);
+                assertTrue(http.unwrap(HttpRequest.class) instanceof HttpRequest);
+                assertTrue(http.unwrap(HttpResponse.class) instanceof HttpResponse);
+                resume();
             }
-        })
-        .send();
+        });
+        client.newRequest(uri()).send(new Response.Listener.Adapter());
+        await();
     }
 
 }

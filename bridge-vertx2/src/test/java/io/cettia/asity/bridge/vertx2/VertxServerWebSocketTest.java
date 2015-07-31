@@ -15,13 +15,13 @@
  */
 package io.cettia.asity.bridge.vertx2;
 
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertThat;
 import io.cettia.asity.action.Action;
-import io.cettia.asity.bridge.vertx2.AsityWebSocketHandler;
-import io.cettia.asity.test.ServerWebSocketTest;
+import io.cettia.asity.test.ServerWebSocketTestBase;
 import io.cettia.asity.websocket.ServerWebSocket;
 
+import java.net.URI;
+
+import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.junit.Test;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.VertxFactory;
@@ -30,18 +30,18 @@ import org.vertx.java.core.http.HttpServer;
 /**
  * @author Donghwan Kim
  */
-public class VertxServerWebSocketTest extends ServerWebSocketTest {
+public class VertxServerWebSocketTest extends ServerWebSocketTestBase {
 
-    HttpServer server;
+    private HttpServer server;
 
     @Override
-    protected void startServer() {
+    protected void startServer(int port, Action<ServerWebSocket> websocketAction) {
         server = VertxFactory.newVertx().createHttpServer();
-        final AsityWebSocketHandler websocketHandler = new AsityWebSocketHandler().onwebsocket(performer.serverAction());
+        final AsityWebSocketHandler websocketHandler = new AsityWebSocketHandler().onwebsocket(websocketAction);
         server.websocketHandler(new Handler<org.vertx.java.core.http.ServerWebSocket>() {
             @Override
             public void handle(org.vertx.java.core.http.ServerWebSocket socket) {
-                if (socket.path().equals("/test")) {
+                if (socket.path().equals(TEST_URI)) {
                     websocketHandler.handle(socket);
                 }
             }
@@ -55,16 +55,16 @@ public class VertxServerWebSocketTest extends ServerWebSocketTest {
     }
 
     @Test
-    public void unwrap() {
-        performer.onserver(new Action<ServerWebSocket>() {
+    public void unwrap() throws Throwable {
+        websocketAction(new Action<ServerWebSocket>() {
             @Override
             public void on(ServerWebSocket ws) {
-                assertThat(ws.unwrap(org.vertx.java.core.http.ServerWebSocket.class),
-                        instanceOf(org.vertx.java.core.http.ServerWebSocket.class));
-                performer.start();
+                assertTrue(ws.unwrap(org.vertx.java.core.http.ServerWebSocket.class) instanceof org.vertx.java.core.http.ServerWebSocket);
+                resume();
             }
-        })
-        .connect();
+        });
+        client.connect(new WebSocketAdapter(), URI.create(uri()));
+        await();
     }
 
 }

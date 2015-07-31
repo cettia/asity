@@ -15,11 +15,8 @@
  */
 package io.cettia.asity.bridge.netty4;
 
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertThat;
 import io.cettia.asity.action.Action;
-import io.cettia.asity.bridge.netty4.AsityServerCodec;
-import io.cettia.asity.test.ServerWebSocketTest;
+import io.cettia.asity.test.ServerWebSocketTestBase;
 import io.cettia.asity.websocket.ServerWebSocket;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandlerContext;
@@ -39,19 +36,20 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.net.URI;
 
+import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.junit.Test;
 
 /**
  * @author Donghwan Kim
  */
-public class NettyServerWebSocketTest extends ServerWebSocketTest {
+public class NettyServerWebSocketTest extends ServerWebSocketTestBase {
 
     EventLoopGroup bossGroup;
     EventLoopGroup workerGroup;
     ChannelGroup channels;
 
     @Override
-    protected void startServer() {
+    protected void startServer(int port, final Action<ServerWebSocket> websocketAction) {
         bossGroup = new NioEventLoopGroup();
         workerGroup = new NioEventLoopGroup();
         channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
@@ -71,10 +69,10 @@ public class NettyServerWebSocketTest extends ServerWebSocketTest {
                 .addLast(new AsityServerCodec() {
                     @Override
                     protected boolean accept(HttpRequest req) {
-                        return URI.create(req.getUri()).getPath().equals("/test");
+                        return URI.create(req.getUri()).getPath().equals(TEST_URI);
                     }
                 }
-                .onwebsocket(performer.serverAction()));
+                .onwebsocket(websocketAction));
             }
         });
         channels.add(bootstrap.bind(port).channel());
@@ -88,17 +86,18 @@ public class NettyServerWebSocketTest extends ServerWebSocketTest {
     }
 
     @Test
-    public void unwrap() {
-        performer.onserver(new Action<ServerWebSocket>() {
+    public void unwrap() throws Throwable {
+        websocketAction(new Action<ServerWebSocket>() {
             @Override
             public void on(ServerWebSocket ws) {
-                assertThat(ws.unwrap(ChannelHandlerContext.class), instanceOf(ChannelHandlerContext.class));
-                assertThat(ws.unwrap(WebSocketServerHandshaker.class), instanceOf(WebSocketServerHandshaker.class));
-                assertThat(ws.unwrap(FullHttpRequest.class), instanceOf(FullHttpRequest.class));
-                performer.start();
+                assertTrue(ws.unwrap(ChannelHandlerContext.class) instanceof ChannelHandlerContext);
+                assertTrue(ws.unwrap(WebSocketServerHandshaker.class) instanceof WebSocketServerHandshaker);
+                assertTrue(ws.unwrap(FullHttpRequest.class) instanceof FullHttpRequest);
+                resume();
             }
-        })
-        .connect();
+        });
+        client.connect(new WebSocketAdapter(), URI.create(uri()));
+        await();
     }
 
 }

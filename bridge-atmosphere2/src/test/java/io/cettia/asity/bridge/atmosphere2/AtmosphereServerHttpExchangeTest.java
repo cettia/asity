@@ -15,12 +15,9 @@
  */
 package io.cettia.asity.bridge.atmosphere2;
 
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertThat;
 import io.cettia.asity.action.Action;
-import io.cettia.asity.bridge.atmosphere2.AsityAtmosphereServlet;
 import io.cettia.asity.http.ServerHttpExchange;
-import io.cettia.asity.test.ServerHttpExchangeTest;
+import io.cettia.asity.test.ServerHttpExchangeTestBase;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
@@ -30,6 +27,7 @@ import javax.servlet.ServletRegistration;
 
 import org.atmosphere.cpr.ApplicationConfig;
 import org.atmosphere.cpr.AtmosphereResource;
+import org.eclipse.jetty.client.api.Response;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -39,12 +37,12 @@ import org.junit.Test;
 /**
  * @author Donghwan Kim
  */
-public class AtmosphereServerHttpExchangeTest extends ServerHttpExchangeTest {
+public class AtmosphereServerHttpExchangeTest extends ServerHttpExchangeTestBase {
 
-    Server server;
+    private Server server;
 
     @Override
-    protected void startServer() throws Exception {
+    protected void startServer(int port, final Action<ServerHttpExchange> requestAction) throws Exception {
         server = new Server();
         ServerConnector connector = new ServerConnector(server);
         connector.setPort(port);
@@ -54,11 +52,11 @@ public class AtmosphereServerHttpExchangeTest extends ServerHttpExchangeTest {
             @Override
             public void contextInitialized(ServletContextEvent event) {
                 ServletContext context = event.getServletContext();
-                Servlet servlet = new AsityAtmosphereServlet().onhttp(performer.serverAction());
+                Servlet servlet = new AsityAtmosphereServlet().onhttp(requestAction);
                 ServletRegistration.Dynamic reg = context.addServlet(AsityAtmosphereServlet.class.getName(), servlet);
                 reg.setAsyncSupported(true);
                 reg.setInitParameter(ApplicationConfig.DISABLE_ATMOSPHEREINTERCEPTOR, Boolean.TRUE.toString());
-                reg.addMapping("/test");
+                reg.addMapping(TEST_URI);
             }
 
             @Override
@@ -74,15 +72,16 @@ public class AtmosphereServerHttpExchangeTest extends ServerHttpExchangeTest {
     }
 
     @Test
-    public void unwrap() {
-        performer.onserver(new Action<ServerHttpExchange>() {
+    public void unwrap() throws Throwable {
+        requestAction(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
-                assertThat(http.unwrap(AtmosphereResource.class), instanceOf(AtmosphereResource.class));
-                performer.start();
+                assertTrue(http.unwrap(AtmosphereResource.class) instanceof AtmosphereResource);
+                resume();
             }
-        })
-        .send();
+        });
+        client.newRequest(uri()).send(new Response.Listener.Adapter());
+        await();
     }
 
     @Override

@@ -15,30 +15,48 @@
  */
 package io.cettia.asity.bridge.grizzly2;
 
-import io.cettia.asity.bridge.grizzly2.AsityHttpHandler;
-import io.cettia.asity.test.ServerHttpExchangeTest;
+import io.cettia.asity.action.Action;
+import io.cettia.asity.http.ServerHttpExchange;
+import io.cettia.asity.test.ServerHttpExchangeTestBase;
 
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.grizzly.http.server.Request;
+import org.glassfish.grizzly.http.server.Response;
 import org.glassfish.grizzly.http.server.ServerConfiguration;
+import org.junit.Test;
 
 /**
  * @author Donghwan Kim
  */
-public class GrizzlyServerHttpExchangeTest extends ServerHttpExchangeTest {
+public class GrizzlyServerHttpExchangeTest extends ServerHttpExchangeTestBase {
     
-    HttpServer server;
+    private HttpServer server;
 
     @Override
-    protected void startServer() throws Exception {
+    protected void startServer(int port, Action<ServerHttpExchange> requestAction) throws Exception {
         server = HttpServer.createSimpleServer(null, port);
         ServerConfiguration config = server.getServerConfiguration();
-        config.addHttpHandler(new AsityHttpHandler().onhttp(performer.serverAction()), "/test");
+        config.addHttpHandler(new AsityHttpHandler().onhttp(requestAction), TEST_URI);
         server.start();
     }
 
     @Override
     protected void stopServer() throws Exception {
         server.shutdownNow();
+    }
+
+    @Test
+    public void unwrap() throws Throwable {
+        requestAction(new Action<ServerHttpExchange>() {
+            @Override
+            public void on(ServerHttpExchange http) {
+                assertTrue(http.unwrap(Request.class) instanceof Request);
+                assertTrue(http.unwrap(Response.class) instanceof Response);
+                resume();
+            }
+        });
+        client.newRequest(uri()).send(new org.eclipse.jetty.client.api.Response.Listener.Adapter());
+        await();
     }
 
 }

@@ -15,12 +15,11 @@
  */
 package io.cettia.asity.bridge.atmosphere2;
 
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertThat;
 import io.cettia.asity.action.Action;
-import io.cettia.asity.bridge.atmosphere2.AsityAtmosphereServlet;
-import io.cettia.asity.test.ServerWebSocketTest;
+import io.cettia.asity.test.ServerWebSocketTestBase;
 import io.cettia.asity.websocket.ServerWebSocket;
+
+import java.net.URI;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
@@ -33,17 +32,18 @@ import org.atmosphere.cpr.AtmosphereResource;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.junit.Test;
 
 /**
  * @author Donghwan Kim
  */
-public class AtmosphereServerWebSocketTest extends ServerWebSocketTest {
+public class AtmosphereServerWebSocketTest extends ServerWebSocketTestBase {
 
     Server server;
 
     @Override
-    protected void startServer() throws Exception {
+    protected void startServer(int port, final Action<ServerWebSocket> websocketAction) throws Exception {
         server = new Server();
         ServerConnector connector = new ServerConnector(server);
         connector.setPort(port);
@@ -53,11 +53,11 @@ public class AtmosphereServerWebSocketTest extends ServerWebSocketTest {
             @Override
             public void contextInitialized(ServletContextEvent event) {
                 ServletContext context = event.getServletContext();
-                Servlet servlet = new AsityAtmosphereServlet().onwebsocket(performer.serverAction());
+                Servlet servlet = new AsityAtmosphereServlet().onwebsocket(websocketAction);
                 ServletRegistration.Dynamic reg = context.addServlet(AsityAtmosphereServlet.class.getName(), servlet);
                 reg.setAsyncSupported(true);
                 reg.setInitParameter(ApplicationConfig.DISABLE_ATMOSPHEREINTERCEPTOR, Boolean.TRUE.toString());
-                reg.addMapping("/test");
+                reg.addMapping(TEST_URI);
             }
 
             @Override
@@ -68,15 +68,16 @@ public class AtmosphereServerWebSocketTest extends ServerWebSocketTest {
     }
 
     @Test
-    public void unwrap() {
-        performer.onserver(new Action<ServerWebSocket>() {
+    public void unwrap() throws Throwable {
+        websocketAction(new Action<ServerWebSocket>() {
             @Override
             public void on(ServerWebSocket ws) {
-                assertThat(ws.unwrap(AtmosphereResource.class), instanceOf(AtmosphereResource.class));
-                performer.start();
+                assertTrue(ws.unwrap(AtmosphereResource.class) instanceof AtmosphereResource);
+                resume();
             }
-        })
-        .connect();
+        });
+        client.connect(new WebSocketAdapter(), URI.create(uri()));
+        await();
     }
 
     @Override

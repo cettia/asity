@@ -15,13 +15,11 @@
  */
 package io.cettia.asity.bridge.vertx2;
 
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertThat;
 import io.cettia.asity.action.Action;
-import io.cettia.asity.bridge.vertx2.AsityRequestHandler;
 import io.cettia.asity.http.ServerHttpExchange;
-import io.cettia.asity.test.ServerHttpExchangeTest;
+import io.cettia.asity.test.ServerHttpExchangeTestBase;
 
+import org.eclipse.jetty.client.api.Response;
 import org.junit.Test;
 import org.vertx.java.core.VertxFactory;
 import org.vertx.java.core.http.HttpServer;
@@ -31,15 +29,15 @@ import org.vertx.java.core.http.RouteMatcher;
 /**
  * @author Donghwan Kim
  */
-public class VertxServerHttpExchangeTest extends ServerHttpExchangeTest {
+public class VertxServerHttpExchangeTest extends ServerHttpExchangeTestBase {
 
-    HttpServer server;
+    private HttpServer server;
 
     @Override
-    protected void startServer() {
+    protected void startServer(int port, Action<ServerHttpExchange> requestAction) throws Exception {
         server = VertxFactory.newVertx().createHttpServer();
         RouteMatcher matcher = new RouteMatcher();
-        matcher.all("/test", new AsityRequestHandler().onhttp(performer.serverAction()));
+        matcher.all(TEST_URI, new AsityRequestHandler().onhttp(requestAction));
         server.requestHandler(matcher);
         server.listen(port);
     }
@@ -50,15 +48,16 @@ public class VertxServerHttpExchangeTest extends ServerHttpExchangeTest {
     }
 
     @Test
-    public void unwrap() {
-        performer.onserver(new Action<ServerHttpExchange>() {
+    public void unwrap() throws Throwable {
+        requestAction(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
-                assertThat(http.unwrap(HttpServerRequest.class), instanceOf(HttpServerRequest.class));
-                performer.start();
+                assertTrue(http.unwrap(HttpServerRequest.class) instanceof HttpServerRequest);
+                resume();
             }
-        })
-        .send();
+        });
+        client.newRequest(uri()).send(new Response.Listener.Adapter());
+        await();
     }
 
 }
