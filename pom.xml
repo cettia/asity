@@ -21,7 +21,6 @@
         <module>bridge-grizzly2</module>
         <module>bridge-jwa1</module>
         <module>bridge-netty4</module>
-        <module>bridge-play2</module>
         <module>bridge-servlet3</module>
         <module>bridge-vertx2</module>
     </modules>
@@ -165,12 +164,6 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>com.typesafe.play</groupId>
-                <artifactId>play_2.11</artifactId>
-                <version>2.3.2</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-codec-http</artifactId>
                 <version>4.0.30.Final</version>
@@ -229,11 +222,4 @@
             </plugin>
         </plugins>
     </build>
-    <repositories>
-        <repository>
-            <id>typesafe</id>
-            <name>typesafe-releases</name>
-            <url>http://repo.typesafe.com/typesafe/releases/</url>
-        </repository>
-    </repositories>
 </project>
