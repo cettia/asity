@@ -13,10 +13,10 @@ title: Asity Reference
 * [Platform](#platform)
     * [Atmosphere 2](#atmosphere-2)
     * [Grizzly 2](#grizzly-2)
+    * [Java Servlet 3](#java-servlet-3)
     * [Java WebSocket API 1](#java-websocket-api-1)
     * [Netty 4](#netty-4)
     * [Play 2](#play-2)
-    * [Servlet 3](#servlet-3)
     * [Vert.x 2](#vert.x-2)
 * [Platform on platform](#platform-on-platform)
     * [JAX-RS 2](#jax-rs-2)
@@ -28,33 +28,21 @@ title: Asity Reference
 ## Installation
 Asity requires Java 7 and is distributed through Maven Central.
 
-* **To run application on platform**
+* **To run an Asity application**
 
-Generally speaking, having application run on the specific platform means to feed one or both of `ServerHttpExchange` and `ServerWebSocket` into the application which are produced by the specific platform or framework using the corresponding bridge module. How to varies for each platform or framework. See [Platform](#platform) and [Platform on platform](#platform-on-platform) section.
+Generally speaking, having an Asity application run on the specific platform means to feed resources like `ServerHttpExchange` and `ServerWebSocket` into the application which are produced by the specific platform using the corresponding bridge module. To deal with bridge, see [Platform](#platform) and [Platform on platform](#platform-on-platform) section.
 
-* **To write application running on platform**
+* **To write an Asity application**
 
-An application running on platform is a collection of actions that consumes resources like `ServerHttpExchange` and `ServerWebSocket`. Therefore, application should expose those actions to receive them. To handle HTTP exchange and WebSocket, see [HTTP](#http) and [Websocket](#websocket) respectively.
+An Asity application is a collection of actions that consumes resources like `ServerHttpExchange` and `ServerWebSocket`. Therefore, application should expose those actions to receive resources from the specific platform. To deal with resource, see [HTTP](#http) and [Websocket](#websocket) respectively.
 
 ---
 
 ## Platform
-Platform stands for lietrally platform where application runs by facilitating dealing with HTTP exchange and WebSocket like full-stack web application framework and raw web server.
-
-To bridge application and platform, a module called bridge is required which transforms the underlying platform's resources representing HTTP exchange and WebSocket into `ServerHttpExchange` and `ServerWebSocket`. The following bridges are available.
-
-|Platform|HTTP|WebSocket|
-|---|---|---|
-|[Atmosphere 2](#atmosphere-2)|&#10003;|&#10003;|
-|[Grizzly 2](#grizzly-2)|&#10003;|&#10003;|
-|[Java WebSocket API 1](#java-websocket-api-1)||&#10003;|
-|[Netty 4](#netty-4)|&#10003;|&#10003;|
-|[Play 2](#play-2)|&#10003;|&#10003;|
-|[Servlet 3](#servlet-3)|&#10003;||
-|[Vert.x 2](#vert.x-2)|&#10003;|&#10003;|
+Platform stands for lietrally platform where application runs by facilitating dealing with resource like HTTP exchange and WebSocket like full-stack web application framework and raw web server.
 
 ### Atmosphere 2
-[Atmosphere 2](https://github.com/Atmosphere/atmosphere/) is a platform to use Servlet 3 and Java WebSocket API 1 together in more comfortable way.
+[Atmosphere 2](https://github.com/Atmosphere/atmosphere/) is a platform to use Java Servlet 3 and Java WebSocket API 1 together in more comfortable way.
 
 **Note**
 
@@ -133,6 +121,49 @@ public class Bootstrap {
 }
 ```
 
+### Java Servlet 3
+[Java Servlet 3.0](http://docs.oracle.com/javaee/6/tutorial/doc/bnafd.html) from Java EE 6 and [Java Servlet 3.1](https://docs.oracle.com/javaee/7/tutorial/servlets.htm) from Java EE 7.
+
+**Note**
+
+* Servlet can't detect disconnection so that `ServerHttpExchange`'s `onclose` doesn't work.
+
+**[Example](https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/servlet3)**
+
+Add the following dependency to your build or include it on your classpath manually.
+
+```xml
+<dependency>
+    <groupId>io.cettia.asity</groupId>
+    <artifactId>asity-bridge-servlet3</artifactId>
+    <version>1.0.0-Beta1</version>
+</dependency>
+```
+
+To bridge application and Servlet, you should register a servlet of `AsityServlet`. When registering servlet, you must set `asyncSupported` to `true`.
+
+```java
+@WebListener
+public class Bootstrap implements ServletContextListener {
+    @Override
+    public void contextInitialized(ServletContextEvent event) {
+        // Your application
+        Action<ServerHttpExchange> httpAction = http -> {};
+        
+        ServletContext context = event.getServletContext();
+        Servlet servlet = new AsityServlet().onhttp(httpAction);
+        ServletRegistration.Dynamic reg = context.addServlet(AsityServlet.class.getName(), servlet);
+        reg.setAsyncSupported(true);
+        reg.addMapping("/cettia");
+    }
+    
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {}
+}
+```
+
+With this bridge, you have no way to handle WebSocket resource unless your web server implements Java WebSocket API 1 as well as Java Servlet 3 like Tomcat or Jetty. If you have such server, see [an example demonstrating how to use Java Servlet 3 bridge and Java WebSocket API 1 bridge together on the same server](https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/servlet3-jwa1).
+
 ### Java WebSocket API 1
 [Java WebSocket API 1](http://docs.oracle.com/javaee/7/tutorial/doc/websocket.htm#GKJIQ5) (JWA) from Java EE 7.
 
@@ -175,7 +206,7 @@ public class Bootstrap implements ServerApplicationConfig {
 }
 ```
 
-With this bridge, you have no way to handle HTTP resource unless your web server implements Servlet 3 as well as Java WebSocket API 1 like Tomcat or Jetty. If you have such server, see [an example demonstrating how to use Java WebSocket API 1 bridge and Servlet 3 bridge together on the same server](https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/servlet3-jwa1).
+With this bridge, you have no way to handle HTTP resource unless your web server implements Java Servlet 3 as well as Java WebSocket API 1 like Tomcat or Jetty. If you have such server, see [an example demonstrating how to use Java WebSocket API 1 bridge and Java Servlet 3 bridge together on the same server](https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/servlet3-jwa1).
 
 ### Netty 4
 [Netty 4](http://netty.io/) is an asynchronous event-driven network application framework.
@@ -305,49 +336,6 @@ object Global extends GlobalSettings {
 }
 ```
 
-### Servlet 3
-[Servlet 3.0](http://docs.oracle.com/javaee/6/tutorial/doc/bnafd.html) from Java EE 6 and [Servlet 3.1](https://docs.oracle.com/javaee/7/tutorial/doc/servlets.htm) from Java EE 7.
-
-**Note**
-
-* Servlet can't detect disconnection so that `ServerHttpExchange`'s `onclose` doesn't work.
-
-**[Example](https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/servlet3)**
-
-Add the following dependency to your build or include it on your classpath manually.
-
-```xml
-<dependency>
-    <groupId>io.cettia.asity</groupId>
-    <artifactId>asity-bridge-servlet3</artifactId>
-    <version>1.0.0-Beta1</version>
-</dependency>
-```
-
-To bridge application and Servlet, you should register a servlet of `AsityServlet`. When registering servlet, you must set `asyncSupported` to `true`.
-
-```java
-@WebListener
-public class Bootstrap implements ServletContextListener {
-    @Override
-    public void contextInitialized(ServletContextEvent event) {
-        // Your application
-        Action<ServerHttpExchange> httpAction = http -> {};
-        
-        ServletContext context = event.getServletContext();
-        Servlet servlet = new AsityServlet().onhttp(httpAction);
-        ServletRegistration.Dynamic reg = context.addServlet(AsityServlet.class.getName(), servlet);
-        reg.setAsyncSupported(true);
-        reg.addMapping("/cettia");
-    }
-    
-    @Override
-    public void contextDestroyed(ServletContextEvent sce) {}
-}
-```
-
-With this bridge, you have no way to handle WebSocket resource unless your web server implements Java WebSocket API 1 as well as Servlet 3 like Tomcat or Jetty. If you have such server, see [an example demonstrating how to use Servlet 3 bridge and Java WebSocket API 1 bridge together on the same server](https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/servlet3-jwa1).
-
 ### Vert.x 2
 [Vert.x 2](http://vertx.io/) is a lightweight, high performance application platform for the JVM 
 
@@ -399,7 +387,7 @@ Some platform, A, is based on the other platform, B, and allows to deal with the
 The general pattern is to share an application instance between the platform and the underlying platform using `static` keyword, sharing application holder or adopting dependency injection.
 
 ### JAX-RS 2
-[JAX-RS 2](https://docs.oracle.com/javaee/7/tutorial/doc/jaxws.htm) from Java EE 7. JAX-RS allows to deploy JAX-RS resources to several servers, and one of them is Servlet. That means, you can run application written in JAX-RS through Servlet. The same approach may be applied to JAX-RS 1. [Example](https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform-on-platform/jaxrs2-atmosphere2).
+[JAX-RS 2](https://docs.oracle.com/javaee/7/tutorial/doc/jaxws.htm) from Java EE 7. JAX-RS allows to deploy JAX-RS resources to several servers, and one of them is Java Servlet. That means, you can run application written in JAX-RS through Servlet. The same approach may be applied to JAX-RS 1. [Example](https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform-on-platform/jaxrs2-atmosphere2).
 
 ---
 

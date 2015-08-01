@@ -8,11 +8,24 @@ title: Asity
 
 Asity is a lightweight abstraction layer for I/O frameworks which is designed to build applications that can run on any full-stack framework, any micro framework or any raw server on the JVM.
 
-Atmosphere 2, Grizzly 2, Java WebSocket API 1, Netty 4, Play 2, Servlet 3, Vert.x 2 are now supported.
+Now the following platforms are supported:
+
+<ul class="inline-list">
+<li>Atmosphere 2</li>
+<li>Grizzly 2</li>
+<li>Java Servlet 3</li>
+<li>Java WebSocket API 1</li>
+<li>Netty 4</li>
+<li>Play 2</li>
+<li>Vert.x 2</li>
+</ul>
 
 ---
 
 ## Getting started
+
+### Write your first Asity app
+
 Asity is distributed through Maven Central. To write web application running on any platform Asity supports, you need two artifacts: `io.cettia.asity:asity-http:1.0.0-Beta1` and `io.cettia.asity:asity-websocket:1.0.0-Beta1`.
 
 ```xml
@@ -66,9 +79,12 @@ public class EchoHandler {
     };
 }
 ```
-Now to run this handler on the specific platform, we need to wrap HTTP resources and WebSocket resources provided by that specific platform into `ServerHttpExchange` and `ServerWebSocket` and feed them into an instance of `EchoHandler`. A module playing such roles is called bridge and various bridges are provided which matches well with each platform's usage.
 
-For example, to run `EchoHandler` on an implementation of Servlet 3 and Java WebSocket API 1 such as Jetty 9 and Tomcat 8, you need Servlet 3 bridge and Java WebSocket API 1 bridge. Let's add the following bridge dependencies.
+### Run your app
+
+Now to run this handler on the specific platform, we need to wrap HTTP resources and WebSocket resources provided by that specific platform into `ServerHttpExchange` and `ServerWebSocket` and feed them into an instance of `EchoHandler`. A module playing such roles is called bridge.
+
+For example, to run `EchoHandler` on an implementation of Java Servlet 3 and Java WebSocket API 1 such as Jetty 9 and Tomcat 8, you need Java Servlet 3 bridge and Java WebSocket API 1 bridge. Let's add the following bridge dependencies.
 
 ```xml
 <dependency>
@@ -130,7 +146,9 @@ public class Bootstrap implements ServletContextListener {
 }
 ```
 
-The same pattern applies when bridging application to other platform. Here is working examples. They demonstrate how to run [Cettia Java Server](/projects/cettia-java-server) implementing the Cettia Protocol using Asity on each platform.
+### Try out examples
+
+The same pattern applies when bridging an application to other platforms. Here is working examples. They demonstrate how to run [Cettia Java Server](/projects/cettia-java-server) implementing the Cettia Protocol using Asity on each platform.
 
 <ul class="inline-list">
 <li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/atmosphere2">Atmosphere 2</a></li>
@@ -148,5 +166,7 @@ It's not the end. Some platform, A, is based on the other platform, B, and allow
 <ul class="inline-list">
 <li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform-on-platform/jaxrs2-atmosphere2">JAX-RS 2 on Atmosphere 2</a></li>
 </ul>
+
+### Build a custom bridge
 
 Though your favorite platform is not supported? Take a look how [Grizzly 2 bridge](https://github.com/cettia/asity/tree/1.0.0-Beta1/bridge-grizzly2) is written. Mostly, with more or less 200 lines, it's enough to write a bridge.
