@@ -33,7 +33,7 @@ Generally speaking, having an Asity application run on the specific platform mea
 
 * **To write an Asity application**
 
-An Asity application is a collection of actions that consumes resources like `ServerHttpExchange` and `ServerWebSocket`. Therefore, application should expose those actions to receive resources from the specific platform. To deal with resource, see [HTTP](#http) and [Websocket](#websocket) respectively.
+An Asity application is a collection of actions that handles resources like `ServerHttpExchange` and `ServerWebSocket`. Therefore, application should expose those actions to receive resources from the specific platform. To deal with resource, see [HTTP](#http) and [Websocket](#websocket) respectively.
 
 ---
 

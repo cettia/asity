@@ -8,7 +8,14 @@ title: Asity
 
 Asity is a lightweight abstraction layer for I/O frameworks which is designed to build applications that can run on any full-stack framework, any micro framework or any raw server on the JVM.
 
-Now the following platforms are supported:
+An Asity application can handle the following resources: 
+
+<ul class="inline-list">
+<li>HTTP</li>
+<li>WebSocket</li>
+</ul>
+
+And run on the following platforms:
 
 <ul class="inline-list">
 <li>Atmosphere 2</li>
@@ -155,7 +162,7 @@ The same pattern applies when bridging an application to other platforms. Here i
 <li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/jwa1">Java WebSocket API 1</a></li>
 <li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/netty4">Netty 4</a></li>
 <li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/servlet3">Servlet 3</a></li>
-<li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/servlet3-jwa1">Servlet 3 and Java WebSocket API 1</a></li>
+<li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/servlet3-jwa1">Java Servlet 3 and Java WebSocket API 1</a></li>
 <li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/vertx2">Vert.x 2</a></li>
 </ul>
 
