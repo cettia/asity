@@ -72,7 +72,7 @@ public class AtmosphereServerWebSocketTest extends ServerWebSocketTestBase {
         websocketAction(new Action<ServerWebSocket>() {
             @Override
             public void on(ServerWebSocket ws) {
-                assertTrue(ws.unwrap(AtmosphereResource.class) instanceof AtmosphereResource);
+                threadAssertTrue(ws.unwrap(AtmosphereResource.class) instanceof AtmosphereResource);
                 resume();
             }
         });

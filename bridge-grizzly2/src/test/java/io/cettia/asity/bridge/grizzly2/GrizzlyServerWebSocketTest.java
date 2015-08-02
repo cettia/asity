@@ -55,7 +55,7 @@ public class GrizzlyServerWebSocketTest extends ServerWebSocketTestBase {
         websocketAction(new Action<ServerWebSocket>() {
             @Override
             public void on(ServerWebSocket ws) {
-                assertTrue(ws.unwrap(WebSocket.class) instanceof WebSocket);
+                threadAssertTrue(ws.unwrap(WebSocket.class) instanceof WebSocket);
                 resume();
             }
         });

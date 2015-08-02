@@ -66,7 +66,7 @@ public class JwaServerWebSocketTest extends ServerWebSocketTestBase {
         websocketAction(new Action<ServerWebSocket>() {
             @Override
             public void on(ServerWebSocket ws) {
-                assertTrue(ws.unwrap(Session.class) instanceof Session);
+                threadAssertTrue(ws.unwrap(Session.class) instanceof Session);
                 resume();
             }
         });

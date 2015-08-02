@@ -75,8 +75,8 @@ public class ServletServerHttpExchangeTest extends ServerHttpExchangeTestBase {
         requestAction(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
-                assertTrue(http.unwrap(HttpServletRequest.class) instanceof HttpServletRequest);
-                assertTrue(http.unwrap(HttpServletResponse.class) instanceof HttpServletResponse);
+                threadAssertTrue(http.unwrap(HttpServletRequest.class) instanceof HttpServletRequest);
+                threadAssertTrue(http.unwrap(HttpServletResponse.class) instanceof HttpServletResponse);
                 resume();
             }
         });

@@ -19,7 +19,6 @@ import io.cettia.asity.action.Action;
 import io.cettia.asity.action.VoidAction;
 import io.cettia.asity.http.HttpStatus;
 import io.cettia.asity.http.ServerHttpExchange;
-import io.cettia.asity.test.support.ConcurrentTestBase;
 
 import java.io.ByteArrayOutputStream;
 import java.net.ServerSocket;
@@ -27,6 +26,8 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
+
+import net.jodah.concurrentunit.ConcurrentTestCase;
 
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.Request;
@@ -36,6 +37,8 @@ import org.eclipse.jetty.client.util.BytesContentProvider;
 import org.eclipse.jetty.client.util.StringContentProvider;
 import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.HttpMethod;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
@@ -43,7 +46,7 @@ import org.junit.rules.Timeout;
 /**
  * @author Donghwan Kim
  */
-public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
+public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
 
     protected static final String TEST_URI = "/test";
     private static final CompleteListener ASYNC = new Response.Listener.Adapter();
@@ -55,9 +58,8 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
     private int port;
     private Action<ServerHttpExchange> requestAction;
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         try (ServerSocket serverSocket = new ServerSocket(0)) {
             port = serverSocket.getLocalPort();
         }
@@ -70,12 +72,11 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
         });
     }
 
-    @Override
+    @After
     public void tearDown() throws Exception {
         stopServer();
         client.stop();
         requestAction = null;
-        super.tearDown();
     }
 
     protected abstract void startServer(int port, Action<ServerHttpExchange> requestAction) throws Exception;
@@ -99,7 +100,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
         requestAction(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
-                assertEquals(http.uri(), "/test?hello=there");
+                threadAssertEquals(http.uri(), "/test?hello=there");
                 resume();
             }
         });
@@ -112,7 +113,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
         requestAction(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
-                assertEquals(http.method(), "POST");
+                threadAssertEquals(http.method(), "POST");
                 resume();
             }
         });
@@ -125,12 +126,12 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
         requestAction(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
-                assertTrue(http.headerNames().containsAll(Arrays.asList("a", "b"))
+                threadAssertTrue(http.headerNames().containsAll(Arrays.asList("a", "b"))
                     || http.headerNames().containsAll(Arrays.asList("A", "B")));
-                assertEquals(http.header("A"), "A");
-                assertEquals(http.header("B"), "B1");
-                assertTrue(http.headers("A").containsAll(Arrays.asList("A")));
-                assertTrue(http.headers("B").containsAll(Arrays.asList("B1", "B2")));
+                threadAssertEquals(http.header("A"), "A");
+                threadAssertEquals(http.header("B"), "B1");
+                threadAssertTrue(http.headers("A").containsAll(Arrays.asList("A")));
+                threadAssertTrue(http.headers("B").containsAll(Arrays.asList("B1", "B2")));
                 resume();
             }
         });
@@ -153,7 +154,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
                 .onend(new VoidAction() {
                     @Override
                     public void on() {
-                        assertEquals(body.toString(), "A Breath Clad In Happiness");
+                        threadAssertEquals(body.toString(), "A Breath Clad In Happiness");
                         resume();
                     }
                 })
@@ -180,7 +181,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
                 .onend(new VoidAction() {
                     @Override
                     public void on() {
-                        assertEquals(body.toString(), "Day 7: Poem of the Ocean");
+                        threadAssertEquals(body.toString(), "Day 7: Poem of the Ocean");
                         resume();
                     }
                 })
@@ -207,7 +208,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
                 .onend(new VoidAction() {
                     @Override
                     public void on() {
-                        assertEquals(body.toString(), "시간 속에 만들어진 무대 위에 그대는 없다");
+                        threadAssertEquals(body.toString(), "시간 속에 만들어진 무대 위에 그대는 없다");
                         resume();
                     }
                 })
@@ -236,7 +237,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
                 .onend(new VoidAction() {
                     @Override
                     public void on() {
-                        assertTrue(Arrays.equals(body.toByteArray(), new byte[] { 'h', 'i' }));
+                        threadAssertTrue(Arrays.equals(body.toByteArray(), new byte[] { 'h', 'i' }));
                         resume();
                     }
                 })
@@ -265,7 +266,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
                 .onend(new VoidAction() {
                     @Override
                     public void on() {
-                        assertTrue(Arrays.equals(body.toByteArray(), new byte[] { 'h', 'i' }));
+                        threadAssertTrue(Arrays.equals(body.toByteArray(), new byte[] { 'h', 'i' }));
                         resume();
                     }
                 })
@@ -285,7 +286,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
                 http.onbody(new Action<String>() {
                     @Override
                     public void on(String data) {
-                        assertEquals(data, "A Breath Clad In Happiness");
+                        threadAssertEquals(data, "A Breath Clad In Happiness");
                         resume();
                     }
                 })
@@ -305,7 +306,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
                 http.onbody(new Action<ByteBuffer>() {
                     @Override
                     public void on(ByteBuffer data) {
-                        assertEquals(data, ByteBuffer.wrap(new byte[] { 'h', 'i' }));
+                        threadAssertEquals(data, ByteBuffer.wrap(new byte[] { 'h', 'i' }));
                         resume();
                     }
                 })
@@ -328,7 +329,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
         client.newRequest(uri()).send(new Response.Listener.Adapter() {
             @Override
             public void onSuccess(Response response) {
-                assertEquals(response.getStatus(), 404);
+                threadAssertEquals(response.getStatus(), 404);
                 resume();
             }
         });
@@ -347,9 +348,9 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
             @Override
             public void onSuccess(Response res) {
                 HttpFields headers = res.getHeaders();
-                assertTrue(headers.getFieldNamesCollection().containsAll(Arrays.asList("A", "B")));
-                assertEquals(headers.get("A"), "A");
-                assertEquals(headers.get("B"), "B1, B2");
+                threadAssertTrue(headers.getFieldNamesCollection().containsAll(Arrays.asList("A", "B")));
+                threadAssertEquals(headers.get("A"), "A");
+                threadAssertEquals(headers.get("B"), "B1, B2");
                 resume();
             }
         });
@@ -388,7 +389,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                assertEquals(body, "기억 속에 머무른 그 때의 모습으로 그때의 웃음으로");
+                threadAssertEquals(body, "기억 속에 머무른 그 때의 모습으로 그때의 웃음으로");
                 resume();
             }
         });
@@ -425,7 +426,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                assertEquals(body, "기억 속에 머무른 그 때의 모습으로 그때의 웃음으로");
+                threadAssertEquals(body, "기억 속에 머무른 그 때의 모습으로 그때의 웃음으로");
                 resume();
             }
         });
@@ -466,7 +467,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestBase {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                assertTrue(Arrays.equals(os.toByteArray(), new byte[] { 'h', 'e', 'l', 'l', 'o' }));
+                threadAssertTrue(Arrays.equals(os.toByteArray(), new byte[] { 'h', 'e', 'l', 'l', 'o' }));
                 resume();
             }
         });

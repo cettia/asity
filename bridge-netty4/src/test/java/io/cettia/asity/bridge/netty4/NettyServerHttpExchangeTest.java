@@ -89,9 +89,9 @@ public class NettyServerHttpExchangeTest extends ServerHttpExchangeTestBase {
         requestAction(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
-                assertTrue(http.unwrap(ChannelHandlerContext.class) instanceof ChannelHandlerContext);
-                assertTrue(http.unwrap(HttpRequest.class) instanceof HttpRequest);
-                assertTrue(http.unwrap(HttpResponse.class) instanceof HttpResponse);
+                threadAssertTrue(http.unwrap(ChannelHandlerContext.class) instanceof ChannelHandlerContext);
+                threadAssertTrue(http.unwrap(HttpRequest.class) instanceof HttpRequest);
+                threadAssertTrue(http.unwrap(HttpResponse.class) instanceof HttpResponse);
                 resume();
             }
         });

@@ -50,8 +50,8 @@ public class GrizzlyServerHttpExchangeTest extends ServerHttpExchangeTestBase {
         requestAction(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
-                assertTrue(http.unwrap(Request.class) instanceof Request);
-                assertTrue(http.unwrap(Response.class) instanceof Response);
+                threadAssertTrue(http.unwrap(Request.class) instanceof Request);
+                threadAssertTrue(http.unwrap(Response.class) instanceof Response);
                 resume();
             }
         });

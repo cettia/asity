@@ -90,9 +90,9 @@ public class NettyServerWebSocketTest extends ServerWebSocketTestBase {
         websocketAction(new Action<ServerWebSocket>() {
             @Override
             public void on(ServerWebSocket ws) {
-                assertTrue(ws.unwrap(ChannelHandlerContext.class) instanceof ChannelHandlerContext);
-                assertTrue(ws.unwrap(WebSocketServerHandshaker.class) instanceof WebSocketServerHandshaker);
-                assertTrue(ws.unwrap(FullHttpRequest.class) instanceof FullHttpRequest);
+                threadAssertTrue(ws.unwrap(ChannelHandlerContext.class) instanceof ChannelHandlerContext);
+                threadAssertTrue(ws.unwrap(WebSocketServerHandshaker.class) instanceof WebSocketServerHandshaker);
+                threadAssertTrue(ws.unwrap(FullHttpRequest.class) instanceof FullHttpRequest);
                 resume();
             }
         });

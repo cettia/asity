@@ -52,7 +52,7 @@ public class VertxServerHttpExchangeTest extends ServerHttpExchangeTestBase {
         requestAction(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
-                assertTrue(http.unwrap(HttpServerRequest.class) instanceof HttpServerRequest);
+                threadAssertTrue(http.unwrap(HttpServerRequest.class) instanceof HttpServerRequest);
                 resume();
             }
         });

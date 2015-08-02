@@ -76,7 +76,7 @@ public class AtmosphereServerHttpExchangeTest extends ServerHttpExchangeTestBase
         requestAction(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
-                assertTrue(http.unwrap(AtmosphereResource.class) instanceof AtmosphereResource);
+                threadAssertTrue(http.unwrap(AtmosphereResource.class) instanceof AtmosphereResource);
                 resume();
             }
         });

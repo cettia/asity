@@ -59,7 +59,7 @@ public class VertxServerWebSocketTest extends ServerWebSocketTestBase {
         websocketAction(new Action<ServerWebSocket>() {
             @Override
             public void on(ServerWebSocket ws) {
-                assertTrue(ws.unwrap(org.vertx.java.core.http.ServerWebSocket.class) instanceof org.vertx.java.core.http.ServerWebSocket);
+                threadAssertTrue(ws.unwrap(org.vertx.java.core.http.ServerWebSocket.class) instanceof org.vertx.java.core.http.ServerWebSocket);
                 resume();
             }
         });

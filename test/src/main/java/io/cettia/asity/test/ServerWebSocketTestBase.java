@@ -17,7 +17,6 @@ package io.cettia.asity.test;
 
 import io.cettia.asity.action.Action;
 import io.cettia.asity.action.VoidAction;
-import io.cettia.asity.test.support.ConcurrentTestBase;
 import io.cettia.asity.websocket.ServerWebSocket;
 
 import java.net.ServerSocket;
@@ -25,11 +24,15 @@ import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+import net.jodah.concurrentunit.ConcurrentTestCase;
+
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.eclipse.jetty.websocket.api.WebSocketListener;
 import org.eclipse.jetty.websocket.api.WriteCallback;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
@@ -37,7 +40,7 @@ import org.junit.rules.Timeout;
 /**
  * @author Donghwan Kim
  */
-public abstract class ServerWebSocketTestBase extends ConcurrentTestBase {
+public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
 
     protected static final String TEST_URI = "/test";
     private static final WebSocketListener NOOP = new WebSocketAdapter();
@@ -56,9 +59,8 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestBase {
     private int port;
     private Action<ServerWebSocket> websocketAction;
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         try (ServerSocket serverSocket = new ServerSocket(0)) {
             port = serverSocket.getLocalPort();
         }
@@ -71,12 +73,11 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestBase {
         });
     }
 
-    @Override
+    @After
     public void tearDown() throws Exception {
         stopServer();
         client.stop();
         websocketAction = null;
-        super.tearDown();
     }
 
     protected abstract void startServer(int port, Action<ServerWebSocket> websocketAction) throws Exception;
@@ -100,7 +101,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestBase {
         websocketAction(new Action<ServerWebSocket>() {
             @Override
             public void on(ServerWebSocket ws) {
-                assertEquals(ws.uri(), "/test?hello=there");
+                threadAssertEquals(ws.uri(), "/test?hello=there");
                 resume();
             }
         });
@@ -136,7 +137,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestBase {
         client.connect(new WebSocketAdapter() {
             @Override
             public void onWebSocketText(String message) {
-                assertEquals(message, "A Will Remains in the Ashes");
+                threadAssertEquals(message, "A Will Remains in the Ashes");
                 resume();
             }
         }, URI.create(uri()));
@@ -154,7 +155,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestBase {
         client.connect(new WebSocketAdapter() {
             @Override
             public void onWebSocketBinary(byte[] payload, int offset, int len) {
-                assertTrue(Arrays.equals(payload, new byte[] { 0x00, 0x01, 0x02 }));
+                threadAssertTrue(Arrays.equals(payload, new byte[] { 0x00, 0x01, 0x02 }));
                 resume();
             }
         }, URI.create(uri()));
@@ -174,7 +175,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestBase {
 
             @Override
             public void onWebSocketText(String message) {
-                assertEquals(message, "A Will Remains in the Ashes");
+                threadAssertEquals(message, "A Will Remains in the Ashes");
                 if (done) {
                     resume();
                 } else {
@@ -184,7 +185,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestBase {
 
             @Override
             public void onWebSocketBinary(byte[] payload, int offset, int len) {
-                assertTrue(Arrays.equals(payload, new byte[] { 0x00, 0x01, 0x02 }));
+                threadAssertTrue(Arrays.equals(payload, new byte[] { 0x00, 0x01, 0x02 }));
                 if (done) {
                     resume();
                 } else {
@@ -203,7 +204,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestBase {
                 ws.ontext(new Action<String>() {
                     @Override
                     public void on(String data) {
-                        assertEquals(data, "A road of winds the water builds");
+                        threadAssertEquals(data, "A road of winds the water builds");
                         resume();
                     }
                 });
@@ -226,7 +227,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestBase {
                 ws.onbinary(new Action<ByteBuffer>() {
                     @Override
                     public void on(ByteBuffer data) {
-                        assertEquals(data, ByteBuffer.wrap(new byte[] { 0x00, 0x01, 0x02 }));
+                        threadAssertEquals(data, ByteBuffer.wrap(new byte[] { 0x00, 0x01, 0x02 }));
                         resume();
                     }
                 });
@@ -250,7 +251,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestBase {
                 ws.ontext(new Action<String>() {
                     @Override
                     public void on(String data) {
-                        assertEquals(data, "A road of winds the water builds");
+                        threadAssertEquals(data, "A road of winds the water builds");
                         if (done) {
                             resume();
                         } else {
@@ -261,7 +262,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestBase {
                 .onbinary(new Action<ByteBuffer>() {
                     @Override
                     public void on(ByteBuffer data) {
-                        assertEquals(data, ByteBuffer.wrap(new byte[] { 0x00, 0x01, 0x02 }));
+                        threadAssertEquals(data, ByteBuffer.wrap(new byte[] { 0x00, 0x01, 0x02 }));
                         if (done) {
                             resume();
                         } else {
