@@ -40,7 +40,7 @@ public interface ServerHttpExchange {
     /**
      * The name of the request method.
      */
-    String method();
+    HttpMethod method();
 
     /**
      * The names of the request headers. HTTP header is not case-sensitive but

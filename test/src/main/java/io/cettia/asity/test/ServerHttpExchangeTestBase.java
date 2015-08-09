@@ -113,7 +113,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
         requestAction(new Action<ServerHttpExchange>() {
             @Override
             public void on(ServerHttpExchange http) {
-                threadAssertEquals(http.method(), "POST");
+                threadAssertEquals(http.method(), io.cettia.asity.http.HttpMethod.POST);
                 resume();
             }
         });

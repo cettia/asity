@@ -221,8 +221,7 @@ public class HttpStatus {
      */
     public static final HttpStatus REQUEST_HEADER_FIELDS_TOO_LARGE = new HttpStatus(431, "Request Header Fields Too Large");
 
-    // 5xx: Server Error - The server failed to fulfill an apparently valid
-    // request
+    // 5xx: Server Error - The server failed to fulfill an apparently valid request
     /**
      * {@code 500 Internal Server Error}
      */
@@ -318,20 +317,26 @@ public class HttpStatus {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         HttpStatus other = (HttpStatus) obj;
-        if (code != other.code)
+        if (code != other.code) {
             return false;
+        }
         if (reason == null) {
-            if (other.reason != null)
+            if (other.reason != null) {
                 return false;
-        } else if (!reason.equals(other.reason))
+            }
+        } else if (!reason.equals(other.reason)) {
             return false;
+        }
         return true;
     }
 

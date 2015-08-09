@@ -17,6 +17,7 @@ package io.cettia.asity.bridge.vertx2;
 
 import io.cettia.asity.action.Action;
 import io.cettia.asity.http.AbstractServerHttpExchange;
+import io.cettia.asity.http.HttpMethod;
 import io.cettia.asity.http.HttpStatus;
 import io.cettia.asity.http.ServerHttpExchange;
 
@@ -70,8 +71,8 @@ public class VertxServerHttpExchange extends AbstractServerHttpExchange {
     }
 
     @Override
-    public String method() {
-        return request.method();
+    public HttpMethod method() {
+        return HttpMethod.valueOf(request.method());
     }
 
     @Override

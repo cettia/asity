@@ -17,6 +17,7 @@ package io.cettia.asity.bridge.grizzly2;
 
 import io.cettia.asity.action.Action;
 import io.cettia.asity.http.AbstractServerHttpExchange;
+import io.cettia.asity.http.HttpMethod;
 import io.cettia.asity.http.HttpStatus;
 import io.cettia.asity.http.ServerHttpExchange;
 
@@ -71,8 +72,8 @@ public class GrizzlyServerHttpExchange extends AbstractServerHttpExchange {
     }
 
     @Override
-    public String method() {
-        return request.getMethod().getMethodString();
+    public HttpMethod method() {
+        return HttpMethod.valueOf(request.getMethod().getMethodString());
     }
 
     @Override

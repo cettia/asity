@@ -17,6 +17,7 @@ package io.cettia.asity.bridge.netty4;
 
 import io.cettia.asity.action.Action;
 import io.cettia.asity.http.AbstractServerHttpExchange;
+import io.cettia.asity.http.HttpMethod;
 import io.cettia.asity.http.HttpStatus;
 import io.cettia.asity.http.ServerHttpExchange;
 import io.netty.buffer.ByteBuf;
@@ -68,8 +69,8 @@ public class NettyServerHttpExchange extends AbstractServerHttpExchange {
     }
 
     @Override
-    public String method() {
-        return request.getMethod().toString();
+    public HttpMethod method() {
+        return HttpMethod.valueOf(request.getMethod().toString());
     }
 
     @Override

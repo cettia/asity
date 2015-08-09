@@ -18,6 +18,7 @@ package io.cettia.asity.bridge.servlet3;
 import io.cettia.asity.action.Action;
 import io.cettia.asity.action.Actions;
 import io.cettia.asity.http.AbstractServerHttpExchange;
+import io.cettia.asity.http.HttpMethod;
 import io.cettia.asity.http.HttpStatus;
 import io.cettia.asity.http.ServerHttpExchange;
 
@@ -82,8 +83,8 @@ public class ServletServerHttpExchange extends AbstractServerHttpExchange {
     }
 
     @Override
-    public String method() {
-        return request.getMethod();
+    public HttpMethod method() {
+        return HttpMethod.valueOf(request.getMethod());
     }
 
     @Override
