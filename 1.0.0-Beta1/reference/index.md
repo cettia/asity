@@ -350,8 +350,8 @@ URI.create(http.uri()).getQuery();
 {% capture panel %}
 ```java
 switch (http.method()) {
-    case "GET":
-    case "POST":
+    case GET:
+    case POST:
         // GET or POST
         break;
 }
