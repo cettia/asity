@@ -1,48 +1,90 @@
 ---
 ---
 
+@charset "utf-8";
+
+// Normalize
 @import "normalize";
-@import "settings";
-@import "foundation";
+
+// Foundation
+@import "foundation/settings";
+@import "foundation/foundation";
+
+@include foundation-global-styles;
+@include foundation-flex-grid;
+@include foundation-typography;
+@include foundation-button;
+@include foundation-forms;
+@include foundation-visibility-classes;
+@include foundation-float-classes;
+@include foundation-accordion;
+@include foundation-accordion-menu;
+@include foundation-badge;
+@include foundation-breadcrumbs;
+@include foundation-button-group;
+@include foundation-callout;
+@include foundation-close-button;
+@include foundation-drilldown-menu;
+@include foundation-dropdown;
+@include foundation-dropdown-menu;
+@include foundation-flex-video;
+@include foundation-label;
+@include foundation-media-object;
+@include foundation-menu;
+@include foundation-off-canvas;
+@include foundation-orbit;
+@include foundation-pagination;
+@include foundation-progress-bar;
+@include foundation-slider;
+@include foundation-sticky;
+@include foundation-reveal;
+@include foundation-switch;
+@include foundation-table;
+@include foundation-tabs;
+@include foundation-thumbnail;
+@include foundation-title-bar;
+@include foundation-tooltip;
+@include foundation-top-bar;
+
+// Source Sans Pro
 @import url("//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic,700italic");
+
+// App
+.top-bar-wrapper {
+  background-color: $topbar-background;
+}
 
 code {
   font-size: 0.875rem;
 }
+
 h1, h2, h3, h4, h5, h6 {
   code {
     font-size: 0.875em;
   }
 }
+
 a {
   code {
     color: inherit;
   }
 }
-pre {
-  background-color: $code-background-color;
-  border-color: $code-border-color;
-  border-style: $code-border-style;
-  border-width: $code-border-size;
-  margin-bottom: $paragraph-margin-bottom;
 
+pre {
   code {
-    border: none;
+    margin-bottom: $paragraph-margin-bottom;
     display: block;
     padding: 0.375rem 0.625rem;
   }
 }
-.version-dropdown code {
-  border: inherit;
-  background: inherit;
-  font-size: inherit;
-}
+
 .copyright {
   color: #777;
   p, ul {
     font-size: 0.875rem;
   }
 }
+
 article {
   .information {
     color: #888;
@@ -52,6 +94,7 @@ article {
     }
   }
 }
+
 #content, .content {
   margin-top: 2rem;
 }

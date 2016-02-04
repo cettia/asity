@@ -1,13 +1,12 @@
 name: Asity
-description: Asity, TODO the real-time web application framework.
+description: Asity.
 url: http://asity.cettia.io/
+author:
+  name: Donghwan Kim
+  email: flowersinthesand@gmail.com
 relative_permalinks: false
-markdown: redcarpet
-redcarpet:
-  extensions:
-    - hard_wrap
-    - no_intra_emphasis
-    - autolink
-    - strikethrough
-    - fenced_code_blocks
-    - tables
+kramdown:
+  input: GFM
+gems:
+  - jekyll-redirect-from
+  - jekyll-sitemap

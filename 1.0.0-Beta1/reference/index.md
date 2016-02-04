@@ -9,19 +9,9 @@ title: Asity Reference
 
 **Table of Contents**
 
-* [Installation](#installation)
-* [Platform](#platform)
-    * [Atmosphere 2](#atmosphere-2)
-    * [Grizzly 2](#grizzly-2)
-    * [Java Servlet 3](#java-servlet-3)
-    * [Java WebSocket API 1](#java-websocket-api-1)
-    * [Netty 4](#netty-4)
-    * [Vert.x 2](#vert.x-2)
-* [Platform on platform](#platform-on-platform)
-    * [JAX-RS 2](#jax-rs-2)
-* [HTTP](#http)
-* [WebSocket](#websocket)
-        
+* TOC
+{:toc}
+
 ---
 
 ## Installation

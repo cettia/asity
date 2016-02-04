@@ -10,20 +10,20 @@ Asity is a lightweight abstraction layer for I/O frameworks which is designed to
 
 An Asity application can handle the following resources: 
 
-<ul class="inline-list">
-<li>HTTP</li>
-<li>WebSocket</li>
+<ul class="menu">
+<li class="menu-text">HTTP</li>
+<li class="menu-text">WebSocket</li>
 </ul>
 
 And run on the following platforms:
 
-<ul class="inline-list">
-<li>Atmosphere 2</li>
-<li>Grizzly 2</li>
-<li>Java Servlet 3</li>
-<li>Java WebSocket API 1</li>
-<li>Netty 4</li>
-<li>Vert.x 2</li>
+<ul class="menu">
+<li class="menu-text">Atmosphere 2</li>
+<li class="menu-text">Grizzly 2</li>
+<li class="menu-text">Java Servlet 3</li>
+<li class="menu-text">Java WebSocket API 1</li>
+<li class="menu-text">Netty 4</li>
+<li class="menu-text">Vert.x 2</li>
 </ul>
 
 ---
@@ -156,7 +156,7 @@ public class Bootstrap implements ServletContextListener {
 
 The same pattern applies when bridging an application to other platforms. Here is working examples. They demonstrate how to run [Cettia Java Server](/projects/cettia-java-server) implementing the Cettia Protocol using Asity on each platform.
 
-<ul class="inline-list">
+<ul class="menu">
 <li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/atmosphere2">Atmosphere 2</a></li>
 <li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/grizzly2">Grizzly 2</a></li>
 <li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/jwa1">Java WebSocket API 1</a></li>
@@ -168,7 +168,7 @@ The same pattern applies when bridging an application to other platforms. Here i
 
 It's not the end. Some platform, A, is based on the other platform, B, and allows to deal with the underlying platform, B, so that if a bridge for B is available, without creating an additional bridge for A, it's possible to run application on A through B. For example, applications written in Spring MVC platform or JAX-RS platform can run on Servlet platform.
 
-<ul class="inline-list">
+<ul class="menu">
 <li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform-on-platform/jaxrs2-atmosphere2">JAX-RS 2 on Atmosphere 2</a></li>
 </ul>
 
