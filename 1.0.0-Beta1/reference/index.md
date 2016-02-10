@@ -44,9 +44,10 @@ Add the following dependency to your build or include it on your classpath manua
 
 ```xml
 <dependency>
-    <groupId>io.cettia.asity</groupId>
-    <artifactId>asity-bridge-atmosphere2</artifactId>
-    <version>1.0.0-Beta1</version>
+  <groupId>io.cettia.asity</groupId>
+  <groupId>io.cettia.asity</groupId>
+  <artifactId>asity-bridge-atmosphere2</artifactId>
+  <version>1.0.0-Beta1</version>
 </dependency>
 ```
 
@@ -55,22 +56,22 @@ To bridge application and Atmosphere, you should register a servlet of `AsityAtm
 ```java
 @WebListener
 public class Bootstrap implements ServletContextListener {
-    @Override
-    public void contextInitialized(ServletContextEvent event) {
-        // Your application
-        Action<ServerHttpExchange> httpAction = http -> {};
-        Action<ServerWebSocket> websocketAction = ws -> {};
-        
-        ServletContext context = event.getServletContext();
-        Servlet servlet = new AsityAtmosphereServlet().onhttp(httpAction).onwebsocket(websocketAction);
-        ServletRegistration.Dynamic reg = context.addServlet(AsityAtmosphereServlet.class.getName(), servlet);
-        reg.setAsyncSupported(true);
-        reg.setInitParameter(ApplicationConfig.DISABLE_ATMOSPHEREINTERCEPTOR, Boolean.TRUE.toString());
-        reg.addMapping("/cettia");
-    }
+  @Override
+  public void contextInitialized(ServletContextEvent event) {
+    // Your application
+    Action<ServerHttpExchange> httpAction = http -> {};
+    Action<ServerWebSocket> websocketAction = ws -> {};
+    
+    ServletContext context = event.getServletContext();
+    Servlet servlet = new AsityAtmosphereServlet().onhttp(httpAction).onwebsocket(websocketAction);
+    ServletRegistration.Dynamic reg = context.addServlet(AsityAtmosphereServlet.class.getName(), servlet);
+    reg.setAsyncSupported(true);
+    reg.setInitParameter(ApplicationConfig.DISABLE_ATMOSPHEREINTERCEPTOR, Boolean.TRUE.toString());
+    reg.addMapping("/cettia");
+  }
 
-    @Override
-    public void contextDestroyed(ServletContextEvent sce) {}
+  @Override
+  public void contextDestroyed(ServletContextEvent sce) {}
 }
 ```
 
@@ -83,9 +84,9 @@ Add the following dependency to your build or include it on your classpath manua
 
 ```xml
 <dependency>
-    <groupId>io.cettia.asity</groupId>
-    <artifactId>asity-bridge-grizzly2</artifactId>
-    <version>1.0.0-Beta1</version>
+  <groupId>io.cettia.asity</groupId>
+  <artifactId>asity-bridge-grizzly2</artifactId>
+  <version>1.0.0-Beta1</version>
 </dependency>
 ```
 
@@ -93,20 +94,20 @@ And then, you should register an instance of `AsityHttpHandler` to deal with HTT
 
 ```java
 public class Bootstrap {
-    public static void main(String[] args) throws Exception {
-        // Your application
-        Action<ServerHttpExchange> httpAction = http -> {};
-        Action<ServerWebSocket> websocketAction = ws -> {};
-        
-        HttpServer httpServer = HttpServer.createSimpleServer();
-        ServerConfiguration config = httpServer.getServerConfiguration();
-        config.addHttpHandler(new AsityHttpHandler().onhttp(httpAction), "/cettia");
-        NetworkListener listener = httpServer.getListener("grizzly");
-        listener.registerAddOn(new WebSocketAddOn());
-        WebSocketEngine.getEngine().register("", "/cettia", new AsityWebSocketApplication().onwebsocket(websocketAction));
-        httpServer.start();
-        System.in.read();
-    }
+  public static void main(String[] args) throws Exception {
+    // Your application
+    Action<ServerHttpExchange> httpAction = http -> {};
+    Action<ServerWebSocket> websocketAction = ws -> {};
+    
+    HttpServer httpServer = HttpServer.createSimpleServer();
+    ServerConfiguration config = httpServer.getServerConfiguration();
+    config.addHttpHandler(new AsityHttpHandler().onhttp(httpAction), "/cettia");
+    NetworkListener listener = httpServer.getListener("grizzly");
+    listener.registerAddOn(new WebSocketAddOn());
+    WebSocketEngine.getEngine().register("", "/cettia", new AsityWebSocketApplication().onwebsocket(websocketAction));
+    httpServer.start();
+    System.in.read();
+  }
 }
 ```
 
@@ -123,9 +124,9 @@ Add the following dependency to your build or include it on your classpath manua
 
 ```xml
 <dependency>
-    <groupId>io.cettia.asity</groupId>
-    <artifactId>asity-bridge-servlet3</artifactId>
-    <version>1.0.0-Beta1</version>
+  <groupId>io.cettia.asity</groupId>
+  <artifactId>asity-bridge-servlet3</artifactId>
+  <version>1.0.0-Beta1</version>
 </dependency>
 ```
 
@@ -134,20 +135,20 @@ To bridge application and Servlet, you should register a servlet of `AsityServle
 ```java
 @WebListener
 public class Bootstrap implements ServletContextListener {
-    @Override
-    public void contextInitialized(ServletContextEvent event) {
-        // Your application
-        Action<ServerHttpExchange> httpAction = http -> {};
-        
-        ServletContext context = event.getServletContext();
-        Servlet servlet = new AsityServlet().onhttp(httpAction);
-        ServletRegistration.Dynamic reg = context.addServlet(AsityServlet.class.getName(), servlet);
-        reg.setAsyncSupported(true);
-        reg.addMapping("/cettia");
-    }
+  @Override
+  public void contextInitialized(ServletContextEvent event) {
+    // Your application
+    Action<ServerHttpExchange> httpAction = http -> {};
     
-    @Override
-    public void contextDestroyed(ServletContextEvent sce) {}
+    ServletContext context = event.getServletContext();
+    Servlet servlet = new AsityServlet().onhttp(httpAction);
+    ServletRegistration.Dynamic reg = context.addServlet(AsityServlet.class.getName(), servlet);
+    reg.setAsyncSupported(true);
+    reg.addMapping("/cettia");
+  }
+  
+  @Override
+  public void contextDestroyed(ServletContextEvent sce) {}
 }
 ```
 
@@ -162,9 +163,9 @@ Add the following dependency to your build or include it on your classpath manua
 
 ```xml
 <dependency>
-    <groupId>io.cettia.asity</groupId>
-    <artifactId>asity-bridge-jwa1</artifactId>
-    <version>1.0.0-Beta1</version>
+  <groupId>io.cettia.asity</groupId>
+  <artifactId>asity-bridge-jwa1</artifactId>
+  <version>1.0.0-Beta1</version>
 </dependency>
 ```
 
@@ -172,26 +173,26 @@ Then, you should register an endpoint of `AsityServerEndpoint`. Note that each W
 
 ```java
 public class Bootstrap implements ServerApplicationConfig {
-    @Override
-    public Set<ServerEndpointConfig> getEndpointConfigs(Set<Class<? extends Endpoint>> _) {
-        // Your application
-        Action<ServerWebSocket> websocketAction = ws -> {};
-        
-        ServerEndpointConfig config = ServerEndpointConfig.Builder.create(AsityServerEndpoint.class, "/cettia")
-        .configurator(new Configurator() {
-            @Override
-            public <T> T getEndpointInstance(Class<T> endpointClass) throws InstantiationException {
-                return endpointClass.cast(new AsityServerEndpoint().onwebsocket(websocketAction));
-            }
-        })
-        .build();
-        return Collections.singleton(config);
-    }
+  @Override
+  public Set<ServerEndpointConfig> getEndpointConfigs(Set<Class<? extends Endpoint>> _) {
+    // Your application
+    Action<ServerWebSocket> websocketAction = ws -> {};
+    
+    ServerEndpointConfig config = ServerEndpointConfig.Builder.create(AsityServerEndpoint.class, "/cettia")
+    .configurator(new Configurator() {
+      @Override
+      public <T> T getEndpointInstance(Class<T> endpointClass) throws InstantiationException {
+        return endpointClass.cast(new AsityServerEndpoint().onwebsocket(websocketAction));
+      }
+    })
+    .build();
+    return Collections.singleton(config);
+  }
 
-    @Override
-    public Set<Class<?>> getAnnotatedEndpointClasses(Set<Class<?>> scanned) {
-        return null;
-    }
+  @Override
+  public Set<Class<?>> getAnnotatedEndpointClasses(Set<Class<?>> scanned) {
+    return null;
+  }
 }
 ```
 
@@ -206,9 +207,9 @@ Add the following dependency to your build or include it on your classpath manua
 
 ```xml
 <dependency>
-    <groupId>io.cettia.asity</groupId>
-    <artifactId>asity-bridge-netty4</artifactId>
-    <version>1.0.0-Beta1</version>
+  <groupId>io.cettia.asity</groupId>
+  <artifactId>asity-bridge-netty4</artifactId>
+  <version>1.0.0-Beta1</version>
 </dependency>
 ```
 
@@ -216,39 +217,39 @@ To bridge application and Netty, you should register a handler of `AsityServerCo
 
 ```java
 public class Bootstrap {
-    public static void main(String[] args) throws Exception {
-        // Your application
-        Action<ServerHttpExchange> httpAction = http -> {};
-        Action<ServerWebSocket> websocketAction = ws -> {};
-        
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-        try {
-            ServerBootstrap bootstrap = new ServerBootstrap();
-            bootstrap.group(bossGroup, workerGroup)
-            .channel(NioServerSocketChannel.class)
-            .childHandler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                public void initChannel(SocketChannel ch) {
-                    ChannelPipeline pipeline = ch.pipeline();
-                    pipeline.addLast(new HttpServerCodec())
-                    .addLast(new AsityServerCodec() {
-                        @Override
-                        protected boolean accept(HttpRequest req) {
-                            return URI.create(req.getUri()).getPath().equals("/cettia");
-                        }
-                    }
-                    .onhttp(httpAction)
-                    .onwebsocket(websocketAction));
-                }
-            });
-            Channel channel = bootstrap.bind(8080).sync().channel();
-            channel.closeFuture().sync();
-        } finally {
-            workerGroup.shutdownGracefully();
-            bossGroup.shutdownGracefully();
+  public static void main(String[] args) throws Exception {
+    // Your application
+    Action<ServerHttpExchange> httpAction = http -> {};
+    Action<ServerWebSocket> websocketAction = ws -> {};
+    
+    EventLoopGroup bossGroup = new NioEventLoopGroup();
+    EventLoopGroup workerGroup = new NioEventLoopGroup();
+    try {
+      ServerBootstrap bootstrap = new ServerBootstrap();
+      bootstrap.group(bossGroup, workerGroup)
+      .channel(NioServerSocketChannel.class)
+      .childHandler(new ChannelInitializer<SocketChannel>() {
+        @Override
+        public void initChannel(SocketChannel ch) {
+          ChannelPipeline pipeline = ch.pipeline();
+          pipeline.addLast(new HttpServerCodec())
+          .addLast(new AsityServerCodec() {
+            @Override
+            protected boolean accept(HttpRequest req) {
+              return URI.create(req.getUri()).getPath().equals("/cettia");
+            }
+          }
+          .onhttp(httpAction)
+          .onwebsocket(websocketAction));
         }
+      });
+      Channel channel = bootstrap.bind(8080).sync().channel();
+      channel.closeFuture().sync();
+    } finally {
+      workerGroup.shutdownGracefully();
+      bossGroup.shutdownGracefully();
     }
+  }
 }
 ```
 
@@ -261,9 +262,9 @@ Add the following dependency to your build or include it on your classpath manua
 
 ```xml
 <dependency>
-    <groupId>io.cettia.asity</groupId>
-    <artifactId>asity-bridge-vertx2</artifactId>
-    <version>1.0.0-Beta1</version>
+  <groupId>io.cettia.asity</groupId>
+  <artifactId>asity-bridge-vertx2</artifactId>
+  <version>1.0.0-Beta1</version>
 </dependency>
 ```
 
@@ -271,27 +272,27 @@ You should register a handler of `AsityRequestHandler` to handle HTTP exchange a
 
 ```java
 public class Bootstrap extends Verticle {
-    @Override
-    public void start() {
-        // Your application
-        Action<ServerHttpExchange> httpAction = http -> {};
-        Action<ServerWebSocket> websocketAction = ws -> {};
-        
-        HttpServer httpServer = vertx.createHttpServer();
-        RouteMatcher httpMatcher = new RouteMatcher();
-        httpMatcher.all("/cettia", new AsityRequestHandler().onhttp(httpAction));
-        httpServer.requestHandler(httpMatcher);
-        final AsityWebSocketHandler websocketHandler = new AsityWebSocketHandler().onwebsocket(websocketAction);
-        httpServer.websocketHandler(new Handler<org.vertx.java.core.http.ServerWebSocket>() {
-            @Override
-            public void handle(org.vertx.java.core.http.ServerWebSocket socket) {
-                if (socket.path().equals("/cettia")) {
-                    websocketHandler.handle(socket);
-                }
-            }
-        });
-        httpServer.listen(8080);
-    }
+  @Override
+  public void start() {
+    // Your application
+    Action<ServerHttpExchange> httpAction = http -> {};
+    Action<ServerWebSocket> websocketAction = ws -> {};
+    
+    HttpServer httpServer = vertx.createHttpServer();
+    RouteMatcher httpMatcher = new RouteMatcher();
+    httpMatcher.all("/cettia", new AsityRequestHandler().onhttp(httpAction));
+    httpServer.requestHandler(httpMatcher);
+    final AsityWebSocketHandler websocketHandler = new AsityWebSocketHandler().onwebsocket(websocketAction);
+    httpServer.websocketHandler(new Handler<org.vertx.java.core.http.ServerWebSocket>() {
+      @Override
+      public void handle(org.vertx.java.core.http.ServerWebSocket socket) {
+        if (socket.path().equals("/cettia")) {
+          websocketHandler.handle(socket);
+        }
+      }
+    });
+    httpServer.listen(8080);
+  }
 }
 ```
 
@@ -312,9 +313,9 @@ To write HTTP application, add the following dependency to your build or include
 
 ```xml
 <dependency>
-    <groupId>io.cettia.asity</groupId>
-    <artifactId>asity-http</artifactId>
-    <version>1.0.0-Beta1</version>
+  <groupId>io.cettia.asity</groupId>
+  <artifactId>asity-http</artifactId>
+  <version>1.0.0-Beta1</version>
 </dependency>
 ```
 
@@ -325,40 +326,40 @@ It represents a server-side HTTP request-response exchange and is given when req
 These are read only and might not be available in some platforms after `onend` or `onclose`.
 
 <div class="row">
-    <div class="large-4 columns">
-        <h5>URI</h5>
-        <p>A request URI used to connect. To work with URI parts, use <code>java.net.URI</code> or something like that.</p>
+  <div class="large-4 columns">
+    <h5>URI</h5>
+    <p>A request URI used to connect. To work with URI parts, use <code>java.net.URI</code> or something like that.</p>
 {% capture panel %}
 ```java
 URI.create(http.uri()).getQuery();
 ```
 {% endcapture %}{{ panel | markdownify }}
-    </div>
-    <div class="large-4 columns">
-        <h5>Method</h5>
-        <p>A name of the request method.</p>
+  </div>
+  <div class="large-4 columns">
+    <h5>Method</h5>
+    <p>A name of the request method.</p>
 {% capture panel %}
 ```java
 switch (http.method()) {
-    case GET:
-    case POST:
-        // GET or POST
-        break;
+  case GET:
+  case POST:
+    // GET or POST
+    break;
 }
 ```
 {% endcapture %}{{ panel | markdownify }}
-    </div>
-    <div class="large-4 columns">
-        <h5>Headers</h5>
-        <p>Request headers.</p>
+  </div>
+  <div class="large-4 columns">
+    <h5>Headers</h5>
+    <p>Request headers.</p>
 {% capture panel %}
 ```java
 for (String name : http.headerNames()) {
-    String value = http.header(name);
+  String value = http.header(name);
 }
 ```
 {% endcapture %}{{ panel | markdownify }}
-    </div>
+  </div>
 </div>
 
 #### Reading request
@@ -367,17 +368,17 @@ for (String name : http.headerNames()) {
 ```java
 Stringbuilder bodyBuilder = new Stringbuilder();
 http.onchunk(new Action<String>() {
-    @Override
-    public void on(String chunk) {
-        bodyBuilder.append(chunk);
-    }
+  @Override
+  public void on(String chunk) {
+    bodyBuilder.append(chunk);
+  }
 })
 .onend(new VoidAction() {
-    @Override
-    public void on() {
-        String body = bodyBuilder.toString();
-        // Your logic here
-    }
+  @Override
+  public void on() {
+    String body = bodyBuilder.toString();
+    // Your logic here
+  }
 })
 .read();
 ```
@@ -386,10 +387,10 @@ For convenience, `onbody` is provided which allows to receive the whole request 
 
 ```java
 http.onbody(new Action<String>() {
-    @Override
-    public void on(String body) {
-        // Your logic here
-    }
+  @Override
+  public void on(String body) {
+    // Your logic here
+  }
 })
 .read();
 ```
@@ -400,24 +401,24 @@ http.onbody(new Action<String>() {
 These are write only and not modifiable after the write of first chunk.
 
 <div class="row">
-    <div class="large-6 columns">
-        <h5>Status</h5>
-        <p>A HTTP Status code for response.</p>
+  <div class="large-6 columns">
+    <h5>Status</h5>
+    <p>A HTTP Status code for response.</p>
 {% capture panel %}
 ```java
 http.setStatus(HttpStatus.NOT_IMPLEMENTED);
 ```
 {% endcapture %}{{ panel | markdownify }}
-    </div>
-    <div class="large-6 columns">
-        <h5>Headers</h5>
-        <p>Response headers.</p>
+  </div>
+  <div class="large-6 columns">
+    <h5>Headers</h5>
+    <p>Response headers.</p>
 {% capture panel %}
 ```java
 http.setHeader("content-type", "text/javascript; charset=utf-8");
 ```
 {% endcapture %}{{ panel | markdownify }}
-    </div>
+  </div>
 </div>
 
 #### Writing response
@@ -437,10 +438,10 @@ And, on the end of the response, `onfinish` is fired.
 
 ```java
 http.onfinish(new VoidAction() {
-    @Override
-    public void on() {
-        // Your logic here
-    }
+  @Override
+  public void on() {
+    // Your logic here
+  }
 })
 ```
 
@@ -449,10 +450,10 @@ Any error happening in request-response exchange is propagated to actions added 
 
 ```java
 http.onerror(new Action<Throwable>() {
-    @Override
-    public void on(Throwable error) {
-        // Your logic here
-    }
+  @Override
+  public void on(Throwable error) {
+    // Your logic here
+  }
 });
 ```
 
@@ -460,10 +461,10 @@ When the underlying connection is terminated for some reason like network or pro
 
 ```java
 http.onclose(new VoidAction() {
-    @Override
-    public void on() {
-        // Your logic here
-    }
+  @Override
+  public void on() {
+    // Your logic here
+  }
 });
 ```
 
@@ -474,9 +475,9 @@ To write WebSocket application, add the following dependency to your build or in
 
 ```xml
 <dependency>
-    <groupId>io.cettia.asity</groupId>
-    <artifactId>asity-websocket</artifactId>
-    <version>1.0.0-Beta1</version>
+  <groupId>io.cettia.asity</groupId>
+  <artifactId>asity-websocket</artifactId>
+  <version>1.0.0-Beta1</version>
 </dependency>
 ```
 
@@ -498,16 +499,16 @@ Text frame is passed to `ontext` as `String` and binary frame is passed to `onbi
 
 ```java
 ws.ontext(new Action<String>() {
-    @Override
-    public void on(String data) {
-        // Your logic here
-    }
+  @Override
+  public void on(String data) {
+    // Your logic here
+  }
 })
 .onbinary(new Action<ByteBuffer>() {
-    @Override
-    public void on(ByteBuffer data) {
-        // Your logic here
-    }
+  @Override
+  public void on(ByteBuffer data) {
+    // Your logic here
+  }
 });
 ```
 
@@ -529,10 +530,10 @@ When the connection has been closed for any reason, normally or abnormally, clos
  
 ```java
 ws.onclose(new VoidAction() {
-    @Override
-    public void on() {
-        // Your logic here
-    }
+  @Override
+  public void on() {
+    // Your logic here
+  }
 });
 ```
 
@@ -541,9 +542,9 @@ Any error happening in this connection is propagated to actions added via `onerr
 
 ```java
 ws.onerror(new Action<Throwable>() {
-    @Override
-    public void on(Throwable error) {
-        // Your logic here
-    }
+  @Override
+  public void on(Throwable error) {
+    // Your logic here
+  }
 });
 ```

@@ -36,14 +36,14 @@ Asity is distributed through Maven Central. To write web application running on 
 
 ```xml
 <dependency>
-    <groupId>io.cettia.asity</groupId>
-    <artifactId>asity-http</artifactId>
-    <version>1.0.0-Beta1</version>
+  <groupId>io.cettia.asity</groupId>
+  <artifactId>asity-http</artifactId>
+  <version>1.0.0-Beta1</version>
 </dependency>
 <dependency>
-    <groupId>io.cettia.asity</groupId>
-    <artifactId>asity-websocket</artifactId>
-    <version>1.0.0-Beta1</version>
+  <groupId>io.cettia.asity</groupId>
+  <artifactId>asity-websocket</artifactId>
+  <version>1.0.0-Beta1</version>
 </dependency>
 ```
 
@@ -55,34 +55,34 @@ import io.cettia.asity.http.ServerHttpExchange;
 import io.cettia.asity.websocket.ServerWebSocket;
 
 public class EchoHandler {
-    // Asity supports Java 7+
-    // For better readability, public final fields and lambda expressions in Java 8 are used here
-    public final Action<ServerHttpExchange> httpAction = (ServerHttpExchange http) -> {
-        // Copies the content-type header of the request to the response
-        http.setHeader("content-type", http.header("content-type"));
-        // When a chunk is read from the request body, writes it to the response body
-        http.onchunk((ByteBuffer bytes) -> http.write(bytes));
-        // When the request is fully read, ends the response
-        http.onend((Void $) -> http.end());
-        // Reads the request body as binary to circumvent encoding issue
-        http.readAsBinary();
-        // When the response is fully written and ends,
-        http.onfinish((Void $) -> System.out.println("on finish"));
-        // When some error happens in the request-response exchange,
-        http.onerror((Throwable t) -> t.printStackTrace());
-        // When the underlying connection is terminated,
-        http.onclose((Void $) -> System.out.println("on close"));
-    };
-    public final Action<ServerWebSocket> websocketAction = (ServerWebSocket ws) -> {
-        // When a text frame is arrived, sends it back
-        ws.ontext((String data) -> ws.send(data));
-        // When a binary frame is arrived, sends it back
-        ws.onbinary((ByteBuffer bytes) -> ws.send(bytes));
-        // When some error happens in the connection,
-        ws.onerror((Throwable t) -> t.printStackTrace());
-        // When the connection is closed for any reason,
-        ws.onclose((Void $) -> System.out.println("on close"));
-    };
+  // Asity supports Java 7+
+  // For better readability, public final fields and lambda expressions in Java 8 are used here
+  public final Action<ServerHttpExchange> httpAction = (ServerHttpExchange http) -> {
+    // Copies the content-type header of the request to the response
+    http.setHeader("content-type", http.header("content-type"));
+    // When a chunk is read from the request body, writes it to the response body
+    http.onchunk((ByteBuffer bytes) -> http.write(bytes));
+    // When the request is fully read, ends the response
+    http.onend((Void $) -> http.end());
+    // Reads the request body as binary to circumvent encoding issue
+    http.readAsBinary();
+    // When the response is fully written and ends,
+    http.onfinish((Void $) -> System.out.println("on finish"));
+    // When some error happens in the request-response exchange,
+    http.onerror((Throwable t) -> t.printStackTrace());
+    // When the underlying connection is terminated,
+    http.onclose((Void $) -> System.out.println("on close"));
+  };
+  public final Action<ServerWebSocket> websocketAction = (ServerWebSocket ws) -> {
+    // When a text frame is arrived, sends it back
+    ws.ontext((String data) -> ws.send(data));
+    // When a binary frame is arrived, sends it back
+    ws.onbinary((ByteBuffer bytes) -> ws.send(bytes));
+    // When some error happens in the connection,
+    ws.onerror((Throwable t) -> t.printStackTrace());
+    // When the connection is closed for any reason,
+    ws.onclose((Void $) -> System.out.println("on close"));
+  };
 }
 ```
 
@@ -94,14 +94,14 @@ For example, to run `EchoHandler` on an implementation of Java Servlet 3 and Jav
 
 ```xml
 <dependency>
-    <groupId>io.cettia.asity</groupId>
-    <artifactId>asity-bridge-servlet3</artifactId>
-    <version>1.0.0-Beta1</version>
+  <groupId>io.cettia.asity</groupId>
+  <artifactId>asity-bridge-servlet3</artifactId>
+  <version>1.0.0-Beta1</version>
 </dependency>
 <dependency>
-    <groupId>io.cettia.asity</groupId>
-    <artifactId>asity-bridge-jwa1</artifactId>
-    <version>1.0.0-Beta1</version>
+  <groupId>io.cettia.asity</groupId>
+  <artifactId>asity-bridge-jwa1</artifactId>
+  <version>1.0.0-Beta1</version>
 </dependency>
 ```
 
@@ -118,37 +118,37 @@ import javax.websocket.server.*;
 
 @WebListener
 public class Bootstrap implements ServletContextListener {
-    @Override
-    public void contextInitialized(ServletContextEvent event) {
-        // An application
-        final EchoHandler handler = new EchoHandler();
-        
-        // Feeds the application with HTTP resources produced by Servlet 3
-        ServletContext context = event.getServletContext();
-        Servlet servlet = new AsityServlet().onhttp(handler.httpAction);
-        ServletRegistration.Dynamic reg = context.addServlet(AsityServlet.class.getName(), servlet);
-        reg.setAsyncSupported(true);
-        reg.addMapping("/echo");
-        
-        // Feeds the application with WebSocket resources produced by Java WebSocket API 1
-        ServerContainer container = (ServerContainer) context.getAttribute(ServerContainer.class.getName());
-        ServerEndpointConfig config = ServerEndpointConfig.Builder.create(AsityServerEndpoint.class, "/echo")
-        .configurator(new Configurator() {
-            @Override
-            public <T> T getEndpointInstance(Class<T> endpointClass) throws InstantiationException {
-                return endpointClass.cast(new AsityServerEndpoint().onwebsocket(handler.websocketAction));
-            }
-        })
-        .build();
-        try {
-            container.addEndpoint(config);
-        } catch (DeploymentException e) {
-            throw new RuntimeException(e);
-        }
+  @Override
+  public void contextInitialized(ServletContextEvent event) {
+    // An application
+    final EchoHandler handler = new EchoHandler();
+    
+    // Feeds the application with HTTP resources produced by Servlet 3
+    ServletContext context = event.getServletContext();
+    Servlet servlet = new AsityServlet().onhttp(handler.httpAction);
+    ServletRegistration.Dynamic reg = context.addServlet(AsityServlet.class.getName(), servlet);
+    reg.setAsyncSupported(true);
+    reg.addMapping("/echo");
+    
+    // Feeds the application with WebSocket resources produced by Java WebSocket API 1
+    ServerContainer container = (ServerContainer) context.getAttribute(ServerContainer.class.getName());
+    ServerEndpointConfig config = ServerEndpointConfig.Builder.create(AsityServerEndpoint.class, "/echo")
+    .configurator(new Configurator() {
+      @Override
+      public <T> T getEndpointInstance(Class<T> endpointClass) throws InstantiationException {
+        return endpointClass.cast(new AsityServerEndpoint().onwebsocket(handler.websocketAction));
+      }
+    })
+    .build();
+    try {
+      container.addEndpoint(config);
+    } catch (DeploymentException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    @Override
-    public void contextDestroyed(ServletContextEvent sce) {}
+  @Override
+  public void contextDestroyed(ServletContextEvent sce) {}
 }
 ```
 
