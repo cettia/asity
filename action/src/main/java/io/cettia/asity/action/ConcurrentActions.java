@@ -27,51 +27,51 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class ConcurrentActions<T> extends AbstractActions<T> {
 
-    private final AtomicBoolean disabled = new AtomicBoolean();
-    private final AtomicBoolean fired = new AtomicBoolean();
-    private final AtomicReference<T> cached = new AtomicReference<>();
+  private final AtomicBoolean disabled = new AtomicBoolean();
+  private final AtomicBoolean fired = new AtomicBoolean();
+  private final AtomicReference<T> cached = new AtomicReference<>();
 
-    public ConcurrentActions() {
-        super();
-    }
+  public ConcurrentActions() {
+    super();
+  }
 
-    public ConcurrentActions(Actions.Options o) {
-        super(o);
-    }
+  public ConcurrentActions(Actions.Options o) {
+    super(o);
+  }
 
-    @Override
-    protected List<Action<T>> createList() {
-        return new CopyOnWriteArrayList<>();
-    }
+  @Override
+  protected List<Action<T>> createList() {
+    return new CopyOnWriteArrayList<>();
+  }
 
-    @Override
-    protected void setCache(T data) {
-        this.cached.set(data);
-    }
+  @Override
+  protected void setCache(T data) {
+    this.cached.set(data);
+  }
 
-    @Override
-    protected T cached() {
-        return cached.get();
-    }
+  @Override
+  protected T cached() {
+    return cached.get();
+  }
 
-    @Override
-    protected boolean setDisabled() {
-        return disabled.compareAndSet(false, true);
-    }
+  @Override
+  protected boolean setDisabled() {
+    return disabled.compareAndSet(false, true);
+  }
 
-    @Override
-    public boolean disabled() {
-        return disabled.get();
-    }
+  @Override
+  public boolean disabled() {
+    return disabled.get();
+  }
 
-    @Override
-    protected void setFired() {
-        fired.set(true);
-    }
+  @Override
+  protected void setFired() {
+    fired.set(true);
+  }
 
-    @Override
-    public boolean fired() {
-        return fired.get();
-    }
+  @Override
+  public boolean fired() {
+    return fired.get();
+  }
 
 }

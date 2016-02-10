@@ -42,102 +42,102 @@ import java.util.Set;
  */
 public class NettyServerHttpExchange extends AbstractServerHttpExchange {
 
-    private final ChannelHandlerContext context;
-    private final HttpRequest request;
-    private final HttpResponse response;
-    private boolean written;
-    private Action<ByteBuffer> chunkAction;
+  private final ChannelHandlerContext context;
+  private final HttpRequest request;
+  private final HttpResponse response;
+  private boolean written;
+  private Action<ByteBuffer> chunkAction;
 
-    public NettyServerHttpExchange(ChannelHandlerContext context, HttpRequest request) {
-        this.context = context;
-        this.request = request;
-        this.response = new DefaultHttpResponse(request.getProtocolVersion(), HttpResponseStatus.OK, false);
-        response.headers().set(HttpHeaders.Names.TRANSFER_ENCODING, HttpHeaders.Values.CHUNKED);
-    }
+  public NettyServerHttpExchange(ChannelHandlerContext context, HttpRequest request) {
+    this.context = context;
+    this.request = request;
+    this.response = new DefaultHttpResponse(request.getProtocolVersion(), HttpResponseStatus.OK, false);
+    response.headers().set(HttpHeaders.Names.TRANSFER_ENCODING, HttpHeaders.Values.CHUNKED);
+  }
 
-    void handleError(Throwable cause) {
-        errorActions.fire(cause);
-    }
+  void handleError(Throwable cause) {
+    errorActions.fire(cause);
+  }
 
-    void handleClose() {
-        closeActions.fire();
-    }
+  void handleClose() {
+    closeActions.fire();
+  }
 
-    @Override
-    public String uri() {
-        return request.getUri();
-    }
+  @Override
+  public String uri() {
+    return request.getUri();
+  }
 
-    @Override
-    public HttpMethod method() {
-        return HttpMethod.valueOf(request.getMethod().toString());
-    }
+  @Override
+  public HttpMethod method() {
+    return HttpMethod.valueOf(request.getMethod().toString());
+  }
 
-    @Override
-    public Set<String> headerNames() {
-        return request.headers().names();
-    }
+  @Override
+  public Set<String> headerNames() {
+    return request.headers().names();
+  }
 
-    @Override
-    public List<String> headers(String name) {
-        return request.headers().getAll(name);
-    }
+  @Override
+  public List<String> headers(String name) {
+    return request.headers().getAll(name);
+  }
 
-    @Override
-    protected void doRead(Action<ByteBuffer> chunkAction) {
-        this.chunkAction = chunkAction;
-    }
+  @Override
+  protected void doRead(Action<ByteBuffer> chunkAction) {
+    this.chunkAction = chunkAction;
+  }
 
-    void handleChunk(HttpContent chunk) {
-        // To obtain chunkAction
-        read();
-        ByteBuf buf = chunk.content();
-        if (buf.isReadable() && this.chunkAction != null) {
-            this.chunkAction.on(buf.nioBuffer());
-        }
-        if (chunk instanceof LastHttpContent) {
-            endActions.fire();
-        }
+  void handleChunk(HttpContent chunk) {
+    // To obtain chunkAction
+    read();
+    ByteBuf buf = chunk.content();
+    if (buf.isReadable() && this.chunkAction != null) {
+      this.chunkAction.on(buf.nioBuffer());
     }
+    if (chunk instanceof LastHttpContent) {
+      endActions.fire();
+    }
+  }
 
-    @Override
-    protected void doSetStatus(HttpStatus status) {
-        response.setStatus(new HttpResponseStatus(status.code(), status.reason()));
-    }
+  @Override
+  protected void doSetStatus(HttpStatus status) {
+    response.setStatus(new HttpResponseStatus(status.code(), status.reason()));
+  }
 
-    @Override
-    protected void doSetHeader(String name, String value) {
-        response.headers().set(name, value);
-    }
+  @Override
+  protected void doSetHeader(String name, String value) {
+    response.headers().set(name, value);
+  }
 
-    @Override
-    protected void doWrite(ByteBuffer byteBuffer) {
-        ByteBuf buf = Unpooled.unreleasableBuffer(Unpooled.wrappedBuffer(byteBuffer));
-        if (!written) {
-            written = true;
-            context.write(response);
-        }
-        context.writeAndFlush(buf);
+  @Override
+  protected void doWrite(ByteBuffer byteBuffer) {
+    ByteBuf buf = Unpooled.unreleasableBuffer(Unpooled.wrappedBuffer(byteBuffer));
+    if (!written) {
+      written = true;
+      context.write(response);
     }
+    context.writeAndFlush(buf);
+  }
 
-    @Override
-    protected void doEnd() {
-        if (!written) {
-            written = true;
-            context.write(response);
-        }
-        context.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
+  @Override
+  protected void doEnd() {
+    if (!written) {
+      written = true;
+      context.write(response);
     }
+    context.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
+  }
 
-    @Override
-    public <T> T unwrap(Class<T> clazz) {
-        return ChannelHandlerContext.class.isAssignableFrom(clazz) ? 
-            clazz.cast(context) : 
-            HttpRequest.class.isAssignableFrom(clazz) ? 
-                clazz.cast(request) : 
-                HttpResponse.class.isAssignableFrom(clazz) ?
-                    clazz.cast(response) :
-                    null;
-    }
+  @Override
+  public <T> T unwrap(Class<T> clazz) {
+    return ChannelHandlerContext.class.isAssignableFrom(clazz) ?
+      clazz.cast(context) :
+      HttpRequest.class.isAssignableFrom(clazz) ?
+        clazz.cast(request) :
+        HttpResponse.class.isAssignableFrom(clazz) ?
+          clazz.cast(response) :
+          null;
+  }
 
 }

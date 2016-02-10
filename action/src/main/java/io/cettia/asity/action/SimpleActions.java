@@ -25,55 +25,55 @@ import java.util.List;
  */
 public class SimpleActions<T> extends AbstractActions<T> {
 
-    private boolean disabled;
-    private boolean fired;
-    private T cached;
+  private boolean disabled;
+  private boolean fired;
+  private T cached;
 
-    public SimpleActions() {
-        super();
-    }
+  public SimpleActions() {
+    super();
+  }
 
-    public SimpleActions(Actions.Options o) {
-        super(o);
-    }
+  public SimpleActions(Actions.Options o) {
+    super(o);
+  }
 
-    @Override
-    protected List<Action<T>> createList() {
-        return new ArrayList<>();
-    }
+  @Override
+  protected List<Action<T>> createList() {
+    return new ArrayList<>();
+  }
 
-    @Override
-    protected void setCache(T data) {
-        this.cached = data;
-    }
+  @Override
+  protected void setCache(T data) {
+    this.cached = data;
+  }
 
-    @Override
-    protected T cached() {
-        return cached;
-    }
+  @Override
+  protected T cached() {
+    return cached;
+  }
 
-    @Override
-    protected boolean setDisabled() {
-        boolean answer = !disabled;
-        if (answer) {
-            disabled = true;
-        }
-        return answer;
+  @Override
+  protected boolean setDisabled() {
+    boolean answer = !disabled;
+    if (answer) {
+      disabled = true;
     }
+    return answer;
+  }
 
-    @Override
-    public boolean disabled() {
-        return disabled;
-    }
+  @Override
+  public boolean disabled() {
+    return disabled;
+  }
 
-    @Override
-    protected void setFired() {
-        fired = true;
-    }
+  @Override
+  protected void setFired() {
+    fired = true;
+  }
 
-    @Override
-    public boolean fired() {
-        return fired;
-    }
+  @Override
+  public boolean fired() {
+    return fired;
+  }
 
 }

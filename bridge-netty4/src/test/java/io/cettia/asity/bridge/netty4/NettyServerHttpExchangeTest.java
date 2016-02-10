@@ -32,71 +32,70 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.util.concurrent.GlobalEventExecutor;
-
-import java.net.URI;
-
 import org.eclipse.jetty.client.api.Response;
 import org.junit.Test;
+
+import java.net.URI;
 
 /**
  * @author Donghwan Kim
  */
 public class NettyServerHttpExchangeTest extends ServerHttpExchangeTestBase {
 
-    private EventLoopGroup bossGroup;
-    private EventLoopGroup workerGroup;
-    private ChannelGroup channels;
+  private EventLoopGroup bossGroup;
+  private EventLoopGroup workerGroup;
+  private ChannelGroup channels;
 
-    @Override
-    protected void startServer(int port, final Action<ServerHttpExchange> requestAction) throws Exception {
-        bossGroup = new NioEventLoopGroup();
-        workerGroup = new NioEventLoopGroup();
-        channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
-        ServerBootstrap bootstrap = new ServerBootstrap();
-        bootstrap.group(bossGroup, workerGroup)
-        .channel(NioServerSocketChannel.class)
-        .childHandler(new ChannelInitializer<SocketChannel>() {
-            @Override
-            public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                channels.add(ctx.channel());
+  @Override
+  protected void startServer(int port, final Action<ServerHttpExchange> requestAction) throws Exception {
+    bossGroup = new NioEventLoopGroup();
+    workerGroup = new NioEventLoopGroup();
+    channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    ServerBootstrap bootstrap = new ServerBootstrap();
+    bootstrap.group(bossGroup, workerGroup)
+      .channel(NioServerSocketChannel.class)
+      .childHandler(new ChannelInitializer<SocketChannel>() {
+        @Override
+        public void channelActive(ChannelHandlerContext ctx) throws Exception {
+          channels.add(ctx.channel());
+        }
+
+        @Override
+        public void initChannel(SocketChannel ch) throws Exception {
+          ChannelPipeline pipeline = ch.pipeline();
+          pipeline.addLast(new HttpServerCodec())
+            .addLast(new AsityServerCodec() {
+              @Override
+              protected boolean accept(HttpRequest req) {
+                return URI.create(req.getUri()).getPath().equals(TEST_URI);
+              }
             }
+              .onhttp(requestAction));
+        }
+      });
+    channels.add(bootstrap.bind(port).channel());
+  }
 
-            @Override
-            public void initChannel(SocketChannel ch) throws Exception {
-                ChannelPipeline pipeline = ch.pipeline();
-                pipeline.addLast(new HttpServerCodec())
-                .addLast(new AsityServerCodec() {
-                    @Override
-                    protected boolean accept(HttpRequest req) {
-                        return URI.create(req.getUri()).getPath().equals(TEST_URI);
-                    }
-                }
-                .onhttp(requestAction));
-            }
-        });
-        channels.add(bootstrap.bind(port).channel());
-    }
+  @Override
+  protected void stopServer() {
+    channels.close();
+    workerGroup.shutdownGracefully();
+    bossGroup.shutdownGracefully();
+  }
 
-    @Override
-    protected void stopServer() {
-        channels.close();
-        workerGroup.shutdownGracefully();
-        bossGroup.shutdownGracefully();
-    }
-
-    @Test
-    public void unwrap() throws Throwable {
-        requestAction(new Action<ServerHttpExchange>() {
-            @Override
-            public void on(ServerHttpExchange http) {
-                threadAssertTrue(http.unwrap(ChannelHandlerContext.class) instanceof ChannelHandlerContext);
-                threadAssertTrue(http.unwrap(HttpRequest.class) instanceof HttpRequest);
-                threadAssertTrue(http.unwrap(HttpResponse.class) instanceof HttpResponse);
-                resume();
-            }
-        });
-        client.newRequest(uri()).send(new Response.Listener.Adapter());
-        await();
-    }
+  @Test
+  public void unwrap() throws Throwable {
+    requestAction(new Action<ServerHttpExchange>() {
+      @Override
+      public void on(ServerHttpExchange http) {
+        threadAssertTrue(http.unwrap(ChannelHandlerContext.class) instanceof ChannelHandlerContext);
+        threadAssertTrue(http.unwrap(HttpRequest.class) instanceof HttpRequest);
+        threadAssertTrue(http.unwrap(HttpResponse.class) instanceof HttpResponse);
+        resume();
+      }
+    });
+    client.newRequest(uri()).send(new Response.Listener.Adapter());
+    await();
+  }
 
 }

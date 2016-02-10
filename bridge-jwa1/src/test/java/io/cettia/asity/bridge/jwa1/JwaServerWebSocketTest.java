@@ -18,14 +18,6 @@ package io.cettia.asity.bridge.jwa1;
 import io.cettia.asity.action.Action;
 import io.cettia.asity.test.ServerWebSocketTestBase;
 import io.cettia.asity.websocket.ServerWebSocket;
-
-import java.net.URI;
-
-import javax.websocket.Session;
-import javax.websocket.server.ServerContainer;
-import javax.websocket.server.ServerEndpointConfig;
-import javax.websocket.server.ServerEndpointConfig.Configurator;
-
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -33,50 +25,56 @@ import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
 import org.junit.Test;
 
+import javax.websocket.Session;
+import javax.websocket.server.ServerContainer;
+import javax.websocket.server.ServerEndpointConfig;
+import javax.websocket.server.ServerEndpointConfig.Configurator;
+import java.net.URI;
+
 /**
  * @author Donghwan Kim
  */
 public class JwaServerWebSocketTest extends ServerWebSocketTestBase {
 
-    Server server;
+  Server server;
 
-    @Override
-    protected void startServer(int port, final Action<ServerWebSocket> websocketAction) throws Exception {
-        server = new Server();
-        ServerConnector connector = new ServerConnector(server);
-        connector.setPort(port);
-        server.addConnector(connector);
-        ServletContextHandler handler = new ServletContextHandler();
-        server.setHandler(handler);
-        ServerContainer container = WebSocketServerContainerInitializer.configureContext(handler);
-        ServerEndpointConfig config = ServerEndpointConfig.Builder.create(AsityServerEndpoint.class, TEST_URI)
-        .configurator(new Configurator() {
-            @Override
-            public <T> T getEndpointInstance(Class<T> endpointClass) throws InstantiationException {
-                return endpointClass.cast(new AsityServerEndpoint().onwebsocket(websocketAction));
-            }
-        })
-        .build();
-        container.addEndpoint(config);
-        server.start();
-    }
+  @Override
+  protected void startServer(int port, final Action<ServerWebSocket> websocketAction) throws Exception {
+    server = new Server();
+    ServerConnector connector = new ServerConnector(server);
+    connector.setPort(port);
+    server.addConnector(connector);
+    ServletContextHandler handler = new ServletContextHandler();
+    server.setHandler(handler);
+    ServerContainer container = WebSocketServerContainerInitializer.configureContext(handler);
+    ServerEndpointConfig config = ServerEndpointConfig.Builder.create(AsityServerEndpoint.class, TEST_URI)
+      .configurator(new Configurator() {
+        @Override
+        public <T> T getEndpointInstance(Class<T> endpointClass) throws InstantiationException {
+          return endpointClass.cast(new AsityServerEndpoint().onwebsocket(websocketAction));
+        }
+      })
+      .build();
+    container.addEndpoint(config);
+    server.start();
+  }
 
-    @Test
-    public void unwrap() throws Throwable {
-        websocketAction(new Action<ServerWebSocket>() {
-            @Override
-            public void on(ServerWebSocket ws) {
-                threadAssertTrue(ws.unwrap(Session.class) instanceof Session);
-                resume();
-            }
-        });
-        client.connect(new WebSocketAdapter(), URI.create(uri()));
-        await();
-    }
+  @Test
+  public void unwrap() throws Throwable {
+    websocketAction(new Action<ServerWebSocket>() {
+      @Override
+      public void on(ServerWebSocket ws) {
+        threadAssertTrue(ws.unwrap(Session.class) instanceof Session);
+        resume();
+      }
+    });
+    client.connect(new WebSocketAdapter(), URI.create(uri()));
+    await();
+  }
 
-    @Override
-    protected void stopServer() throws Exception {
-        server.stop();
-    }
+  @Override
+  protected void stopServer() throws Exception {
+    server.stop();
+  }
 
 }

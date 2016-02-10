@@ -20,16 +20,14 @@ import io.cettia.asity.action.Actions;
 import io.cettia.asity.action.ConcurrentActions;
 import io.cettia.asity.http.ServerHttpExchange;
 import io.cettia.asity.websocket.ServerWebSocket;
-
-import java.io.IOException;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-
 import org.atmosphere.cpr.AtmosphereResource;
 import org.atmosphere.cpr.AtmosphereResponse;
 import org.atmosphere.cpr.AtmosphereServlet;
 import org.atmosphere.handler.AtmosphereHandlerAdapter;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import java.io.IOException;
 
 /**
  * Servlet to process {@link AtmosphereResource} into {@link ServerHttpExchange}
@@ -38,8 +36,8 @@ import org.atmosphere.handler.AtmosphereHandlerAdapter;
  * </strong> and set a init param, <strong>
  * <code>org.atmosphere.cpr.AtmosphereInterceptor.disableDefaults</code>
  * </strong>, to <strong><code>true</code></strong>.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * <pre>
  * Servlet servlet = new AsityAtmosphereServlet().onhttp(http -&gt {}).onwebsocket(ws -&gt {});
  * ServletRegistration.Dynamic reg = context.addServlet(AsityAtmosphereServlet.class.getName(), servlet);
@@ -52,53 +50,53 @@ import org.atmosphere.handler.AtmosphereHandlerAdapter;
  */
 @SuppressWarnings("serial")
 public class AsityAtmosphereServlet extends AtmosphereServlet {
-    
-    private Actions<ServerHttpExchange> httpActions = new ConcurrentActions<>();
-    private Actions<ServerWebSocket> wsActions = new ConcurrentActions<>();
 
-    @Override
-    public void init(ServletConfig sc) throws ServletException {
-        super.init(sc);
-        framework().addAtmosphereHandler("/", new AtmosphereHandlerAdapter() {
-            @Override
-            public void onRequest(AtmosphereResource resource) throws IOException {
-                if (isWebSocketResource(resource)) {
-                    if (resource.getRequest().getMethod().equals("GET")) {
-                        wsActions.fire(new AtmosphereServerWebSocket(resource));
-                    }
-                } else {
-                    httpActions.fire(new AtmosphereServerHttpExchange(resource));
-                }
-            }
-        });
-    }
+  private Actions<ServerHttpExchange> httpActions = new ConcurrentActions<>();
+  private Actions<ServerWebSocket> wsActions = new ConcurrentActions<>();
 
-    /**
-     * Does the given {@link AtmosphereResource} represent WebSocket resource?
-     */
-    protected boolean isWebSocketResource(AtmosphereResource resource) {
-        // As HttpServletResponseWrapper, AtmosphereResponse returns itself on
-        // its getResponse method when there was no instance of ServletResponse
-        // given by the container. That's exactly the case of WebSocket.
-        return resource.getResponse().getResponse() instanceof AtmosphereResponse;
-    }
+  @Override
+  public void init(ServletConfig sc) throws ServletException {
+    super.init(sc);
+    framework().addAtmosphereHandler("/", new AtmosphereHandlerAdapter() {
+      @Override
+      public void onRequest(AtmosphereResource resource) throws IOException {
+        if (isWebSocketResource(resource)) {
+          if (resource.getRequest().getMethod().equals("GET")) {
+            wsActions.fire(new AtmosphereServerWebSocket(resource));
+          }
+        } else {
+          httpActions.fire(new AtmosphereServerHttpExchange(resource));
+        }
+      }
+    });
+  }
 
-    /**
-     * Registers an action to be called when {@link ServerHttpExchange} is
-     * available.
-     */
-    public AsityAtmosphereServlet onhttp(Action<ServerHttpExchange> action) {
-        httpActions.add(action);
-        return this;
-    }
+  /**
+   * Does the given {@link AtmosphereResource} represent WebSocket resource?
+   */
+  protected boolean isWebSocketResource(AtmosphereResource resource) {
+    // As HttpServletResponseWrapper, AtmosphereResponse returns itself on
+    // its getResponse method when there was no instance of ServletResponse
+    // given by the container. That's exactly the case of WebSocket.
+    return resource.getResponse().getResponse() instanceof AtmosphereResponse;
+  }
 
-    /**
-     * Registers an action to be called when {@link ServerWebSocket} is
-     * available.
-     */
-    public AsityAtmosphereServlet onwebsocket(Action<ServerWebSocket> action) {
-        wsActions.add(action);
-        return this;
-    }
+  /**
+   * Registers an action to be called when {@link ServerHttpExchange} is
+   * available.
+   */
+  public AsityAtmosphereServlet onhttp(Action<ServerHttpExchange> action) {
+    httpActions.add(action);
+    return this;
+  }
+
+  /**
+   * Registers an action to be called when {@link ServerWebSocket} is
+   * available.
+   */
+  public AsityAtmosphereServlet onwebsocket(Action<ServerWebSocket> action) {
+    wsActions.add(action);
+    return this;
+  }
 
 }

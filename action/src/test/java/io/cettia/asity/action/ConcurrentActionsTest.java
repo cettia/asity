@@ -15,8 +15,6 @@
  */
 package io.cettia.asity.action;
 
-import io.cettia.asity.action.Actions;
-import io.cettia.asity.action.ConcurrentActions;
 import io.cettia.asity.action.Actions.Options;
 
 /**
@@ -24,14 +22,14 @@ import io.cettia.asity.action.Actions.Options;
  */
 public class ConcurrentActionsTest extends ActionsTestBase {
 
-    @Override
-    protected <T> Actions<T> createActions() {
-        return new ConcurrentActions<>();
-    }
+  @Override
+  protected <T> Actions<T> createActions() {
+    return new ConcurrentActions<>();
+  }
 
-    @Override
-    protected <T> Actions<T> createActions(Options options) {
-        return new ConcurrentActions<>(options);
-    }
+  @Override
+  protected <T> Actions<T> createActions(Options options) {
+    return new ConcurrentActions<>(options);
+  }
 
 }

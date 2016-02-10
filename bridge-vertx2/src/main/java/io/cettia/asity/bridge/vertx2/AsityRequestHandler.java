@@ -19,15 +19,14 @@ import io.cettia.asity.action.Action;
 import io.cettia.asity.action.Actions;
 import io.cettia.asity.action.ConcurrentActions;
 import io.cettia.asity.http.ServerHttpExchange;
-
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.http.HttpServerRequest;
 
 /**
  * Handler to process {@link HttpServerRequest} into
  * {@link VertxServerHttpExchange}.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * <pre>
  * httpServer.requestHandler(new AsityRequestHandler().onhttp(http -&gt {}));
  * </pre>
@@ -36,21 +35,21 @@ import org.vertx.java.core.http.HttpServerRequest;
  */
 public class AsityRequestHandler implements Handler<HttpServerRequest> {
 
-    private Actions<ServerHttpExchange> httpActions = new ConcurrentActions<>();
+  private Actions<ServerHttpExchange> httpActions = new ConcurrentActions<>();
 
-    @Override
-    public void handle(HttpServerRequest request) {
-        httpActions.fire(new VertxServerHttpExchange(request));
-    }
+  @Override
+  public void handle(HttpServerRequest request) {
+    httpActions.fire(new VertxServerHttpExchange(request));
+  }
 
-    /**
-     * Registers an action to be called when {@link ServerHttpExchange} is
-     * available.
-     */
-    public AsityRequestHandler onhttp(Action<ServerHttpExchange> action) {
-        httpActions.add(action);
-        return this;
-    }
+  /**
+   * Registers an action to be called when {@link ServerHttpExchange} is
+   * available.
+   */
+  public AsityRequestHandler onhttp(Action<ServerHttpExchange> action) {
+    httpActions.add(action);
+    return this;
+  }
 
 
 }

@@ -18,13 +18,6 @@ package io.cettia.asity.bridge.atmosphere2;
 import io.cettia.asity.action.Action;
 import io.cettia.asity.http.ServerHttpExchange;
 import io.cettia.asity.test.ServerHttpExchangeTestBase;
-
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletRegistration;
-
 import org.atmosphere.cpr.ApplicationConfig;
 import org.atmosphere.cpr.AtmosphereResource;
 import org.eclipse.jetty.client.api.Response;
@@ -34,59 +27,67 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletRegistration;
+
 /**
  * @author Donghwan Kim
  */
 public class AtmosphereServerHttpExchangeTest extends ServerHttpExchangeTestBase {
 
-    private Server server;
+  private Server server;
 
-    @Override
-    protected void startServer(int port, final Action<ServerHttpExchange> requestAction) throws Exception {
-        server = new Server();
-        ServerConnector connector = new ServerConnector(server);
-        connector.setPort(port);
-        server.addConnector(connector);
-        ServletContextHandler handler = new ServletContextHandler();
-        handler.addEventListener(new ServletContextListener() {
-            @Override
-            public void contextInitialized(ServletContextEvent event) {
-                ServletContext context = event.getServletContext();
-                Servlet servlet = new AsityAtmosphereServlet().onhttp(requestAction);
-                ServletRegistration.Dynamic reg = context.addServlet(AsityAtmosphereServlet.class.getName(), servlet);
-                reg.setAsyncSupported(true);
-                reg.setInitParameter(ApplicationConfig.DISABLE_ATMOSPHEREINTERCEPTOR, Boolean.TRUE.toString());
-                reg.addMapping(TEST_URI);
-            }
+  @Override
+  protected void startServer(int port, final Action<ServerHttpExchange> requestAction) throws Exception {
+    server = new Server();
+    ServerConnector connector = new ServerConnector(server);
+    connector.setPort(port);
+    server.addConnector(connector);
+    ServletContextHandler handler = new ServletContextHandler();
+    handler.addEventListener(new ServletContextListener() {
+      @Override
+      public void contextInitialized(ServletContextEvent event) {
+        ServletContext context = event.getServletContext();
+        Servlet servlet = new AsityAtmosphereServlet().onhttp(requestAction);
+        ServletRegistration.Dynamic reg = context.addServlet(AsityAtmosphereServlet.class.getName(), servlet);
+        reg.setAsyncSupported(true);
+        reg.setInitParameter(ApplicationConfig.DISABLE_ATMOSPHEREINTERCEPTOR, Boolean.TRUE.toString());
+        reg.addMapping(TEST_URI);
+      }
 
-            @Override
-            public void contextDestroyed(ServletContextEvent sce) {}
-        });
-        server.setHandler(handler);
-        server.start();
-    }
+      @Override
+      public void contextDestroyed(ServletContextEvent sce) {
+      }
+    });
+    server.setHandler(handler);
+    server.start();
+  }
 
-    @Override
-    protected void stopServer() throws Exception {
-        server.stop();
-    }
+  @Override
+  protected void stopServer() throws Exception {
+    server.stop();
+  }
 
-    @Test
-    public void unwrap() throws Throwable {
-        requestAction(new Action<ServerHttpExchange>() {
-            @Override
-            public void on(ServerHttpExchange http) {
-                threadAssertTrue(http.unwrap(AtmosphereResource.class) instanceof AtmosphereResource);
-                resume();
-            }
-        });
-        client.newRequest(uri()).send(new Response.Listener.Adapter());
-        await();
-    }
+  @Test
+  public void unwrap() throws Throwable {
+    requestAction(new Action<ServerHttpExchange>() {
+      @Override
+      public void on(ServerHttpExchange http) {
+        threadAssertTrue(http.unwrap(AtmosphereResource.class) instanceof AtmosphereResource);
+        resume();
+      }
+    });
+    client.newRequest(uri()).send(new Response.Listener.Adapter());
+    await();
+  }
 
-    @Override
-    @Test
-    @Ignore
-    public void testOnclose() {}
+  @Override
+  @Test
+  @Ignore
+  public void testOnclose() {
+  }
 
 }

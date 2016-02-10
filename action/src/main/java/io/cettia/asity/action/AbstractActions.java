@@ -25,93 +25,93 @@ import java.util.List;
  */
 public abstract class AbstractActions<T> implements Actions<T> {
 
-    private final Actions.Options options;
-    protected final List<Action<T>> actionList;
+  protected final List<Action<T>> actionList;
+  private final Actions.Options options;
 
-    protected AbstractActions() {
-        this(new Actions.Options());
+  protected AbstractActions() {
+    this(new Actions.Options());
+  }
+
+  protected AbstractActions(Actions.Options o) {
+    this.options = new Actions.Options(o);
+    this.actionList = createList();
+  }
+
+  protected abstract List<Action<T>> createList();
+
+  @Override
+  public Actions<T> add(Action<T> action) {
+    if (!disabled()) {
+      if (options.memory() && fired()) {
+        fireOne(action, cached());
+      }
+      if (!options.unique()
+        || (options.unique() && !actionList.contains(action))) {
+        actionList.add(action);
+      }
     }
+    return this;
+  }
 
-    protected AbstractActions(Actions.Options o) {
-        this.options = new Actions.Options(o);
-        this.actionList = createList();
+  protected abstract T cached();
+
+  @Override
+  public Actions<T> disable() {
+    if (setDisabled()) {
+      actionList.clear();
     }
+    return this;
+  }
 
-    protected abstract List<Action<T>> createList();
+  protected abstract boolean setDisabled();
 
-    @Override
-    public Actions<T> add(Action<T> action) {
-        if (!disabled()) {
-            if (options.memory() && fired()) {
-                fireOne(action, cached());
-            }
-            if (!options.unique()
-                    || (options.unique() && !actionList.contains(action))) {
-                actionList.add(action);
-            }
-        }
-        return this;
+  @Override
+  public Actions<T> empty() {
+    actionList.clear();
+    return this;
+  }
+
+  @Override
+  public Actions<T> fire() {
+    return fire(null);
+  }
+
+  @Override
+  public Actions<T> fire(T data) {
+    if (!disabled() && !(options.once() && fired())) {
+      setFired();
+      if (options.memory()) {
+        setCache(data);
+      }
+      for (int i = 0; i < actionList.size(); i++) {
+        fireOne(actionList.get(i), data);
+      }
     }
+    return this;
+  }
 
-    protected abstract T cached();
+  protected abstract void setFired();
 
-    @Override
-    public Actions<T> disable() {
-        if (setDisabled()) {
-            actionList.clear();
-        }
-        return this;
-    }
+  protected abstract void setCache(T data);
 
-    protected abstract boolean setDisabled();
+  @Override
+  public boolean has() {
+    return !actionList.isEmpty();
+  }
 
-    @Override
-    public Actions<T> empty() {
-        actionList.clear();
-        return this;
-    }
+  @Override
+  public boolean has(Action<T> action) {
+    return actionList.contains(action);
+  }
 
-    @Override
-    public Actions<T> fire() {
-        return fire(null);
-    }
+  @Override
+  public Actions<T> remove(Action<T> action) {
+    actionList.removeAll(Collections.singleton(action));
+    return this;
+  }
 
-    @Override
-    public Actions<T> fire(T data) {
-        if (!disabled() && !(options.once() && fired())) {
-            setFired();
-            if (options.memory()) {
-                setCache(data);
-            }
-            for (int i = 0; i < actionList.size(); i++) {
-                fireOne(actionList.get(i), data);
-            }
-        }
-        return this;
-    }
-
-    protected abstract void setFired();
-
-    protected abstract void setCache(T data);
-
-    @Override
-    public boolean has() {
-        return !actionList.isEmpty();
-    }
-
-    @Override
-    public boolean has(Action<T> action) {
-        return actionList.contains(action);
-    }
-
-    @Override
-    public Actions<T> remove(Action<T> action) {
-        actionList.removeAll(Collections.singleton(action));
-        return this;
-    }
-
-    protected void fireOne(Action<T> action, T data) {
-        action.on(data);
-    }
+  protected void fireOne(Action<T> action, T data) {
+    action.on(data);
+  }
 
 }

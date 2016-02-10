@@ -30,8 +30,8 @@ import javax.websocket.Session;
 
 /**
  * Endpoint to process {@link Endpoint} and {@link Session} into {@link ServerWebSocket}.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * <pre>
  * ServerEndpointConfig config = ServerEndpointConfig.Builder.create(AsityServerEndpoint.class, "/cettia")
  * .configurator(new Configurator() {
@@ -47,35 +47,35 @@ import javax.websocket.Session;
  */
 public class AsityServerEndpoint extends Endpoint {
 
-    private Actions<ServerWebSocket> wsActions = new ConcurrentActions<>();
-    private JwaServerWebSocket ws;
+  private Actions<ServerWebSocket> wsActions = new ConcurrentActions<>();
+  private JwaServerWebSocket ws;
 
-    @Override
-    @OnOpen
-    public void onOpen(Session session, EndpointConfig config) {
-        ws = new JwaServerWebSocket(session);
-        wsActions.fire(ws);
-    }
+  @Override
+  @OnOpen
+  public void onOpen(Session session, EndpointConfig config) {
+    ws = new JwaServerWebSocket(session);
+    wsActions.fire(ws);
+  }
 
-    @Override
-    @OnError
-    public void onError(Session session, Throwable throwable) {
-        ws.onError(throwable);
-    }
+  @Override
+  @OnError
+  public void onError(Session session, Throwable throwable) {
+    ws.onError(throwable);
+  }
 
-    @Override
-    @OnClose
-    public void onClose(Session session, CloseReason closeReason) {
-        ws.onClose();
-    }
+  @Override
+  @OnClose
+  public void onClose(Session session, CloseReason closeReason) {
+    ws.onClose();
+  }
 
-    /**
-     * Registers an action to be called when {@link ServerWebSocket} is
-     * available.
-     */
-    public AsityServerEndpoint onwebsocket(Action<ServerWebSocket> action) {
-        wsActions.add(action);
-        return this;
-    }
+  /**
+   * Registers an action to be called when {@link ServerWebSocket} is
+   * available.
+   */
+  public AsityServerEndpoint onwebsocket(Action<ServerWebSocket> action) {
+    wsActions.add(action);
+    return this;
+  }
 
 }

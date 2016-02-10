@@ -19,14 +19,13 @@ import io.cettia.asity.action.Action;
 import io.cettia.asity.action.Actions;
 import io.cettia.asity.action.ConcurrentActions;
 import io.cettia.asity.websocket.ServerWebSocket;
-
 import org.vertx.java.core.Handler;
 
 /**
  * Handler to process {@link org.vertx.java.core.http.ServerWebSocket} into
  * {@link VertxServerWebSocket}.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * <pre>
  * httpServer.websocketHandler(new AsityWebSocketHandler().onwebsocket(http -&gt {}));
  * </pre>
@@ -35,20 +34,20 @@ import org.vertx.java.core.Handler;
  */
 public class AsityWebSocketHandler implements Handler<org.vertx.java.core.http.ServerWebSocket> {
 
-    private Actions<ServerWebSocket> wsActions = new ConcurrentActions<>();
+  private Actions<ServerWebSocket> wsActions = new ConcurrentActions<>();
 
-    @Override
-    public void handle(org.vertx.java.core.http.ServerWebSocket ws) {
-        wsActions.fire(new VertxServerWebSocket(ws));
-    }
+  @Override
+  public void handle(org.vertx.java.core.http.ServerWebSocket ws) {
+    wsActions.fire(new VertxServerWebSocket(ws));
+  }
 
-    /**
-     * Registers an action to be called when {@link ServerWebSocket} is
-     * available.
-     */
-    public AsityWebSocketHandler onwebsocket(Action<ServerWebSocket> action) {
-        wsActions.add(action);
-        return this;
-    }
+  /**
+   * Registers an action to be called when {@link ServerWebSocket} is
+   * available.
+   */
+  public AsityWebSocketHandler onwebsocket(Action<ServerWebSocket> action) {
+    wsActions.add(action);
+    return this;
+  }
 
 }

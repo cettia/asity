@@ -15,8 +15,6 @@
  */
 package io.cettia.asity.action;
 
-import io.cettia.asity.action.Actions;
-import io.cettia.asity.action.SimpleActions;
 import io.cettia.asity.action.Actions.Options;
 
 /**
@@ -24,14 +22,14 @@ import io.cettia.asity.action.Actions.Options;
  */
 public class SimpleActionsTest extends ActionsTestBase {
 
-    @Override
-    protected <T> Actions<T> createActions() {
-        return new SimpleActions<>();
-    }
+  @Override
+  protected <T> Actions<T> createActions() {
+    return new SimpleActions<>();
+  }
 
-    @Override
-    protected <T> Actions<T> createActions(Options options) {
-        return new SimpleActions<>(options);
-    }
+  @Override
+  protected <T> Actions<T> createActions(Options options) {
+    return new SimpleActions<>(options);
+  }
 
 }

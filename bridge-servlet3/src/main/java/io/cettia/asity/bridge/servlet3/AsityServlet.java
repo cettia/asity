@@ -29,8 +29,8 @@ import javax.servlet.http.HttpServletResponse;
  * into {@link ServerHttpExchange}. When you configure servlet, you must set
  * <strong><code>asyncSupported</code></strong> to <strong><code>true</code>
  * </strong>.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * <pre>
  * Servlet servlet = new AsityServlet().onhttp(http -&gt {});
  * ServletRegistration.Dynamic reg = context.addServlet(AsityServlet.class.getName(), servlet);
@@ -43,19 +43,19 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class AsityServlet extends HttpServlet {
 
-    private Actions<ServerHttpExchange> httpActions = new ConcurrentActions<>();
+  private Actions<ServerHttpExchange> httpActions = new ConcurrentActions<>();
 
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) {
-        httpActions.fire(new ServletServerHttpExchange(req, resp));
-    }
+  @Override
+  protected void service(HttpServletRequest req, HttpServletResponse resp) {
+    httpActions.fire(new ServletServerHttpExchange(req, resp));
+  }
 
-    /**
-     * Registers an action to be called when {@link ServerHttpExchange} is
-     * available.
-     */
-    public AsityServlet onhttp(Action<ServerHttpExchange> action) {
-        httpActions.add(action);
-        return this;
-    }
+  /**
+   * Registers an action to be called when {@link ServerHttpExchange} is
+   * available.
+   */
+  public AsityServlet onhttp(Action<ServerHttpExchange> action) {
+    httpActions.add(action);
+    return this;
+  }
 }

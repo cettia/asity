@@ -19,20 +19,19 @@ import io.cettia.asity.action.Action;
 import io.cettia.asity.action.Actions;
 import io.cettia.asity.action.ConcurrentActions;
 import io.cettia.asity.websocket.ServerWebSocket;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.glassfish.grizzly.websockets.DataFrame;
 import org.glassfish.grizzly.websockets.DefaultWebSocket;
 import org.glassfish.grizzly.websockets.WebSocket;
 import org.glassfish.grizzly.websockets.WebSocketApplication;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * WebSocketApplication to process {@link WebSocket} into
  * {@link GrizzlyServerWebSocket}.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * <pre>
  * NetworkListener listener = httpServer.getListener("grizzly");
  * listener.registerAddOn(new WebSocketAddOn());
@@ -42,39 +41,39 @@ import org.glassfish.grizzly.websockets.WebSocketApplication;
  * @author Donghwan Kim
  */
 public class AsityWebSocketApplication extends WebSocketApplication {
-    
-    private Actions<ServerWebSocket> wsActions = new ConcurrentActions<>();
-    private Map<WebSocket, GrizzlyServerWebSocket> sockets = new ConcurrentHashMap<>();
 
-    @Override
-    public void onConnect(WebSocket socket) {
-        super.onConnect(socket);
-        GrizzlyServerWebSocket ws = new GrizzlyServerWebSocket((DefaultWebSocket) socket);
-        sockets.put(socket, ws);
-        wsActions.fire(ws);
-    }
+  private Actions<ServerWebSocket> wsActions = new ConcurrentActions<>();
+  private Map<WebSocket, GrizzlyServerWebSocket> sockets = new ConcurrentHashMap<>();
 
-    
-    @Override
-    public void onClose(WebSocket socket, DataFrame frame) {
-        super.onClose(socket, frame);
-        sockets.remove(socket);
-    }
+  @Override
+  public void onConnect(WebSocket socket) {
+    super.onConnect(socket);
+    GrizzlyServerWebSocket ws = new GrizzlyServerWebSocket((DefaultWebSocket) socket);
+    sockets.put(socket, ws);
+    wsActions.fire(ws);
+  }
 
-    @Override
-    protected boolean onError(WebSocket webSocket, Throwable t) {
-        boolean ret = super.onError(webSocket, t);
-        sockets.get(webSocket).onError(t);
-        return ret;
-    }
 
-    /**
-     * Registers an action to be called when {@link ServerWebSocket} is
-     * available.
-     */
-    public AsityWebSocketApplication onwebsocket(Action<ServerWebSocket> action) {
-        wsActions.add(action);
-        return this;
-    }
+  @Override
+  public void onClose(WebSocket socket, DataFrame frame) {
+    super.onClose(socket, frame);
+    sockets.remove(socket);
+  }
+
+  @Override
+  protected boolean onError(WebSocket webSocket, Throwable t) {
+    boolean ret = super.onError(webSocket, t);
+    sockets.get(webSocket).onError(t);
+    return ret;
+  }
+
+  /**
+   * Registers an action to be called when {@link ServerWebSocket} is
+   * available.
+   */
+  public AsityWebSocketApplication onwebsocket(Action<ServerWebSocket> action) {
+    wsActions.add(action);
+    return this;
+  }
 
 }

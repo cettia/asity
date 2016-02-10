@@ -47,10 +47,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * {@link NettyServerHttpExchange} and {@link NettyServerWebSocket}. When you
  * configure handler, you must add <strong>{@link HttpServerCodec}</strong> in
  * front of this handler.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * <pre>
- * 
+ *
  * ChannelPipeline pipeline = ch.pipeline();
  * <strong>pipeline.addLast(new HttpServerCodec())</strong>
  * .addLast(new AsityServerCodec() {
@@ -66,119 +66,119 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class AsityServerCodec extends ChannelInboundHandlerAdapter {
 
-    private Actions<ServerHttpExchange> httpActions = new ConcurrentActions<>();
-    private Actions<ServerWebSocket> wsActions = new ConcurrentActions<>();
-    private Map<Channel, NettyServerHttpExchange> httpMap = new ConcurrentHashMap<>();
-    private Map<Channel, NettyServerWebSocket> wsMap = new ConcurrentHashMap<>();
-    private Map<Channel, FullHttpRequest> wsReqMap = new ConcurrentHashMap<>();
+  private Actions<ServerHttpExchange> httpActions = new ConcurrentActions<>();
+  private Actions<ServerWebSocket> wsActions = new ConcurrentActions<>();
+  private Map<Channel, NettyServerHttpExchange> httpMap = new ConcurrentHashMap<>();
+  private Map<Channel, NettyServerWebSocket> wsMap = new ConcurrentHashMap<>();
+  private Map<Channel, FullHttpRequest> wsReqMap = new ConcurrentHashMap<>();
 
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        if (msg instanceof HttpRequest) {
-            HttpRequest req = (HttpRequest) msg;
-            if (!accept(req)) {
-                ctx.fireChannelRead(msg);
-                return;
-            }
-            if (req.getMethod() == HttpMethod.GET && req.headers().contains(HttpHeaders.Names.UPGRADE, HttpHeaders.Values.WEBSOCKET, true)) {
-                // Because WebSocketServerHandshaker requires FullHttpRequest
-                FullHttpRequest wsRequest = new DefaultFullHttpRequest(req.getProtocolVersion(), req.getMethod(), req.getUri());
-                wsRequest.headers().set(req.headers());
-                wsReqMap.put(ctx.channel(), wsRequest);
-                // Set timeout to avoid memory leak
-                ctx.pipeline().addFirst(new ReadTimeoutHandler(5));
-            } else {
-                NettyServerHttpExchange http = new NettyServerHttpExchange(ctx, req);
-                httpMap.put(ctx.channel(), http);
-                httpActions.fire(http);
-            }
-        } else if (msg instanceof HttpContent) {
-            FullHttpRequest wsReq = wsReqMap.get(ctx.channel());
-            if (wsReq != null) {
-                wsReq.content().writeBytes(((HttpContent) msg).content());
-                if (msg instanceof LastHttpContent) {
-                    wsReqMap.remove(ctx.channel());
-                    // Cancel timeout
-                    ctx.pipeline().remove(ReadTimeoutHandler.class);
-                    WebSocketServerHandshakerFactory factory = new WebSocketServerHandshakerFactory(getWebSocketLocation(ctx.pipeline(), wsReq), null, true);
-                    WebSocketServerHandshaker handshaker = factory.newHandshaker(wsReq);
-                    if (handshaker == null) {
-                        WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
-                    } else {
-                        handshaker.handshake(ctx.channel(), wsReq);
-                        NettyServerWebSocket ws = new NettyServerWebSocket(ctx, wsReq, handshaker);
-                        wsMap.put(ctx.channel(), ws);
-                        wsActions.fire(ws);
-                    }
-                }
-            } else {
-                NettyServerHttpExchange http = httpMap.get(ctx.channel());
-                if (http != null) {
-                    http.handleChunk((HttpContent) msg);
-                }
-            }
-        } else if (msg instanceof WebSocketFrame) {
-            NettyServerWebSocket ws = wsMap.get(ctx.channel());
-            if (ws != null) {
-                ws.handleFrame((WebSocketFrame) msg);
-            }
+  @Override
+  public void channelRead(ChannelHandlerContext ctx, Object msg) {
+    if (msg instanceof HttpRequest) {
+      HttpRequest req = (HttpRequest) msg;
+      if (!accept(req)) {
+        ctx.fireChannelRead(msg);
+        return;
+      }
+      if (req.getMethod() == HttpMethod.GET && req.headers().contains(HttpHeaders.Names.UPGRADE, HttpHeaders.Values.WEBSOCKET, true)) {
+        // Because WebSocketServerHandshaker requires FullHttpRequest
+        FullHttpRequest wsRequest = new DefaultFullHttpRequest(req.getProtocolVersion(), req.getMethod(), req.getUri());
+        wsRequest.headers().set(req.headers());
+        wsReqMap.put(ctx.channel(), wsRequest);
+        // Set timeout to avoid memory leak
+        ctx.pipeline().addFirst(new ReadTimeoutHandler(5));
+      } else {
+        NettyServerHttpExchange http = new NettyServerHttpExchange(ctx, req);
+        httpMap.put(ctx.channel(), http);
+        httpActions.fire(http);
+      }
+    } else if (msg instanceof HttpContent) {
+      FullHttpRequest wsReq = wsReqMap.get(ctx.channel());
+      if (wsReq != null) {
+        wsReq.content().writeBytes(((HttpContent) msg).content());
+        if (msg instanceof LastHttpContent) {
+          wsReqMap.remove(ctx.channel());
+          // Cancel timeout
+          ctx.pipeline().remove(ReadTimeoutHandler.class);
+          WebSocketServerHandshakerFactory factory = new WebSocketServerHandshakerFactory(getWebSocketLocation(ctx.pipeline(), wsReq), null, true);
+          WebSocketServerHandshaker handshaker = factory.newHandshaker(wsReq);
+          if (handshaker == null) {
+            WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
+          } else {
+            handshaker.handshake(ctx.channel(), wsReq);
+            NettyServerWebSocket ws = new NettyServerWebSocket(ctx, wsReq, handshaker);
+            wsMap.put(ctx.channel(), ws);
+            wsActions.fire(ws);
+          }
         }
-    }
-    
-    /**
-     * Whether to process this request or not. By default, it accepts every
-     * request.
-     */
-    protected boolean accept(HttpRequest req) {
-        return true;
-    }
-
-    private String getWebSocketLocation(ChannelPipeline pipeline, HttpRequest req) {
-        return (pipeline.get(SslHandler.class) == null ? "ws://" : "wss://") + HttpHeaders.getHost(req) + req.getUri();
-    }
-
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+      } else {
         NettyServerHttpExchange http = httpMap.get(ctx.channel());
         if (http != null) {
-            http.handleError(cause);
+          http.handleChunk((HttpContent) msg);
         }
-        NettyServerWebSocket ws = wsMap.get(ctx.channel());
-        if (ws != null) {
-            ws.handleError(cause);
-        }
-        ctx.close();
+      }
+    } else if (msg instanceof WebSocketFrame) {
+      NettyServerWebSocket ws = wsMap.get(ctx.channel());
+      if (ws != null) {
+        ws.handleFrame((WebSocketFrame) msg);
+      }
     }
+  }
 
-    @Override
-    public void channelInactive(ChannelHandlerContext ctx) {
-        NettyServerHttpExchange http = httpMap.remove(ctx.channel());
-        if (http != null) {
-            http.handleClose();
-        }
-        NettyServerWebSocket ws = wsMap.remove(ctx.channel());
-        if (ws != null) {
-            ws.handleClose();
-        }
-        wsReqMap.remove(ctx.channel());
-    }
+  /**
+   * Whether to process this request or not. By default, it accepts every
+   * request.
+   */
+  protected boolean accept(HttpRequest req) {
+    return true;
+  }
 
-    /**
-     * Registers an action to be called when {@link ServerHttpExchange} is
-     * available.
-     */
-    public AsityServerCodec onhttp(Action<ServerHttpExchange> action) {
-        httpActions.add(action);
-        return this;
-    }
+  private String getWebSocketLocation(ChannelPipeline pipeline, HttpRequest req) {
+    return (pipeline.get(SslHandler.class) == null ? "ws://" : "wss://") + HttpHeaders.getHost(req) + req.getUri();
+  }
 
-    /**
-     * Registers an action to be called when {@link ServerWebSocket} is
-     * available.
-     */
-    public AsityServerCodec onwebsocket(Action<ServerWebSocket> action) {
-        wsActions.add(action);
-        return this;
+  @Override
+  public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+    NettyServerHttpExchange http = httpMap.get(ctx.channel());
+    if (http != null) {
+      http.handleError(cause);
     }
+    NettyServerWebSocket ws = wsMap.get(ctx.channel());
+    if (ws != null) {
+      ws.handleError(cause);
+    }
+    ctx.close();
+  }
+
+  @Override
+  public void channelInactive(ChannelHandlerContext ctx) {
+    NettyServerHttpExchange http = httpMap.remove(ctx.channel());
+    if (http != null) {
+      http.handleClose();
+    }
+    NettyServerWebSocket ws = wsMap.remove(ctx.channel());
+    if (ws != null) {
+      ws.handleClose();
+    }
+    wsReqMap.remove(ctx.channel());
+  }
+
+  /**
+   * Registers an action to be called when {@link ServerHttpExchange} is
+   * available.
+   */
+  public AsityServerCodec onhttp(Action<ServerHttpExchange> action) {
+    httpActions.add(action);
+    return this;
+  }
+
+  /**
+   * Registers an action to be called when {@link ServerWebSocket} is
+   * available.
+   */
+  public AsityServerCodec onwebsocket(Action<ServerWebSocket> action) {
+    wsActions.add(action);
+    return this;
+  }
 
 }

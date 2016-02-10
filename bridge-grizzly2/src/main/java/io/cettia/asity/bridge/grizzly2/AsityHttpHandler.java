@@ -19,7 +19,6 @@ import io.cettia.asity.action.Action;
 import io.cettia.asity.action.Actions;
 import io.cettia.asity.action.ConcurrentActions;
 import io.cettia.asity.http.ServerHttpExchange;
-
 import org.glassfish.grizzly.http.server.HttpHandler;
 import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.server.Response;
@@ -27,8 +26,8 @@ import org.glassfish.grizzly.http.server.Response;
 /**
  * HttpHandler to process {@link Request} and {@link Response} into
  * {@link GrizzlyServerHttpExchange}.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * <pre>
  * ServerConfiguration config = httpServer.getServerConfiguration();
  * config.addHttpHandler(new AsityHttpHandler().onhttp(http -&gt {}), "/cettia");
@@ -38,20 +37,20 @@ import org.glassfish.grizzly.http.server.Response;
  */
 public class AsityHttpHandler extends HttpHandler {
 
-    private Actions<ServerHttpExchange> httpActions = new ConcurrentActions<>();
+  private Actions<ServerHttpExchange> httpActions = new ConcurrentActions<>();
 
-    @Override
-    public void service(Request request, Response response) throws Exception {
-        httpActions.fire(new GrizzlyServerHttpExchange(request, response));
-    }
+  @Override
+  public void service(Request request, Response response) throws Exception {
+    httpActions.fire(new GrizzlyServerHttpExchange(request, response));
+  }
 
-    /**
-     * Registers an action to be called when {@link ServerHttpExchange} is
-     * available.
-     */
-    public AsityHttpHandler onhttp(Action<ServerHttpExchange> action) {
-        httpActions.add(action);
-        return this;
-    }
+  /**
+   * Registers an action to be called when {@link ServerHttpExchange} is
+   * available.
+   */
+  public AsityHttpHandler onhttp(Action<ServerHttpExchange> action) {
+    httpActions.add(action);
+    return this;
+  }
 
 }

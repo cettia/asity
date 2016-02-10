@@ -26,57 +26,57 @@ import java.nio.ByteBuffer;
  *
  * @author Donghwan Kim
  * @see <a href="http://tools.ietf.org/html/rfc6455">RFC6455 - The WebSocket
- *      Protocol</a>
+ * Protocol</a>
  */
 public interface ServerWebSocket {
 
-    /**
-     * The URI used to connect.
-     */
-    String uri();
+  /**
+   * The URI used to connect.
+   */
+  String uri();
 
-    /**
-     * Closes the connection. This method has no side effect if called more than
-     * once.
-     */
-    void close();
+  /**
+   * Closes the connection. This method has no side effect if called more than
+   * once.
+   */
+  void close();
 
-    /**
-     * Sends a text frame through the connection.
-     */
-    ServerWebSocket send(String data);
+  /**
+   * Sends a text frame through the connection.
+   */
+  ServerWebSocket send(String data);
 
-    /**
-     * Sends a binary frame through the connection.
-     */
-    ServerWebSocket send(ByteBuffer byteBuffer);
+  /**
+   * Sends a binary frame through the connection.
+   */
+  ServerWebSocket send(ByteBuffer byteBuffer);
 
-    /**
-     * Attaches an action for the text frame.
-     */
-    ServerWebSocket ontext(Action<String> action);
+  /**
+   * Attaches an action for the text frame.
+   */
+  ServerWebSocket ontext(Action<String> action);
 
-    /**
-     * Attaches an action for the binary frame.
-     */
-    ServerWebSocket onbinary(Action<ByteBuffer> action);
+  /**
+   * Attaches an action for the binary frame.
+   */
+  ServerWebSocket onbinary(Action<ByteBuffer> action);
 
-    /**
-     * Attaches an action for the close event. After this event, the instance
-     * shouldn't be used and all the other events will be disabled.
-     */
-    ServerWebSocket onclose(Action<Void> action);
+  /**
+   * Attaches an action for the close event. After this event, the instance
+   * shouldn't be used and all the other events will be disabled.
+   */
+  ServerWebSocket onclose(Action<Void> action);
 
-    /**
-     * Attaches an action to handle error from various things. Its exact
-     * behavior is platform-specific and error created by the platform is
-     * propagated.
-     */
-    ServerWebSocket onerror(Action<Throwable> action);
+  /**
+   * Attaches an action to handle error from various things. Its exact
+   * behavior is platform-specific and error created by the platform is
+   * propagated.
+   */
+  ServerWebSocket onerror(Action<Throwable> action);
 
-    /**
-     * Returns the provider-specific component.
-     */
-    <T> T unwrap(Class<T> clazz);
+  /**
+   * Returns the provider-specific component.
+   */
+  <T> T unwrap(Class<T> clazz);
 
 }

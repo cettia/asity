@@ -18,7 +18,6 @@ package io.cettia.asity.bridge.grizzly2;
 import io.cettia.asity.action.Action;
 import io.cettia.asity.http.ServerHttpExchange;
 import io.cettia.asity.test.ServerHttpExchangeTestBase;
-
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.server.Response;
@@ -29,34 +28,34 @@ import org.junit.Test;
  * @author Donghwan Kim
  */
 public class GrizzlyServerHttpExchangeTest extends ServerHttpExchangeTestBase {
-    
-    private HttpServer server;
 
-    @Override
-    protected void startServer(int port, Action<ServerHttpExchange> requestAction) throws Exception {
-        server = HttpServer.createSimpleServer(null, port);
-        ServerConfiguration config = server.getServerConfiguration();
-        config.addHttpHandler(new AsityHttpHandler().onhttp(requestAction), TEST_URI);
-        server.start();
-    }
+  private HttpServer server;
 
-    @Override
-    protected void stopServer() throws Exception {
-        server.shutdownNow();
-    }
+  @Override
+  protected void startServer(int port, Action<ServerHttpExchange> requestAction) throws Exception {
+    server = HttpServer.createSimpleServer(null, port);
+    ServerConfiguration config = server.getServerConfiguration();
+    config.addHttpHandler(new AsityHttpHandler().onhttp(requestAction), TEST_URI);
+    server.start();
+  }
 
-    @Test
-    public void unwrap() throws Throwable {
-        requestAction(new Action<ServerHttpExchange>() {
-            @Override
-            public void on(ServerHttpExchange http) {
-                threadAssertTrue(http.unwrap(Request.class) instanceof Request);
-                threadAssertTrue(http.unwrap(Response.class) instanceof Response);
-                resume();
-            }
-        });
-        client.newRequest(uri()).send(new org.eclipse.jetty.client.api.Response.Listener.Adapter());
-        await();
-    }
+  @Override
+  protected void stopServer() throws Exception {
+    server.shutdownNow();
+  }
+
+  @Test
+  public void unwrap() throws Throwable {
+    requestAction(new Action<ServerHttpExchange>() {
+      @Override
+      public void on(ServerHttpExchange http) {
+        threadAssertTrue(http.unwrap(Request.class) instanceof Request);
+        threadAssertTrue(http.unwrap(Response.class) instanceof Response);
+        resume();
+      }
+    });
+    client.newRequest(uri()).send(new org.eclipse.jetty.client.api.Response.Listener.Adapter());
+    await();
+  }
 
 }

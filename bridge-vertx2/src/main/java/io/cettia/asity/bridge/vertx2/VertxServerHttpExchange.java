@@ -20,16 +20,15 @@ import io.cettia.asity.http.AbstractServerHttpExchange;
 import io.cettia.asity.http.HttpMethod;
 import io.cettia.asity.http.HttpStatus;
 import io.cettia.asity.http.ServerHttpExchange;
-
-import java.nio.ByteBuffer;
-import java.util.List;
-import java.util.Set;
-
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.VoidHandler;
 import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.http.HttpServerRequest;
 import org.vertx.java.core.http.HttpServerResponse;
+
+import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.Set;
 
 /**
  * {@link ServerHttpExchange} for Vert.x 2.
@@ -38,95 +37,95 @@ import org.vertx.java.core.http.HttpServerResponse;
  */
 public class VertxServerHttpExchange extends AbstractServerHttpExchange {
 
-    private final HttpServerRequest request;
-    private final HttpServerResponse response;
+  private final HttpServerRequest request;
+  private final HttpServerResponse response;
 
-    public VertxServerHttpExchange(HttpServerRequest request) {
-        this.request = request;
-        this.response = request.response();
-        request.exceptionHandler(new Handler<Throwable>() {
-            @Override
-            public void handle(Throwable t) {
-                errorActions.fire(t);
-            }
-        });
-        response.exceptionHandler(new Handler<Throwable>() {
-            @Override
-            public void handle(Throwable t) {
-                errorActions.fire(t);
-            }
-        })
-        .closeHandler(new VoidHandler() {
-            @Override
-            protected void handle() {
-                closeActions.fire();
-            }
-        })
-        .setChunked(true);
-    }
+  public VertxServerHttpExchange(HttpServerRequest request) {
+    this.request = request;
+    this.response = request.response();
+    request.exceptionHandler(new Handler<Throwable>() {
+      @Override
+      public void handle(Throwable t) {
+        errorActions.fire(t);
+      }
+    });
+    response.exceptionHandler(new Handler<Throwable>() {
+      @Override
+      public void handle(Throwable t) {
+        errorActions.fire(t);
+      }
+    })
+      .closeHandler(new VoidHandler() {
+        @Override
+        protected void handle() {
+          closeActions.fire();
+        }
+      })
+      .setChunked(true);
+  }
 
-    @Override
-    public String uri() {
-        return request.uri();
-    }
+  @Override
+  public String uri() {
+    return request.uri();
+  }
 
-    @Override
-    public HttpMethod method() {
-        return HttpMethod.valueOf(request.method());
-    }
+  @Override
+  public HttpMethod method() {
+    return HttpMethod.valueOf(request.method());
+  }
 
-    @Override
-    public Set<String> headerNames() {
-        return request.headers().names();
-    }
+  @Override
+  public Set<String> headerNames() {
+    return request.headers().names();
+  }
 
-    @Override
-    public List<String> headers(String name) {
-        return request.headers().getAll(name);
-    }
-    
-    @Override
-    protected void doRead(final Action<ByteBuffer> chunkAction) {
-        request.dataHandler(new Handler<Buffer>() {
-            @Override
-            public void handle(Buffer body) {
-                chunkAction.on(body.getByteBuf().nioBuffer());
-            }
-        })
-        .endHandler(new VoidHandler() {
-            @Override
-            protected void handle() {
-                endActions.fire();
-            }
-        });
-    }
+  @Override
+  public List<String> headers(String name) {
+    return request.headers().getAll(name);
+  }
 
-    @Override
-    protected void doSetStatus(HttpStatus status) {
-        response.setStatusCode(status.code()).setStatusMessage(status.reason());
-    }
+  @Override
+  protected void doRead(final Action<ByteBuffer> chunkAction) {
+    request.dataHandler(new Handler<Buffer>() {
+      @Override
+      public void handle(Buffer body) {
+        chunkAction.on(body.getByteBuf().nioBuffer());
+      }
+    })
+      .endHandler(new VoidHandler() {
+        @Override
+        protected void handle() {
+          endActions.fire();
+        }
+      });
+  }
 
-    @Override
-    protected void doSetHeader(String name, String value) {
-        response.putHeader(name, value);
-    }
+  @Override
+  protected void doSetStatus(HttpStatus status) {
+    response.setStatusCode(status.code()).setStatusMessage(status.reason());
+  }
 
-    @Override
-    protected void doWrite(ByteBuffer byteBuffer) {
-        response.write(new Buffer().setBytes(0, byteBuffer));
-    }
+  @Override
+  protected void doSetHeader(String name, String value) {
+    response.putHeader(name, value);
+  }
 
-    @Override
-    protected void doEnd() {
-        response.end();
-    }
+  @Override
+  protected void doWrite(ByteBuffer byteBuffer) {
+    response.write(new Buffer().setBytes(0, byteBuffer));
+  }
 
-    /**
-     * {@link HttpServerRequest} is available.
-     */
-    @Override
-    public <T> T unwrap(Class<T> clazz) {
-        return HttpServerRequest.class.isAssignableFrom(clazz) ? clazz.cast(request) : null;
-    }
+  @Override
+  protected void doEnd() {
+    response.end();
+  }
+
+  /**
+   * {@link HttpServerRequest} is available.
+   */
+  @Override
+  public <T> T unwrap(Class<T> clazz) {
+    return HttpServerRequest.class.isAssignableFrom(clazz) ? clazz.cast(request) : null;
+  }
 
 }

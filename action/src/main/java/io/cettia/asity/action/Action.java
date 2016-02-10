@@ -22,9 +22,9 @@ package io.cettia.asity.action;
  */
 public interface Action<T> {
 
-    /**
-     * Some action is taken.
-     */
-    void on(T object);
+  /**
+   * Some action is taken.
+   */
+  void on(T object);
 
 }

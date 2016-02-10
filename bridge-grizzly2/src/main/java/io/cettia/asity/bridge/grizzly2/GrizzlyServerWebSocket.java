@@ -17,15 +17,13 @@ package io.cettia.asity.bridge.grizzly2;
 
 import io.cettia.asity.websocket.AbstractServerWebSocket;
 import io.cettia.asity.websocket.ServerWebSocket;
-
-import java.nio.ByteBuffer;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.glassfish.grizzly.websockets.DataFrame;
 import org.glassfish.grizzly.websockets.DefaultWebSocket;
 import org.glassfish.grizzly.websockets.WebSocket;
 import org.glassfish.grizzly.websockets.WebSocketAdapter;
+
+import javax.servlet.http.HttpServletRequest;
+import java.nio.ByteBuffer;
 
 /**
  * {@link ServerWebSocket} for Grizzly 2.
@@ -33,64 +31,64 @@ import org.glassfish.grizzly.websockets.WebSocketAdapter;
  * @author Donghwan Kim
  */
 public class GrizzlyServerWebSocket extends AbstractServerWebSocket {
-    
-    // To access the upgrade request for this WebSocket 
-    private final DefaultWebSocket socket;
-    
-    public GrizzlyServerWebSocket(DefaultWebSocket webSocket) {
-        this.socket = webSocket;
-        socket.add(new WebSocketAdapter() {
-            @Override
-            public void onMessage(WebSocket socket, String message) {
-                textActions.fire(message);
-            }
-            
-            @Override
-            public void onMessage(WebSocket socket, byte[] bytes) {
-                binaryActions.fire(ByteBuffer.wrap(bytes));
-            }
-            
-            @Override
-            public void onClose(WebSocket socket, DataFrame frame) {
-                closeActions.fire();
-            }
-        });
-    }
-    
-    void onError(Throwable e) {
-        errorActions.fire(e);
-    }
 
-    @Override
-    public String uri() {
-        HttpServletRequest request = socket.getUpgradeRequest();
-        String uri = request.getRequestURI();
-        if (request.getQueryString() != null) {
-            uri += "?" + request.getQueryString();
-        }
-        return uri;
-    }
+  // To access the upgrade request for this WebSocket
+  private final DefaultWebSocket socket;
 
-    @Override
-    protected void doSend(String data) {
-        socket.send(data);
-    }
+  public GrizzlyServerWebSocket(DefaultWebSocket webSocket) {
+    this.socket = webSocket;
+    socket.add(new WebSocketAdapter() {
+      @Override
+      public void onMessage(WebSocket socket, String message) {
+        textActions.fire(message);
+      }
 
-    @Override
-    protected void doSend(ByteBuffer data) {
-        byte[] bytes = new byte[data.remaining()];
-        data.get(bytes);
-        socket.send(bytes);
-    }
+      @Override
+      public void onMessage(WebSocket socket, byte[] bytes) {
+        binaryActions.fire(ByteBuffer.wrap(bytes));
+      }
 
-    @Override
-    protected void doClose() {
-        socket.close();
-    }
+      @Override
+      public void onClose(WebSocket socket, DataFrame frame) {
+        closeActions.fire();
+      }
+    });
+  }
 
-    @Override
-    public <T> T unwrap(Class<T> clazz) {
-        return WebSocket.class.isAssignableFrom(clazz) ? clazz.cast(socket) : null;
+  void onError(Throwable e) {
+    errorActions.fire(e);
+  }
+
+  @Override
+  public String uri() {
+    HttpServletRequest request = socket.getUpgradeRequest();
+    String uri = request.getRequestURI();
+    if (request.getQueryString() != null) {
+      uri += "?" + request.getQueryString();
     }
+    return uri;
+  }
+
+  @Override
+  protected void doSend(String data) {
+    socket.send(data);
+  }
+
+  @Override
+  protected void doSend(ByteBuffer data) {
+    byte[] bytes = new byte[data.remaining()];
+    data.get(bytes);
+    socket.send(bytes);
+  }
+
+  @Override
+  protected void doClose() {
+    socket.close();
+  }
+
+  @Override
+  public <T> T unwrap(Class<T> clazz) {
+    return WebSocket.class.isAssignableFrom(clazz) ? clazz.cast(socket) : null;
+  }
 
 }

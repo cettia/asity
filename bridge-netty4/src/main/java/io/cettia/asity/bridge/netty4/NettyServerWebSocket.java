@@ -35,64 +35,64 @@ import java.nio.ByteBuffer;
  */
 public class NettyServerWebSocket extends AbstractServerWebSocket {
 
-    private final ChannelHandlerContext context;
-    private final FullHttpRequest request;
-    private final WebSocketServerHandshaker handshaker;
+  private final ChannelHandlerContext context;
+  private final FullHttpRequest request;
+  private final WebSocketServerHandshaker handshaker;
 
-    public NettyServerWebSocket(ChannelHandlerContext context, FullHttpRequest req, WebSocketServerHandshaker handshaker) {
-        this.context = context;
-        this.request = req;
-        this.handshaker = handshaker;
-    }
+  public NettyServerWebSocket(ChannelHandlerContext context, FullHttpRequest req, WebSocketServerHandshaker handshaker) {
+    this.context = context;
+    this.request = req;
+    this.handshaker = handshaker;
+  }
 
-    void handleFrame(WebSocketFrame frame) {
-        if (frame instanceof TextWebSocketFrame) {
-            textActions.fire(((TextWebSocketFrame) frame).text());
-        } else if (frame instanceof BinaryWebSocketFrame) {
-            binaryActions.fire(frame.content().nioBuffer());
-        } else if (frame instanceof CloseWebSocketFrame) {
-            handshaker.close(context.channel(), (CloseWebSocketFrame) frame.retain());
-            closeActions.fire();
-        }
+  void handleFrame(WebSocketFrame frame) {
+    if (frame instanceof TextWebSocketFrame) {
+      textActions.fire(((TextWebSocketFrame) frame).text());
+    } else if (frame instanceof BinaryWebSocketFrame) {
+      binaryActions.fire(frame.content().nioBuffer());
+    } else if (frame instanceof CloseWebSocketFrame) {
+      handshaker.close(context.channel(), (CloseWebSocketFrame) frame.retain());
+      closeActions.fire();
     }
-    
-    void handleError(Throwable e) {
-        errorActions.fire(e);
-    }
+  }
 
-    void handleClose() {
-        closeActions.fire();
-    }
+  void handleError(Throwable e) {
+    errorActions.fire(e);
+  }
 
-    @Override
-    public String uri() {
-        return request.getUri();
-    }
+  void handleClose() {
+    closeActions.fire();
+  }
 
-    @Override
-    protected void doSend(ByteBuffer byteBuffer) {
-        context.writeAndFlush(new BinaryWebSocketFrame(Unpooled.wrappedBuffer(byteBuffer)));
-    }
+  @Override
+  public String uri() {
+    return request.getUri();
+  }
 
-    @Override
-    protected void doSend(String data) {
-        context.writeAndFlush(new TextWebSocketFrame(data));
-    }
+  @Override
+  protected void doSend(ByteBuffer byteBuffer) {
+    context.writeAndFlush(new BinaryWebSocketFrame(Unpooled.wrappedBuffer(byteBuffer)));
+  }
 
-    @Override
-    protected void doClose() {
-        context.close();
-    }
+  @Override
+  protected void doSend(String data) {
+    context.writeAndFlush(new TextWebSocketFrame(data));
+  }
 
-    @Override
-    public <T> T unwrap(Class<T> clazz) {
-        return ChannelHandlerContext.class.isAssignableFrom(clazz) ? 
-            clazz.cast(context) : 
-            WebSocketServerHandshaker.class.isAssignableFrom(clazz) ? 
-                clazz.cast(handshaker) : 
-                    FullHttpRequest.class.isAssignableFrom(clazz) ?
-                        clazz.cast(request) :
-                        null;
-    }
+  @Override
+  protected void doClose() {
+    context.close();
+  }
+
+  @Override
+  public <T> T unwrap(Class<T> clazz) {
+    return ChannelHandlerContext.class.isAssignableFrom(clazz) ?
+      clazz.cast(context) :
+      WebSocketServerHandshaker.class.isAssignableFrom(clazz) ?
+        clazz.cast(handshaker) :
+        FullHttpRequest.class.isAssignableFrom(clazz) ?
+          clazz.cast(request) :
+          null;
+  }
 
 }

@@ -20,11 +20,11 @@ package io.cettia.asity.http;
  *
  * @author Donghwan Kim
  * @see <a
- *      href="http://www.iana.org/assignments/http-methods/http-methods.xhtml">HTTP
- *      Method Registry</a>
+ * href="http://www.iana.org/assignments/http-methods/http-methods.xhtml">HTTP
+ * Method Registry</a>
  */
 public enum HttpMethod {
 
-    GET, HEAD, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, PATCH
+  GET, HEAD, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, PATCH
 
 }

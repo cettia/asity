@@ -18,7 +18,6 @@ package io.cettia.asity.bridge.vertx2;
 import io.cettia.asity.action.Action;
 import io.cettia.asity.http.ServerHttpExchange;
 import io.cettia.asity.test.ServerHttpExchangeTestBase;
-
 import org.eclipse.jetty.client.api.Response;
 import org.junit.Test;
 import org.vertx.java.core.VertxFactory;
@@ -31,33 +30,33 @@ import org.vertx.java.core.http.RouteMatcher;
  */
 public class VertxServerHttpExchangeTest extends ServerHttpExchangeTestBase {
 
-    private HttpServer server;
+  private HttpServer server;
 
-    @Override
-    protected void startServer(int port, Action<ServerHttpExchange> requestAction) throws Exception {
-        server = VertxFactory.newVertx().createHttpServer();
-        RouteMatcher matcher = new RouteMatcher();
-        matcher.all(TEST_URI, new AsityRequestHandler().onhttp(requestAction));
-        server.requestHandler(matcher);
-        server.listen(port);
-    }
+  @Override
+  protected void startServer(int port, Action<ServerHttpExchange> requestAction) throws Exception {
+    server = VertxFactory.newVertx().createHttpServer();
+    RouteMatcher matcher = new RouteMatcher();
+    matcher.all(TEST_URI, new AsityRequestHandler().onhttp(requestAction));
+    server.requestHandler(matcher);
+    server.listen(port);
+  }
 
-    @Override
-    protected void stopServer() {
-        server.close();
-    }
+  @Override
+  protected void stopServer() {
+    server.close();
+  }
 
-    @Test
-    public void unwrap() throws Throwable {
-        requestAction(new Action<ServerHttpExchange>() {
-            @Override
-            public void on(ServerHttpExchange http) {
-                threadAssertTrue(http.unwrap(HttpServerRequest.class) instanceof HttpServerRequest);
-                resume();
-            }
-        });
-        client.newRequest(uri()).send(new Response.Listener.Adapter());
-        await();
-    }
+  @Test
+  public void unwrap() throws Throwable {
+    requestAction(new Action<ServerHttpExchange>() {
+      @Override
+      public void on(ServerHttpExchange http) {
+        threadAssertTrue(http.unwrap(HttpServerRequest.class) instanceof HttpServerRequest);
+        resume();
+      }
+    });
+    client.newRequest(uri()).send(new Response.Listener.Adapter());
+    await();
+  }
 
 }
