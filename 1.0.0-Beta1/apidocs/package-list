@@ -1,0 +1,10 @@
+io.cettia.asity.action
+io.cettia.asity.bridge.atmosphere2
+io.cettia.asity.bridge.grizzly2
+io.cettia.asity.bridge.jwa1
+io.cettia.asity.bridge.netty4
+io.cettia.asity.bridge.servlet3
+io.cettia.asity.bridge.vertx2
+io.cettia.asity.http
+io.cettia.asity.test
+io.cettia.asity.websocket
