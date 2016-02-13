@@ -14,12 +14,12 @@ title: Asity Reference
 
 ---
 
-## Installation
+## Getting started
 Asity requires Java 7 and is distributed through Maven Central.
 
 * **To run an Asity application**
 
-Generally speaking, having an Asity application run on the specific platform means to feed resources like `ServerHttpExchange` and `ServerWebSocket` into the application which are produced by the specific platform using the corresponding bridge module. To deal with bridge, see [Platform](#platform) and [Platform on platform](#platform-on-platform) section.
+Generally speaking, having an Asity application run on the specific platform means to feed resources like `ServerHttpExchange` and `ServerWebSocket` produced by the specific platform into the application using the corresponding bridge module. To deal with bridge, see [Platform](#platform) and [Platform on platform](#platform-on-platform) section.
 
 * **To write an Asity application**
 
@@ -28,7 +28,7 @@ An Asity application is a collection of actions that handles resources like `Ser
 ---
 
 ## Platform
-Platform stands for lietrally platform where application runs by facilitating dealing with resource like HTTP exchange and WebSocket like full-stack web application framework and raw web server.
+Platform stands for lietrally platform where application runs by facilitating dealing with resource like HTTP exchange and WebSocket like full-stack application framework and raw web server.
 
 ### Atmosphere 2
 [Atmosphere 2](https://github.com/Atmosphere/atmosphere/) is a platform to use Java Servlet 3 and Java WebSocket API 1 together in more comfortable way.
@@ -45,13 +45,12 @@ Add the following dependency to your build or include it on your classpath manua
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
-  <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-atmosphere2</artifactId>
   <version>1.0.0-Beta1</version>
 </dependency>
 ```
 
-To bridge application and Atmosphere, you should register a servlet of `AsityAtmosphereServlet`. When registering servlet, you must set `asyncSupported` to `true` and set a init param, `org.atmosphere.cpr.AtmosphereInterceptor.disableDefaults`, to `true`.
+To bridge application and Atmosphere, you should register a servlet of `AsityAtmosphereServlet`. When registering servlet, you must set `asyncSupported` to `true` and set a init param, `org.atmosphere.cpr.AtmosphereInterceptor.disableDefaults` that is defined as `org.atmosphere.cpr.ApplicationConfig.DISABLE_ATMOSPHEREINTERCEPTOR`, to `true`.
 
 ```java
 @WebListener
@@ -174,7 +173,7 @@ Then, you should register an endpoint of `AsityServerEndpoint`. Note that each W
 ```java
 public class Bootstrap implements ServerApplicationConfig {
   @Override
-  public Set<ServerEndpointConfig> getEndpointConfigs(Set<Class<? extends Endpoint>> _) {
+  public Set<ServerEndpointConfig> getEndpointConfigs(Set<Class<? extends Endpoint>> endpointClasses) {
     // Your application
     Action<ServerWebSocket> websocketAction = ws -> {};
     
@@ -301,7 +300,7 @@ public class Bootstrap extends Verticle {
 ## Platform on platform
 Some platform, A, is based on the other platform, B, and allows to deal with the underlying platform, B, so that if a bridge for B is available, without creating an additional bridge for A, it's possible to run application on A through B.
 
-The general pattern is to share an application instance between the platform and the underlying platform using `static` keyword, sharing application holder or adopting dependency injection.
+The general pattern is to share an application instance between the platform, A, and the underlying platform, B, using `static` keyword, application holder or dependency injection framework like Spring or Guice.
 
 ### JAX-RS 2
 [JAX-RS 2](https://docs.oracle.com/javaee/7/tutorial/doc/jaxws.htm) from Java EE 7. JAX-RS allows to deploy JAX-RS resources to several servers, and one of them is Java Servlet. That means, you can run application written in JAX-RS through Servlet. The same approach may be applied to JAX-RS 1. [Example](https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform-on-platform/jaxrs2-atmosphere2).
@@ -320,7 +319,7 @@ To write HTTP application, add the following dependency to your build or include
 ```
 
 ### `ServerHttpExchange` 
-It represents a server-side HTTP request-response exchange and is given when request headers is read. Note that is is not thread safe.
+It represents a server-side HTTP request-response exchange and is given when request headers is read. Note that it is not thread safe.
 
 #### Request properties
 These are read only and might not be available in some platforms after `onend` or `onclose`.

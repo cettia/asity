@@ -32,7 +32,7 @@ And run on the following platforms:
 
 ### Write your first Asity app
 
-Asity is distributed through Maven Central. To write web application running on any platform Asity supports, you need two artifacts: `io.cettia.asity:asity-http:1.0.0-Beta1` and `io.cettia.asity:asity-websocket:1.0.0-Beta1`.
+Asity is distributed through Maven Central. To write a web application running on any platform Asity supports, you need two artifacts: `io.cettia.asity:asity-http:1.0.0-Beta1` and `io.cettia.asity:asity-websocket:1.0.0-Beta1`.
 
 ```xml
 <dependency>
@@ -63,15 +63,15 @@ public class EchoHandler {
     // When a chunk is read from the request body, writes it to the response body
     http.onchunk((ByteBuffer bytes) -> http.write(bytes));
     // When the request is fully read, ends the response
-    http.onend((Void $) -> http.end());
+    http.onend((Void v) -> http.end());
     // Reads the request body as binary to circumvent encoding issue
     http.readAsBinary();
     // When the response is fully written and ends,
-    http.onfinish((Void $) -> System.out.println("on finish"));
+    http.onfinish((Void v) -> System.out.println("on finish"));
     // When some error happens in the request-response exchange,
     http.onerror((Throwable t) -> t.printStackTrace());
     // When the underlying connection is terminated,
-    http.onclose((Void $) -> System.out.println("on close"));
+    http.onclose((Void v) -> System.out.println("on close"));
   };
   public final Action<ServerWebSocket> websocketAction = (ServerWebSocket ws) -> {
     // When a text frame is arrived, sends it back
@@ -81,14 +81,14 @@ public class EchoHandler {
     // When some error happens in the connection,
     ws.onerror((Throwable t) -> t.printStackTrace());
     // When the connection is closed for any reason,
-    ws.onclose((Void $) -> System.out.println("on close"));
+    ws.onclose((Void v) -> System.out.println("on close"));
   };
 }
 ```
 
 ### Run your app
 
-Now to run this handler on the specific platform, we need to wrap HTTP resources and WebSocket resources provided by that specific platform into `ServerHttpExchange` and `ServerWebSocket` and feed them into an instance of `EchoHandler`. A module playing such roles is called bridge.
+Now to run this application on the specific platform, we need to wrap HTTP resources and WebSocket resources provided by that specific platform into `ServerHttpExchange` and `ServerWebSocket` and feed them into an instance of `EchoHandler`. A module playing such roles is called bridge.
 
 For example, to run `EchoHandler` on an implementation of Java Servlet 3 and Java WebSocket API 1 such as Jetty 9 and Tomcat 8, you need Java Servlet 3 bridge and Java WebSocket API 1 bridge. Let's add the following bridge dependencies.
 
@@ -105,7 +105,7 @@ For example, to run `EchoHandler` on an implementation of Java Servlet 3 and Jav
 </dependency>
 ```
 
-Then, you can feed the handler with HTTP resources through `AsityServlet` and WebSocket resources through `AsityServerEndpoint`.
+Then, you can feed the application with HTTP resources through `AsityServlet` and WebSocket resources through `AsityServerEndpoint`.
 
 ```java
 import io.cettia.asity.bridge.jwa1.AsityServerEndpoint;
@@ -120,7 +120,7 @@ import javax.websocket.server.*;
 public class Bootstrap implements ServletContextListener {
   @Override
   public void contextInitialized(ServletContextEvent event) {
-    // An application
+    // An Asity application
     final EchoHandler handler = new EchoHandler();
     
     // Feeds the application with HTTP resources produced by Servlet 3
@@ -166,7 +166,7 @@ The same pattern applies when bridging an application to other platforms. Here i
 <li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/vertx2">Vert.x 2</a></li>
 </ul>
 
-It's not the end. Some platform, A, is based on the other platform, B, and allows to deal with the underlying platform, B, so that if a bridge for B is available, without creating an additional bridge for A, it's possible to run application on A through B. For example, applications written in Spring MVC platform or JAX-RS platform can run on Servlet platform.
+It's not the end. Some platform, A, is based on the other platform, B, and allows to deal with the underlying platform, B, so that if a bridge for B is available, without creating an additional bridge for A, it's possible to run application on A through B. For example, applications written in Spring MVC platform or JAX-RS platform can run on Servlet platform. See the following examples.
 
 <ul class="menu">
 <li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform-on-platform/jaxrs2-atmosphere2">JAX-RS 2 on Atmosphere 2</a></li>
