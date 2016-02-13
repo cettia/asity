@@ -56,21 +56,21 @@ public class AtmosphereServerWebSocket extends AbstractServerWebSocket {
         errorActions.fire(event.throwable());
       }
     })
-      .addEventListener(new WebSocketEventListenerAdapter() {
-        @SuppressWarnings("rawtypes")
-        @Override
-        public void onMessage(WebSocketEvent event) {
-          Object message = event.message();
-          if (message instanceof String) {
-            textActions.fire((String) message);
-          } else if (message instanceof byte[]) {
-            binaryActions.fire(ByteBuffer.wrap((byte[]) message));
-          } else {
-            // Just to be sure
-            errorActions.fire(new IllegalStateException("Message is neither String nor byte[]"));
-          }
+    .addEventListener(new WebSocketEventListenerAdapter() {
+      @SuppressWarnings("rawtypes")
+      @Override
+      public void onMessage(WebSocketEvent event) {
+        Object message = event.message();
+        if (message instanceof String) {
+          textActions.fire((String) message);
+        } else if (message instanceof byte[]) {
+          binaryActions.fire(ByteBuffer.wrap((byte[]) message));
+        } else {
+          // Just to be sure
+          errorActions.fire(new IllegalStateException("Message is neither String nor byte[]"));
         }
-      });
+      }
+    });
   }
 
   @Override

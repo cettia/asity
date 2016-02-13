@@ -42,29 +42,29 @@ public class VertxServerWebSocket extends AbstractServerWebSocket {
         closeActions.fire();
       }
     })
-      .exceptionHandler(new Handler<Throwable>() {
-        @Override
-        public void handle(Throwable throwable) {
-          errorActions.fire(throwable);
+    .exceptionHandler(new Handler<Throwable>() {
+      @Override
+      public void handle(Throwable throwable) {
+        errorActions.fire(throwable);
+      }
+    })
+    .frameHandler(new Handler<WebSocketFrame>() {
+      @Override
+      public void handle(WebSocketFrame f) {
+        // Deal with only data frames
+        WebSocketFrameInternal frame = (WebSocketFrameInternal) f;
+        switch (frame.type()) {
+          case TEXT:
+            textActions.fire(frame.textData());
+            break;
+          case BINARY:
+            binaryActions.fire(frame.getBinaryData().nioBuffer());
+            break;
+          default:
+            break;
         }
-      })
-      .frameHandler(new Handler<WebSocketFrame>() {
-        @Override
-        public void handle(WebSocketFrame f) {
-          // Deal with only data frames
-          WebSocketFrameInternal frame = (WebSocketFrameInternal) f;
-          switch (frame.type()) {
-            case TEXT:
-              textActions.fire(frame.textData());
-              break;
-            case BINARY:
-              binaryActions.fire(frame.getBinaryData().nioBuffer());
-              break;
-            default:
-              break;
-          }
-        }
-      });
+      }
+    });
   }
 
   @Override

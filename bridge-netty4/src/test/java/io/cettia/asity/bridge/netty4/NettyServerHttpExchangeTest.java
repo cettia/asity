@@ -47,7 +47,8 @@ public class NettyServerHttpExchangeTest extends ServerHttpExchangeTestBase {
   private ChannelGroup channels;
 
   @Override
-  protected void startServer(int port, final Action<ServerHttpExchange> requestAction) throws Exception {
+  protected void startServer(int port, final Action<ServerHttpExchange> requestAction) throws
+    Exception {
     bossGroup = new NioEventLoopGroup();
     workerGroup = new NioEventLoopGroup();
     channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
@@ -64,13 +65,12 @@ public class NettyServerHttpExchangeTest extends ServerHttpExchangeTestBase {
         public void initChannel(SocketChannel ch) throws Exception {
           ChannelPipeline pipeline = ch.pipeline();
           pipeline.addLast(new HttpServerCodec())
-            .addLast(new AsityServerCodec() {
-              @Override
-              protected boolean accept(HttpRequest req) {
-                return URI.create(req.getUri()).getPath().equals(TEST_URI);
-              }
+          .addLast(new AsityServerCodec() {
+            @Override
+            protected boolean accept(HttpRequest req) {
+              return URI.create(req.getUri()).getPath().equals(TEST_URI);
             }
-              .onhttp(requestAction));
+          }.onhttp(requestAction));
         }
       });
     channels.add(bootstrap.bind(port).channel());

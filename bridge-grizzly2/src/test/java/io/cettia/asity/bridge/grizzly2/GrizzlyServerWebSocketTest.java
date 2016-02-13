@@ -33,14 +33,15 @@ import java.net.URI;
  */
 public class GrizzlyServerWebSocketTest extends ServerWebSocketTestBase {
 
-  HttpServer server;
+  private HttpServer server;
 
   @Override
   protected void startServer(int port, Action<ServerWebSocket> websocketAction) throws Exception {
     server = HttpServer.createSimpleServer(null, port);
     NetworkListener listener = server.getListener("grizzly");
     listener.registerAddOn(new WebSocketAddOn());
-    WebSocketEngine.getEngine().register("", TEST_URI, new AsityWebSocketApplication().onwebsocket(websocketAction));
+    WebSocketEngine.getEngine().register("", TEST_URI, new AsityWebSocketApplication()
+      .onwebsocket(websocketAction));
     server.start();
   }
 

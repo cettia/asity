@@ -65,13 +65,12 @@ public class NettyServerWebSocketTest extends ServerWebSocketTestBase {
         public void initChannel(SocketChannel ch) throws Exception {
           ChannelPipeline pipeline = ch.pipeline();
           pipeline.addLast(new HttpServerCodec())
-            .addLast(new AsityServerCodec() {
-              @Override
-              protected boolean accept(HttpRequest req) {
-                return URI.create(req.getUri()).getPath().equals(TEST_URI);
-              }
+          .addLast(new AsityServerCodec() {
+            @Override
+            protected boolean accept(HttpRequest req) {
+              return URI.create(req.getUri()).getPath().equals(TEST_URI);
             }
-              .onwebsocket(websocketAction));
+          }.onwebsocket(websocketAction));
         }
       });
     channels.add(bootstrap.bind(port).channel());
@@ -90,7 +89,8 @@ public class NettyServerWebSocketTest extends ServerWebSocketTestBase {
       @Override
       public void on(ServerWebSocket ws) {
         threadAssertTrue(ws.unwrap(ChannelHandlerContext.class) instanceof ChannelHandlerContext);
-        threadAssertTrue(ws.unwrap(WebSocketServerHandshaker.class) instanceof WebSocketServerHandshaker);
+        threadAssertTrue(ws.unwrap(WebSocketServerHandshaker.class) instanceof
+          WebSocketServerHandshaker);
         threadAssertTrue(ws.unwrap(FullHttpRequest.class) instanceof FullHttpRequest);
         resume();
       }

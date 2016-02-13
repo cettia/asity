@@ -33,10 +33,12 @@ import javax.websocket.Session;
  * <p/>
  * <p/>
  * <pre>
- * ServerEndpointConfig config = ServerEndpointConfig.Builder.create(AsityServerEndpoint.class, "/cettia")
+ * ServerEndpointConfig config = ServerEndpointConfig.Builder.create(AsityServerEndpoint.class,
+ * "/cettia")
  * .configurator(new Configurator() {
  *     {@literal @}Override
- *     protected &ltT&gt T getEndpointInstance(Class&ltT&gt endpointClass) throws InstantiationException {
+ *     protected &ltT&gt T getEndpointInstance(Class&ltT&gt endpointClass) throws
+ *     InstantiationException {
  *         return endpointClass.cast(new AsityServerEndpoint().onwebsocket(ws -&gt {}));
  *     }
  * })

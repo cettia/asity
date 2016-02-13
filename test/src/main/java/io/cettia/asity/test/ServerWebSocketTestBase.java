@@ -80,7 +80,8 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
     websocketAction = null;
   }
 
-  protected abstract void startServer(int port, Action<ServerWebSocket> websocketAction) throws Exception;
+  protected abstract void startServer(int port, Action<ServerWebSocket> websocketAction) throws
+    Exception;
 
   protected abstract void stopServer() throws Exception;
 
@@ -260,17 +261,17 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
             }
           }
         })
-          .onbinary(new Action<ByteBuffer>() {
-            @Override
-            public void on(ByteBuffer data) {
-              threadAssertEquals(data, ByteBuffer.wrap(new byte[]{0x00, 0x01, 0x02}));
-              if (done) {
-                resume();
-              } else {
-                done = true;
-              }
+        .onbinary(new Action<ByteBuffer>() {
+          @Override
+          public void on(ByteBuffer data) {
+            threadAssertEquals(data, ByteBuffer.wrap(new byte[]{0x00, 0x01, 0x02}));
+            if (done) {
+              resume();
+            } else {
+              done = true;
             }
-          });
+          }
+        });
       }
     });
     client.connect(new WebSocketAdapter() {
@@ -294,7 +295,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
             resume();
           }
         })
-          .close();
+        .close();
       }
     });
     client.connect(NOOP, URI.create(uri()));

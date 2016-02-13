@@ -33,7 +33,8 @@ public abstract class AbstractServerWebSocket implements ServerWebSocket {
   protected final Actions<String> textActions = new SimpleActions<>();
   protected final Actions<ByteBuffer> binaryActions = new SimpleActions<>();
   protected final Actions<Throwable> errorActions = new SimpleActions<>();
-  protected final Actions<Void> closeActions = new SimpleActions<>(new Actions.Options().once(true).memory(true));
+  protected final Actions<Void> closeActions = new SimpleActions<>(new Actions.Options().once
+    (true).memory(true));
 
   private final Logger logger = LoggerFactory.getLogger(AbstractServerWebSocket.class);
   private State state = State.OPEN;

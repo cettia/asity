@@ -51,7 +51,8 @@ public class NettyServerHttpExchange extends AbstractServerHttpExchange {
   public NettyServerHttpExchange(ChannelHandlerContext context, HttpRequest request) {
     this.context = context;
     this.request = request;
-    this.response = new DefaultHttpResponse(request.getProtocolVersion(), HttpResponseStatus.OK, false);
+    this.response = new DefaultHttpResponse(request.getProtocolVersion(), HttpResponseStatus.OK,
+      false);
     response.headers().set(HttpHeaders.Names.TRANSFER_ENCODING, HttpHeaders.Values.CHUNKED);
   }
 

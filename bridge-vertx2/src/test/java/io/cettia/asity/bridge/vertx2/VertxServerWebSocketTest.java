@@ -36,7 +36,8 @@ public class VertxServerWebSocketTest extends ServerWebSocketTestBase {
   @Override
   protected void startServer(int port, Action<ServerWebSocket> websocketAction) {
     server = VertxFactory.newVertx().createHttpServer();
-    final AsityWebSocketHandler websocketHandler = new AsityWebSocketHandler().onwebsocket(websocketAction);
+    final AsityWebSocketHandler websocketHandler = new AsityWebSocketHandler().onwebsocket
+      (websocketAction);
     server.websocketHandler(new Handler<org.vertx.java.core.http.ServerWebSocket>() {
       @Override
       public void handle(org.vertx.java.core.http.ServerWebSocket socket) {
@@ -58,7 +59,8 @@ public class VertxServerWebSocketTest extends ServerWebSocketTestBase {
     websocketAction(new Action<ServerWebSocket>() {
       @Override
       public void on(ServerWebSocket ws) {
-        threadAssertTrue(ws.unwrap(org.vertx.java.core.http.ServerWebSocket.class) instanceof org.vertx.java.core.http.ServerWebSocket);
+        threadAssertTrue(ws.unwrap(org.vertx.java.core.http.ServerWebSocket.class) instanceof org
+          .vertx.java.core.http.ServerWebSocket);
         resume();
       }
     });

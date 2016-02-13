@@ -38,10 +38,11 @@ import java.net.URI;
  */
 public class AtmosphereServerWebSocketTest extends ServerWebSocketTestBase {
 
-  Server server;
+  private Server server;
 
   @Override
-  protected void startServer(int port, final Action<ServerWebSocket> websocketAction) throws Exception {
+  protected void startServer(int port, final Action<ServerWebSocket> websocketAction) throws
+    Exception {
     server = new Server();
     ServerConnector connector = new ServerConnector(server);
     connector.setPort(port);
@@ -52,9 +53,11 @@ public class AtmosphereServerWebSocketTest extends ServerWebSocketTestBase {
       public void contextInitialized(ServletContextEvent event) {
         ServletContext context = event.getServletContext();
         Servlet servlet = new AsityAtmosphereServlet().onwebsocket(websocketAction);
-        ServletRegistration.Dynamic reg = context.addServlet(AsityAtmosphereServlet.class.getName(), servlet);
+        ServletRegistration.Dynamic reg = context.addServlet(AsityAtmosphereServlet.class.getName
+          (), servlet);
         reg.setAsyncSupported(true);
-        reg.setInitParameter(ApplicationConfig.DISABLE_ATMOSPHEREINTERCEPTOR, Boolean.TRUE.toString());
+        reg.setInitParameter(ApplicationConfig.DISABLE_ATMOSPHEREINTERCEPTOR, Boolean.TRUE
+          .toString());
         reg.setInitParameter(ApplicationConfig.SCAN_CLASSPATH, Boolean.FALSE.toString());
         reg.addMapping(TEST_URI);
       }

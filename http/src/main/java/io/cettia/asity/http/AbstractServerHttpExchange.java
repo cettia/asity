@@ -35,14 +35,18 @@ import java.util.List;
  */
 public abstract class AbstractServerHttpExchange implements ServerHttpExchange {
 
-  protected final Actions<Void> endActions = new SimpleActions<>(new Actions.Options().once(true).memory(true));
+  protected final Actions<Void> endActions = new SimpleActions<>(new Actions.Options().once(true)
+    .memory(true));
   protected final Actions<Throwable> errorActions = new SimpleActions<>();
-  protected final Actions<Void> closeActions = new SimpleActions<>(new Actions.Options().once(true).memory(true));
+  protected final Actions<Void> closeActions = new SimpleActions<>(new Actions.Options().once
+    (true).memory(true));
 
   private final Logger logger = LoggerFactory.getLogger(AbstractServerHttpExchange.class);
   private final Actions<Object> chunkActions = new SimpleActions<>();
-  private final Actions<Object> bodyActions = new SimpleActions<>(new Actions.Options().once(true).memory(true));
-  private final Actions<Void> finishActions = new SimpleActions<>(new Actions.Options().once(true).memory(true));
+  private final Actions<Object> bodyActions = new SimpleActions<>(new Actions.Options().once
+    (true).memory(true));
+  private final Actions<Void> finishActions = new SimpleActions<>(new Actions.Options().once
+    (true).memory(true));
   private boolean read;
   private boolean readBody;
   private boolean ended;

@@ -55,7 +55,8 @@ public class HttpStatus {
   /**
    * {@code 203 Non-Authoritative Information}
    */
-  public static final HttpStatus NON_AUTHORITATIVE_INFORMATION = new HttpStatus(203, "Non-Authoritative Information");
+  public static final HttpStatus NON_AUTHORITATIVE_INFORMATION = new HttpStatus(203,
+    "Non-Authoritative Information");
   /**
    * {@code 204 No Content}
    */
@@ -151,7 +152,8 @@ public class HttpStatus {
   /**
    * {@code 407 Proxy Authentication Required}
    */
-  public static final HttpStatus PROXY_AUTHENTICATION_REQUIRED = new HttpStatus(407, "Proxy Authentication Required");
+  public static final HttpStatus PROXY_AUTHENTICATION_REQUIRED = new HttpStatus(407, "Proxy " +
+    "Authentication Required");
   /**
    * {@code 408 Request Timeout}
    */
@@ -175,7 +177,8 @@ public class HttpStatus {
   /**
    * {@code 413 Request Entity Too Large}
    */
-  public static final HttpStatus REQUEST_ENTITY_TOO_LARGE = new HttpStatus(413, "Request Entity Too Large");
+  public static final HttpStatus REQUEST_ENTITY_TOO_LARGE = new HttpStatus(413, "Request Entity " +
+    "Too Large");
   /**
    * {@code 414 Request-URI Too Long}
    */
@@ -183,11 +186,13 @@ public class HttpStatus {
   /**
    * {@code 415 Unsupported Media Type}
    */
-  public static final HttpStatus UNSUPPORTED_MEDIA_TYPE = new HttpStatus(415, "Unsupported Media Type");
+  public static final HttpStatus UNSUPPORTED_MEDIA_TYPE = new HttpStatus(415, "Unsupported Media " +
+    "Type");
   /**
    * {@code 416 Requested Range Not Satisfiable}
    */
-  public static final HttpStatus REQUESTED_RANGE_NOT_SATISFIABLE = new HttpStatus(416, "Requested Range Not Satisfiable");
+  public static final HttpStatus REQUESTED_RANGE_NOT_SATISFIABLE = new HttpStatus(416, "Requested" +
+    " Range Not Satisfiable");
   /**
    * {@code 417 Expectation Failed}
    */
@@ -211,7 +216,8 @@ public class HttpStatus {
   /**
    * {@code 428 Precondition Required}
    */
-  public static final HttpStatus PRECONDITION_REQUIRED = new HttpStatus(428, "Precondition Required");
+  public static final HttpStatus PRECONDITION_REQUIRED = new HttpStatus(428, "Precondition " +
+    "Required");
   /**
    * {@code 429 Too Many Requests}
    */
@@ -219,13 +225,15 @@ public class HttpStatus {
   /**
    * {@code 431 Request Header Fields Too Large}
    */
-  public static final HttpStatus REQUEST_HEADER_FIELDS_TOO_LARGE = new HttpStatus(431, "Request Header Fields Too Large");
+  public static final HttpStatus REQUEST_HEADER_FIELDS_TOO_LARGE = new HttpStatus(431, "Request " +
+    "Header Fields Too Large");
 
   // 5xx: Server Error - The server failed to fulfill an apparently valid request
   /**
    * {@code 500 Internal Server Error}
    */
-  public static final HttpStatus INTERNAL_SERVER_ERROR = new HttpStatus(500, "Internal Server Error");
+  public static final HttpStatus INTERNAL_SERVER_ERROR = new HttpStatus(500, "Internal Server " +
+    "Error");
   /**
    * {@code 501 Not Implemented}
    */
@@ -245,11 +253,13 @@ public class HttpStatus {
   /**
    * {@code 505 HTTP Version Not Supported}
    */
-  public static final HttpStatus HTTP_VERSION_NOT_SUPPORTED = new HttpStatus(505, "HTTP Version Not Supported");
+  public static final HttpStatus HTTP_VERSION_NOT_SUPPORTED = new HttpStatus(505, "HTTP Version " +
+    "Not Supported");
   /**
    * {@code 506 Variant Also Negotiates (Experimental)}
    */
-  public static final HttpStatus VARIANT_ALSO_NEGOTIATES = new HttpStatus(506, "Variant Also Negotiates (Experimental)");
+  public static final HttpStatus VARIANT_ALSO_NEGOTIATES = new HttpStatus(506, "Variant Also " +
+    "Negotiates (Experimental)");
   /**
    * {@code 507 Insufficient Storage}
    */
@@ -265,7 +275,8 @@ public class HttpStatus {
   /**
    * {@code 511 Network Authentication Required}
    */
-  public static final HttpStatus NETWORK_AUTHENTICATION_REQUIRED = new HttpStatus(511, "Network Authentication Required");
+  public static final HttpStatus NETWORK_AUTHENTICATION_REQUIRED = new HttpStatus(511, "Network " +
+    "Authentication Required");
 
   private int code;
   private String reason;

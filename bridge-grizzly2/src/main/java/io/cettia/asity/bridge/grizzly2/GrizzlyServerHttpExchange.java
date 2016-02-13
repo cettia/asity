@@ -22,6 +22,7 @@ import io.cettia.asity.http.HttpStatus;
 import io.cettia.asity.http.ServerHttpExchange;
 import org.glassfish.grizzly.CloseListener;
 import org.glassfish.grizzly.Closeable;
+import org.glassfish.grizzly.ICloseType;
 import org.glassfish.grizzly.ReadHandler;
 import org.glassfish.grizzly.http.io.NIOInputStream;
 import org.glassfish.grizzly.http.server.Request;
@@ -49,14 +50,17 @@ public class GrizzlyServerHttpExchange extends AbstractServerHttpExchange {
   public GrizzlyServerHttpExchange(Request request, Response response) {
     this.request = request;
     this.response = response;
-    request.getContext().getConnection().addCloseListener(new CloseListener<Closeable, org.glassfish.grizzly.ICloseType>() {
+    request.getContext().getConnection().addCloseListener(new CloseListener<Closeable,
+      ICloseType>() {
       @Override
-      public void onClosed(Closeable closeable, org.glassfish.grizzly.ICloseType type) throws IOException {
+      public void onClosed(Closeable closeable, ICloseType type) throws
+        IOException {
         closeActions.fire();
       }
     });
     // To detect closed connection
-    // From https://github.com/GrizzlyNIO/grizzly-mirror/blob/2_3_17/modules/comet/src/main/java/org/glassfish/grizzly/comet/CometContext.java#L250
+    // From https://github.com/GrizzlyNIO/grizzly-mirror/blob/2_3_17/modules/comet/src/main/java
+    // /org/glassfish/grizzly/comet/CometContext.java#L250
     request.getInputBuffer().initiateAsyncronousDataReceiving();
     response.suspend();
   }

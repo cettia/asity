@@ -39,7 +39,8 @@ public class NettyServerWebSocket extends AbstractServerWebSocket {
   private final FullHttpRequest request;
   private final WebSocketServerHandshaker handshaker;
 
-  public NettyServerWebSocket(ChannelHandlerContext context, FullHttpRequest req, WebSocketServerHandshaker handshaker) {
+  public NettyServerWebSocket(ChannelHandlerContext context, FullHttpRequest req,
+                              WebSocketServerHandshaker handshaker) {
     this.context = context;
     this.request = req;
     this.handshaker = handshaker;

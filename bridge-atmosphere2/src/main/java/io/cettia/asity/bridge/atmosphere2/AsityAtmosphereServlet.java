@@ -40,9 +40,11 @@ import java.io.IOException;
  * <p/>
  * <pre>
  * Servlet servlet = new AsityAtmosphereServlet().onhttp(http -&gt {}).onwebsocket(ws -&gt {});
- * ServletRegistration.Dynamic reg = context.addServlet(AsityAtmosphereServlet.class.getName(), servlet);
+ * ServletRegistration.Dynamic reg = context.addServlet(AsityAtmosphereServlet.class.getName(),
+ * servlet);
  * <strong>reg.setAsyncSupported(true);</strong>
- * <strong>reg.setInitParameter(ApplicationConfig.DISABLE_ATMOSPHEREINTERCEPTOR, Boolean.TRUE.toString())</strong>
+ * <strong>reg.setInitParameter(ApplicationConfig.DISABLE_ATMOSPHEREINTERCEPTOR, Boolean.TRUE
+ * .toString())</strong>
  * reg.addMapping("/cettia");
  * </pre>
  *

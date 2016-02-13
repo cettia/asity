@@ -45,8 +45,7 @@ public abstract class AbstractActions<T> implements Actions<T> {
       if (options.memory() && fired()) {
         fireOne(action, cached());
       }
-      if (!options.unique()
-        || (options.unique() && !actionList.contains(action))) {
+      if (!options.unique() || (options.unique() && !actionList.contains(action))) {
         actionList.add(action);
       }
     }

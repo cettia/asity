@@ -35,7 +35,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * <pre>
  * NetworkListener listener = httpServer.getListener("grizzly");
  * listener.registerAddOn(new WebSocketAddOn());
- * WebSocketEngine.getEngine().register("", "/cettia", new AsityWebSocketApplication().onwebsocket(ws -&gt {}));
+ * WebSocketEngine.getEngine().register("", "/cettia", new AsityWebSocketApplication()
+ * .onwebsocket(ws -&gt {}));
  * </pre>
  *
  * @author Donghwan Kim

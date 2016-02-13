@@ -77,7 +77,8 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
     requestAction = null;
   }
 
-  protected abstract void startServer(int port, Action<ServerHttpExchange> requestAction) throws Exception;
+  protected abstract void startServer(int port, Action<ServerHttpExchange> requestAction) throws
+    Exception;
 
   protected abstract void stopServer() throws Exception;
 
@@ -149,18 +150,19 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
             body.append(data);
           }
         })
-          .onend(new VoidAction() {
-            @Override
-            public void on() {
-              threadAssertEquals(body.toString(), "A Breath Clad In Happiness");
-              resume();
-            }
-          })
-          .read();
+        .onend(new VoidAction() {
+          @Override
+          public void on() {
+            threadAssertEquals(body.toString(), "A Breath Clad In Happiness");
+            resume();
+          }
+        })
+        .read();
       }
     });
     client.newRequest(uri()).method(HttpMethod.POST)
-      .content(new StringContentProvider("A Breath Clad In Happiness"), "text/plain; charset=utf-8").send(ASYNC);
+    .content(new StringContentProvider("A Breath Clad In Happiness"), "text/plain; charset=utf-8")
+    .send(ASYNC);
     await();
   }
 
@@ -176,18 +178,19 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
             body.append(data);
           }
         })
-          .onend(new VoidAction() {
-            @Override
-            public void on() {
-              threadAssertEquals(body.toString(), "Day 7: Poem of the Ocean");
-              resume();
-            }
-          })
-          .readAsText();
+        .onend(new VoidAction() {
+          @Override
+          public void on() {
+            threadAssertEquals(body.toString(), "Day 7: Poem of the Ocean");
+            resume();
+          }
+        })
+        .readAsText();
       }
     });
     client.newRequest(uri()).method(HttpMethod.POST)
-      .content(new StringContentProvider("Day 7: Poem of the Ocean"), "application/octet-stream").send(ASYNC);
+    .content(new StringContentProvider("Day 7: Poem of the Ocean"), "application/octet-stream")
+    .send(ASYNC);
     await();
   }
 
@@ -203,18 +206,19 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
             body.append(data);
           }
         })
-          .onend(new VoidAction() {
-            @Override
-            public void on() {
-              threadAssertEquals(body.toString(), "시간 속에 만들어진 무대 위에 그대는 없다");
-              resume();
-            }
-          })
-          .readAsText("utf-8");
+        .onend(new VoidAction() {
+          @Override
+          public void on() {
+            threadAssertEquals(body.toString(), "시간 속에 만들어진 무대 위에 그대는 없다");
+            resume();
+          }
+        })
+        .readAsText("utf-8");
       }
     });
     client.newRequest(uri()).method(HttpMethod.POST)
-      .content(new StringContentProvider("시간 속에 만들어진 무대 위에 그대는 없다", "utf-8"), "text/plain; charset=euc-kr").send(ASYNC);
+    .content(new StringContentProvider("시간 속에 만들어진 무대 위에 그대는 없다", "utf-8"),
+      "text/plain; charset=euc-kr").send(ASYNC);
     await();
   }
 
@@ -232,18 +236,19 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
             body.write(bytes, 0, bytes.length);
           }
         })
-          .onend(new VoidAction() {
-            @Override
-            public void on() {
-              threadAssertTrue(Arrays.equals(body.toByteArray(), new byte[]{'h', 'i'}));
-              resume();
-            }
-          })
-          .read();
+        .onend(new VoidAction() {
+          @Override
+          public void on() {
+            threadAssertTrue(Arrays.equals(body.toByteArray(), new byte[]{'h', 'i'}));
+            resume();
+          }
+        })
+        .read();
       }
     });
     client.newRequest(uri()).method(HttpMethod.POST)
-      .content(new BytesContentProvider(new byte[]{'h', 'i'}), "application/octet-stream").send(ASYNC);
+    .content(new BytesContentProvider(new byte[]{'h', 'i'}), "application/octet-stream")
+    .send(ASYNC);
     await();
   }
 
@@ -261,18 +266,19 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
             body.write(bytes, 0, bytes.length);
           }
         })
-          .onend(new VoidAction() {
-            @Override
-            public void on() {
-              threadAssertTrue(Arrays.equals(body.toByteArray(), new byte[]{'h', 'i'}));
-              resume();
-            }
-          })
-          .readAsBinary();
+        .onend(new VoidAction() {
+          @Override
+          public void on() {
+            threadAssertTrue(Arrays.equals(body.toByteArray(), new byte[]{'h', 'i'}));
+            resume();
+          }
+        })
+        .readAsBinary();
       }
     });
     client.newRequest(uri()).method(HttpMethod.POST)
-      .content(new BytesContentProvider(new byte[]{'h', 'i'}), "text/plain").send(ASYNC);
+    .content(new BytesContentProvider(new byte[]{'h', 'i'}), "text/plain")
+    .send(ASYNC);
     await();
   }
 
@@ -288,11 +294,12 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
             resume();
           }
         })
-          .read();
+        .read();
       }
     });
     client.newRequest(uri()).method(HttpMethod.POST)
-      .content(new StringContentProvider("A Breath Clad In Happiness"), "text/plain; charset=utf-8").send(ASYNC);
+    .content(new StringContentProvider("A Breath Clad In Happiness"), "text/plain; charset=utf-8")
+    .send(ASYNC);
     await();
   }
 
@@ -308,11 +315,12 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
             resume();
           }
         })
-          .read();
+        .read();
       }
     });
     client.newRequest(uri()).method(HttpMethod.POST)
-      .content(new BytesContentProvider(new byte[]{'h', 'i'}), "application/octet-stream").send(ASYNC);
+    .content(new BytesContentProvider(new byte[]{'h', 'i'}), "application/octet-stream")
+    .send(ASYNC);
     await();
   }
 
@@ -362,9 +370,9 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
       @Override
       public void on(ServerHttpExchange http) {
         http.setHeader("content-type", "text/plain; charset=euc-kr")
-          .write("기억 속에 머무른 그 때의 모습으로 그때의 웃음으로")
-          .end()
-          .onfinish(new VoidAction() {
+        .write("기억 속에 머무른 그 때의 모습으로 그때의 웃음으로")
+        .end()
+        .onfinish(new VoidAction() {
             @Override
             public void on() {
               latch.countDown();
@@ -406,7 +414,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
             latch.countDown();
           }
         })
-          .end("기억 속에 머무른 그 때의 모습으로 그때의 웃음으로", "euc-kr");
+        .end("기억 속에 머무른 그 때의 모습으로 그때의 웃음으로", "euc-kr");
       }
     });
     client.newRequest(uri()).send(new Response.Listener.Adapter() {
@@ -438,9 +446,9 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
       @Override
       public void on(ServerHttpExchange http) {
         http.write(ByteBuffer.wrap(new byte[]{'h', 'e'}).asReadOnlyBuffer())
-          .write(ByteBuffer.wrap(new byte[]{'l', 'l'}))
-          .end(ByteBuffer.wrap(new byte[]{'o'}))
-          .onfinish(new VoidAction() {
+        .write(ByteBuffer.wrap(new byte[]{'l', 'l'}))
+        .end(ByteBuffer.wrap(new byte[]{'o'}))
+        .onfinish(new VoidAction() {
             @Override
             public void on() {
               latch.countDown();
@@ -503,13 +511,13 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
       }
     });
     client.newRequest(uri())
-      .listener(new Request.Listener.Adapter() {
-        @Override
-        public void onCommit(Request request) {
-          request.abort(new Exception());
-        }
-      })
-      .send(ASYNC);
+    .listener(new Request.Listener.Adapter() {
+      @Override
+      public void onCommit(Request request) {
+        request.abort(new Exception());
+      }
+    })
+    .send(ASYNC);
     await();
   }
 

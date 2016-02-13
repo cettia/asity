@@ -36,10 +36,11 @@ import java.net.URI;
  */
 public class JwaServerWebSocketTest extends ServerWebSocketTestBase {
 
-  Server server;
+  private Server server;
 
   @Override
-  protected void startServer(int port, final Action<ServerWebSocket> websocketAction) throws Exception {
+  protected void startServer(int port, final Action<ServerWebSocket> websocketAction) throws
+    Exception {
     server = new Server();
     ServerConnector connector = new ServerConnector(server);
     connector.setPort(port);
@@ -47,14 +48,15 @@ public class JwaServerWebSocketTest extends ServerWebSocketTestBase {
     ServletContextHandler handler = new ServletContextHandler();
     server.setHandler(handler);
     ServerContainer container = WebSocketServerContainerInitializer.configureContext(handler);
-    ServerEndpointConfig config = ServerEndpointConfig.Builder.create(AsityServerEndpoint.class, TEST_URI)
-      .configurator(new Configurator() {
-        @Override
-        public <T> T getEndpointInstance(Class<T> endpointClass) throws InstantiationException {
-          return endpointClass.cast(new AsityServerEndpoint().onwebsocket(websocketAction));
-        }
-      })
-      .build();
+    ServerEndpointConfig config = ServerEndpointConfig.Builder.create(AsityServerEndpoint.class,
+      TEST_URI)
+    .configurator(new Configurator() {
+      @Override
+      public <T> T getEndpointInstance(Class<T> endpointClass) throws InstantiationException {
+        return endpointClass.cast(new AsityServerEndpoint().onwebsocket(websocketAction));
+      }
+    })
+    .build();
     container.addEndpoint(config);
     server.start();
   }

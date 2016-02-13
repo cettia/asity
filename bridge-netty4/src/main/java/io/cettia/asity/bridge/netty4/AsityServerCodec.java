@@ -80,9 +80,11 @@ public class AsityServerCodec extends ChannelInboundHandlerAdapter {
         ctx.fireChannelRead(msg);
         return;
       }
-      if (req.getMethod() == HttpMethod.GET && req.headers().contains(HttpHeaders.Names.UPGRADE, HttpHeaders.Values.WEBSOCKET, true)) {
+      if (req.getMethod() == HttpMethod.GET && req.headers().contains(HttpHeaders.Names.UPGRADE,
+        HttpHeaders.Values.WEBSOCKET, true)) {
         // Because WebSocketServerHandshaker requires FullHttpRequest
-        FullHttpRequest wsRequest = new DefaultFullHttpRequest(req.getProtocolVersion(), req.getMethod(), req.getUri());
+        FullHttpRequest wsRequest = new DefaultFullHttpRequest(req.getProtocolVersion(), req
+          .getMethod(), req.getUri());
         wsRequest.headers().set(req.headers());
         wsReqMap.put(ctx.channel(), wsRequest);
         // Set timeout to avoid memory leak
@@ -100,7 +102,8 @@ public class AsityServerCodec extends ChannelInboundHandlerAdapter {
           wsReqMap.remove(ctx.channel());
           // Cancel timeout
           ctx.pipeline().remove(ReadTimeoutHandler.class);
-          WebSocketServerHandshakerFactory factory = new WebSocketServerHandshakerFactory(getWebSocketLocation(ctx.pipeline(), wsReq), null, true);
+          WebSocketServerHandshakerFactory factory = new WebSocketServerHandshakerFactory
+            (getWebSocketLocation(ctx.pipeline(), wsReq), null, true);
           WebSocketServerHandshaker handshaker = factory.newHandshaker(wsReq);
           if (handshaker == null) {
             WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
@@ -134,7 +137,8 @@ public class AsityServerCodec extends ChannelInboundHandlerAdapter {
   }
 
   private String getWebSocketLocation(ChannelPipeline pipeline, HttpRequest req) {
-    return (pipeline.get(SslHandler.class) == null ? "ws://" : "wss://") + HttpHeaders.getHost(req) + req.getUri();
+    return (pipeline.get(SslHandler.class) == null ? "ws://" : "wss://") + HttpHeaders.getHost
+      (req) + req.getUri();
   }
 
   @Override

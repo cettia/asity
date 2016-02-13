@@ -41,7 +41,8 @@ public class ServletServerHttpExchangeTest extends ServerHttpExchangeTestBase {
   private Server server;
 
   @Override
-  protected void startServer(int port, final Action<ServerHttpExchange> requestAction) throws Exception {
+  protected void startServer(int port, final Action<ServerHttpExchange> requestAction) throws
+    Exception {
     server = new Server();
     ServerConnector connector = new ServerConnector(server);
     connector.setPort(port);

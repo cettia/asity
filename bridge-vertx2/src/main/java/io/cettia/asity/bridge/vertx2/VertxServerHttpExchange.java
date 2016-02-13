@@ -55,13 +55,13 @@ public class VertxServerHttpExchange extends AbstractServerHttpExchange {
         errorActions.fire(t);
       }
     })
-      .closeHandler(new VoidHandler() {
-        @Override
-        protected void handle() {
-          closeActions.fire();
-        }
-      })
-      .setChunked(true);
+    .closeHandler(new VoidHandler() {
+      @Override
+      protected void handle() {
+        closeActions.fire();
+      }
+    })
+    .setChunked(true);
   }
 
   @Override
@@ -92,12 +92,12 @@ public class VertxServerHttpExchange extends AbstractServerHttpExchange {
         chunkAction.on(body.getByteBuf().nioBuffer());
       }
     })
-      .endHandler(new VoidHandler() {
-        @Override
-        protected void handle() {
-          endActions.fire();
-        }
-      });
+    .endHandler(new VoidHandler() {
+      @Override
+      protected void handle() {
+        endActions.fire();
+      }
+    });
   }
 
   @Override

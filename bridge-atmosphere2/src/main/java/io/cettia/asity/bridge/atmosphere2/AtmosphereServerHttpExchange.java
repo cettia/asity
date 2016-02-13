@@ -175,7 +175,8 @@ public class AtmosphereServerHttpExchange extends AbstractServerHttpExchange {
     final Actions<Void> endActions;
     final Actions<Throwable> errorActions;
 
-    public BodyReader(ServletInputStream input, Action<ByteBuffer> chunkAction, Actions<Void> endActions, Actions<Throwable> errorActions) {
+    public BodyReader(ServletInputStream input, Action<ByteBuffer> chunkAction, Actions<Void>
+      endActions, Actions<Throwable> errorActions) {
       this.input = input;
       this.chunkAction = chunkAction;
       this.endActions = endActions;
@@ -201,7 +202,8 @@ public class AtmosphereServerHttpExchange extends AbstractServerHttpExchange {
   }
 
   private static class AsyncBodyReader extends BodyReader {
-    public AsyncBodyReader(ServletInputStream input, Action<ByteBuffer> action, Actions<Void> endActions, Actions<Throwable> errorActions) {
+    public AsyncBodyReader(ServletInputStream input, Action<ByteBuffer> action, Actions<Void>
+      endActions, Actions<Throwable> errorActions) {
       super(input, action, endActions, errorActions);
     }
 
@@ -232,7 +234,8 @@ public class AtmosphereServerHttpExchange extends AbstractServerHttpExchange {
   }
 
   private static class SyncBodyReader extends BodyReader {
-    public SyncBodyReader(ServletInputStream input, Action<ByteBuffer> action, Actions<Void> endActions, Actions<Throwable> errorActions) {
+    public SyncBodyReader(ServletInputStream input, Action<ByteBuffer> action, Actions<Void>
+      endActions, Actions<Throwable> errorActions) {
       super(input, action, endActions, errorActions);
     }
 
@@ -248,8 +251,7 @@ public class AtmosphereServerHttpExchange extends AbstractServerHttpExchange {
             errorActions.fire(e);
           }
         }
-      })
-        .start();
+      }).start();
     }
 
     @Override
