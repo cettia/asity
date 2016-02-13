@@ -55,6 +55,7 @@ public class AtmosphereServerHttpExchangeTest extends ServerHttpExchangeTestBase
         ServletRegistration.Dynamic reg = context.addServlet(AsityAtmosphereServlet.class.getName(), servlet);
         reg.setAsyncSupported(true);
         reg.setInitParameter(ApplicationConfig.DISABLE_ATMOSPHEREINTERCEPTOR, Boolean.TRUE.toString());
+        reg.setInitParameter(ApplicationConfig.SCAN_CLASSPATH, Boolean.FALSE.toString());
         reg.addMapping(TEST_URI);
       }
 
