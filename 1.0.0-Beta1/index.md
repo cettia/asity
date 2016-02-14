@@ -10,20 +10,20 @@ Asity is a lightweight abstraction layer for I/O frameworks which is designed to
 
 An Asity application can handle the following resources: 
 
-<ul class="menu">
-<li class="menu-text">HTTP</li>
-<li class="menu-text">WebSocket</li>
+<ul class="menu simple" style="margin-bottom: 1rem">
+<li>HTTP</li>
+<li>WebSocket</li>
 </ul>
 
 And run on the following platforms:
 
-<ul class="menu">
-<li class="menu-text">Atmosphere 2</li>
-<li class="menu-text">Grizzly 2</li>
-<li class="menu-text">Java Servlet 3</li>
-<li class="menu-text">Java WebSocket API 1</li>
-<li class="menu-text">Netty 4</li>
-<li class="menu-text">Vert.x 2</li>
+<ul class="menu simple">
+<li>Atmosphere 2</li>
+<li>Grizzly 2</li>
+<li>Java Servlet 3</li>
+<li>Java WebSocket API 1</li>
+<li>Netty 4</li>
+<li>Vert.x 2</li>
 </ul>
 
 ---
