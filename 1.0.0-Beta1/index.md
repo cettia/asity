@@ -154,7 +154,7 @@ public class Bootstrap implements ServletContextListener {
 
 ### Try out examples
 
-The same pattern applies when bridging an application to other platforms. Here is working examples. They demonstrate how to run [Cettia Java Server](http://cettia.io/projects/cettia-java-server) implementing the Cettia Protocol using Asity on each platform.
+The same pattern applies when bridging an application to other platforms. Here are working examples. They demonstrate how to run [Cettia Java Server](http://cettia.io/projects/cettia-java-server) implementing the Cettia Protocol using Asity on each platform.
 
 <ul class="menu">
 <li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/atmosphere2">Atmosphere 2</a></li>
