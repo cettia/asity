@@ -220,10 +220,8 @@
           <links>
             <link>http://docs.oracle.com/javaee/7/api/</link>
             <link>http://atmosphere.github.io/atmosphere/apidocs/</link>
-            <link>http://vertx.io/api/java/</link>
-            <link>https://playframework.com/documentation/2.3.x/api/java/</link>
+            <link>http://vertx.io/vertx2/api/java/</link>
             <link>http://netty.io/4.1/api/</link>
-            <link>https://grizzly.java.net/docs/2.3/apidocs/</link>
           </links>
         </configuration>
       </plugin>
