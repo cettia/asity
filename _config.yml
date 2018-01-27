@@ -4,9 +4,20 @@ url: http://asity.cettia.io/
 author:
   name: Donghwan Kim
   email: flowersinthesand@gmail.com
+  twitter: flowersits
 relative_permalinks: false
 kramdown:
   input: GFM
 gems:
   - jekyll-redirect-from
   - jekyll-sitemap
+  - jekyll-seo-tag
+sass:
+    style: compressed
+twitter:
+  username: cettia_project
+social:
+  links:
+    - https://github.com/cettia/asity
+    - https://twitter.com/cettia_project
+    - http://groups.google.com/group/cettia

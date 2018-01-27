@@ -166,12 +166,6 @@ The same pattern applies when bridging an application to other platforms. Here a
 <li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform/vertx2">Vert.x 2</a></li>
 </ul>
 
-It's not the end. Some platform, A, is based on the other platform, B, and allows to deal with the underlying platform, B, so that if a bridge for B is available, without creating an additional bridge for A, it's possible to run application on A through B. For example, applications written in Spring MVC platform or JAX-RS platform can run on Servlet platform. See the following examples.
-
-<ul class="menu">
-<li><a href="https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform-on-platform/jaxrs2-atmosphere2">JAX-RS 2 on Atmosphere 2</a></li>
-</ul>
-
 ### Build a custom bridge
 
 Though your favorite platform is not supported? Take a look how [Grizzly 2 bridge](https://github.com/cettia/asity/tree/1.0.0-Beta1/bridge-grizzly2) is written. Mostly, with more or less 200 lines, it's enough to write a bridge.

@@ -19,7 +19,7 @@ Asity requires Java 7 and is distributed through Maven Central.
 
 * **To run an Asity application**
 
-Generally speaking, having an Asity application run on the specific platform means to feed resources like `ServerHttpExchange` and `ServerWebSocket` produced by the specific platform into the application using the corresponding bridge module. To deal with bridge, see [Platform](#platform) and [Platform on platform](#platform-on-platform) section.
+Generally speaking, having an Asity application run on the specific platform means to feed resources like `ServerHttpExchange` and `ServerWebSocket` produced by the specific platform into the application using the corresponding bridge module. To deal with bridge, see [Platform](#platform) section.
 
 * **To write an Asity application**
 
@@ -294,16 +294,6 @@ public class Bootstrap extends Verticle {
   }
 }
 ```
-
----
-
-## Platform on platform
-Some platform, A, is based on the other platform, B, and allows to deal with the underlying platform, B, so that if a bridge for B is available, without creating an additional bridge for A, it's possible to run application on A through B.
-
-The general pattern is to share an application instance between the platform, A, and the underlying platform, B, using `static` keyword, application holder or dependency injection framework like Spring or Guice.
-
-### JAX-RS 2
-[JAX-RS 2](https://docs.oracle.com/javaee/7/tutorial/doc/jaxws.htm) from Java EE 7. JAX-RS allows to deploy JAX-RS resources to several servers, and one of them is Java Servlet. That means, you can run application written in JAX-RS through Servlet. The same approach may be applied to JAX-RS 1. [Example](https://github.com/cettia/cettia-examples/tree/master/archetype/cettia-java-server/platform-on-platform/jaxrs2-atmosphere2).
 
 ---
 
