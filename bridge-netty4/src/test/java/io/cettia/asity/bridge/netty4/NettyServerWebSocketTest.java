@@ -23,8 +23,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.group.ChannelGroup;
-import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -32,7 +30,6 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
-import io.netty.util.concurrent.GlobalEventExecutor;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.junit.Test;
 
@@ -43,42 +40,36 @@ import java.net.URI;
  */
 public class NettyServerWebSocketTest extends ServerWebSocketTestBase {
 
-  EventLoopGroup bossGroup;
-  EventLoopGroup workerGroup;
-  ChannelGroup channels;
+  private EventLoopGroup bossGroup;
+  private EventLoopGroup workerGroup;
 
   @Override
-  protected void startServer(int port, final Action<ServerWebSocket> websocketAction) {
+  protected void startServer(int port, final Action<ServerWebSocket> websocketAction) throws
+    Exception {
     bossGroup = new NioEventLoopGroup();
     workerGroup = new NioEventLoopGroup();
-    channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+
     ServerBootstrap bootstrap = new ServerBootstrap();
     bootstrap.group(bossGroup, workerGroup)
       .channel(NioServerSocketChannel.class)
       .childHandler(new ChannelInitializer<SocketChannel>() {
         @Override
-        public void channelActive(ChannelHandlerContext ctx) throws Exception {
-          channels.add(ctx.channel());
-        }
-
-        @Override
         public void initChannel(SocketChannel ch) throws Exception {
           ChannelPipeline pipeline = ch.pipeline();
           pipeline.addLast(new HttpServerCodec())
-          .addLast(new AsityServerCodec() {
-            @Override
-            protected boolean accept(HttpRequest req) {
-              return URI.create(req.getUri()).getPath().equals(TEST_URI);
-            }
-          }.onwebsocket(websocketAction));
+            .addLast(new AsityServerCodec() {
+              @Override
+              protected boolean accept(HttpRequest req) {
+                return URI.create(req.getUri()).getPath().equals(TEST_URI);
+              }
+            }.onwebsocket(websocketAction));
         }
       });
-    channels.add(bootstrap.bind(port).channel());
+    bootstrap.bind(port).sync();
   }
 
   @Override
   protected void stopServer() {
-    channels.close();
     workerGroup.shutdownGracefully();
     bossGroup.shutdownGracefully();
   }
