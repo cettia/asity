@@ -19,7 +19,7 @@
   <parent>
     <groupId>io.cettia.asity</groupId>
     <artifactId>asity-parent</artifactId>
-    <version>1.0.0-Beta2-SNAPSHOT</version>
+    <version>1.0.0</version>
   </parent>
   <artifactId>asity-bridge-vertx2</artifactId>
   <name>Asity/Bridge/Vert.x 2</name>
