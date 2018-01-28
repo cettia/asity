@@ -223,6 +223,7 @@
             <link>http://vertx.io/vertx2/api/java/</link>
             <link>http://netty.io/4.1/api/</link>
           </links>
+          <additionalparam>-Xdoclint:none</additionalparam>
         </configuration>
       </plugin>
       <plugin>
