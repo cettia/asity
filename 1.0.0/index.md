@@ -6,7 +6,7 @@ title: Asity
 <h1>Asity</h1>
 <h4 class="subheader">Build I/O framework-agnostic applications on the JVM</h4>
 
-Asity is a lightweight abstraction layer for I/O frameworks which is designed to build applications that can run on any full-stack framework, any micro framework or any raw server on the JVM.
+Asity is a lightweight abstraction layer for I/O frameworks which is designed to build applications that can run on any full-stack framework, any micro framework and any raw server on the JVM.
 
 An Asity application can handle the following resources: 
 
