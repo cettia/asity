@@ -61,7 +61,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
       port = serverSocket.getLocalPort();
     }
     client.start();
-    startServer(port, requestAction::on);
+    startServer(port, http -> requestAction.on(http));
   }
 
   @After

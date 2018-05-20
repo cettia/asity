@@ -64,7 +64,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
       port = serverSocket.getLocalPort();
     }
     client.start();
-    startServer(port, websocketAction::on);
+    startServer(port, ws -> websocketAction.on(ws));
   }
 
   @After
