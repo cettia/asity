@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import io.cettia.asity.websocket.ServerWebSocket;
 
 import javax.websocket.MessageHandler;
 import javax.websocket.SendHandler;
-import javax.websocket.SendResult;
 import javax.websocket.Session;
 import java.io.IOException;
 import java.net.URI;
@@ -34,17 +33,15 @@ import java.nio.ByteBuffer;
 public class JwaServerWebSocket extends AbstractServerWebSocket {
 
   private final Session session;
-  private final SendHandler sendHandler = new SendHandler() {
-    @Override
-    public void onResult(SendResult result) {
-      if (!result.isOK()) {
-        errorActions.fire(result.getException());
-      }
+  private final SendHandler sendHandler = result -> {
+    if (!result.isOK()) {
+      errorActions.fire(result.getException());
     }
   };
 
   public JwaServerWebSocket(Session session) {
     this.session = session;
+    // Uses `void addMessageHandler(MessageHandler handler)` to support 1.0
     session.addMessageHandler(new MessageHandler.Whole<String>() {
       @Override
       public void onMessage(String message) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -245,15 +245,12 @@ public class ServletServerHttpExchange extends AbstractServerHttpExchange {
 
     @Override
     void start() {
-      new Thread(new Runnable() {
-        @Override
-        public void run() {
-          try {
-            read();
-            end();
-          } catch (IOException e) {
-            errorActions.fire(e);
-          }
+      new Thread(() -> {
+        try {
+          read();
+          end();
+        } catch (IOException e) {
+          errorActions.fire(e);
         }
       }).start();
     }

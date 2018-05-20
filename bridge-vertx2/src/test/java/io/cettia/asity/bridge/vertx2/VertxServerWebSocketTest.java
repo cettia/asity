@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import io.cettia.asity.test.ServerWebSocketTestBase;
 import io.cettia.asity.websocket.ServerWebSocket;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.junit.Test;
-import org.vertx.java.core.Handler;
 import org.vertx.java.core.VertxFactory;
 import org.vertx.java.core.http.HttpServer;
 
@@ -38,12 +37,9 @@ public class VertxServerWebSocketTest extends ServerWebSocketTestBase {
     server = VertxFactory.newVertx().createHttpServer();
     final AsityWebSocketHandler websocketHandler = new AsityWebSocketHandler().onwebsocket
       (websocketAction);
-    server.websocketHandler(new Handler<org.vertx.java.core.http.ServerWebSocket>() {
-      @Override
-      public void handle(org.vertx.java.core.http.ServerWebSocket socket) {
-        if (socket.path().equals(TEST_URI)) {
-          websocketHandler.handle(socket);
-        }
+    server.websocketHandler(socket -> {
+      if (socket.path().equals(TEST_URI)) {
+        websocketHandler.handle(socket);
       }
     });
     server.listen(port);
@@ -56,13 +52,10 @@ public class VertxServerWebSocketTest extends ServerWebSocketTestBase {
 
   @Test
   public void unwrap() throws Throwable {
-    websocketAction(new Action<ServerWebSocket>() {
-      @Override
-      public void on(ServerWebSocket ws) {
-        threadAssertTrue(ws.unwrap(org.vertx.java.core.http.ServerWebSocket.class) instanceof org
-          .vertx.java.core.http.ServerWebSocket);
-        resume();
-      }
+    websocketAction(ws -> {
+      threadAssertTrue(ws.unwrap(org.vertx.java.core.http.ServerWebSocket.class) instanceof org
+        .vertx.java.core.http.ServerWebSocket);
+      resume();
     });
     client.connect(new WebSocketAdapter(), URI.create(uri()));
     await();

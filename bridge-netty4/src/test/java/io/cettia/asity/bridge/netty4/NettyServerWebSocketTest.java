@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,15 +76,12 @@ public class NettyServerWebSocketTest extends ServerWebSocketTestBase {
 
   @Test
   public void unwrap() throws Throwable {
-    websocketAction(new Action<ServerWebSocket>() {
-      @Override
-      public void on(ServerWebSocket ws) {
-        threadAssertTrue(ws.unwrap(ChannelHandlerContext.class) instanceof ChannelHandlerContext);
-        threadAssertTrue(ws.unwrap(WebSocketServerHandshaker.class) instanceof
-          WebSocketServerHandshaker);
-        threadAssertTrue(ws.unwrap(FullHttpRequest.class) instanceof FullHttpRequest);
-        resume();
-      }
+    websocketAction(ws -> {
+      threadAssertTrue(ws.unwrap(ChannelHandlerContext.class) instanceof ChannelHandlerContext);
+      threadAssertTrue(ws.unwrap(WebSocketServerHandshaker.class) instanceof
+        WebSocketServerHandshaker);
+      threadAssertTrue(ws.unwrap(FullHttpRequest.class) instanceof FullHttpRequest);
+      resume();
     });
     client.connect(new WebSocketAdapter(), URI.create(uri()));
     await();

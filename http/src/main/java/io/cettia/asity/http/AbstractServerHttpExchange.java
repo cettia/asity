@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package io.cettia.asity.http;
 import io.cettia.asity.action.Action;
 import io.cettia.asity.action.Actions;
 import io.cettia.asity.action.SimpleActions;
-import io.cettia.asity.action.VoidAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,30 +52,10 @@ public abstract class AbstractServerHttpExchange implements ServerHttpExchange {
   private String writeCharsetName = "ISO-8859-1";
 
   public AbstractServerHttpExchange() {
-    endActions.add(new VoidAction() {
-      @Override
-      public void on() {
-        logger.trace("{}'s request has ended", AbstractServerHttpExchange.this);
-      }
-    });
-    finishActions.add(new VoidAction() {
-      @Override
-      public void on() {
-        logger.trace("{}'s response has ended", AbstractServerHttpExchange.this);
-      }
-    });
-    errorActions.add(new Action<Throwable>() {
-      @Override
-      public void on(Throwable throwable) {
-        logger.trace("{} has received a throwable {}", AbstractServerHttpExchange.this, throwable);
-      }
-    });
-    closeActions.add(new VoidAction() {
-      @Override
-      public void on() {
-        logger.trace("{} has been closed", AbstractServerHttpExchange.this);
-      }
-    });
+    endActions.add($ -> logger.trace("{}'s request has ended", AbstractServerHttpExchange.this));
+    finishActions.add($ -> logger.trace("{}'s response has ended", AbstractServerHttpExchange.this));
+    errorActions.add(throwable -> logger.trace("{} has received a throwable {}", AbstractServerHttpExchange.this, throwable));
+    closeActions.add($ -> logger.trace("{} has been closed", AbstractServerHttpExchange.this));
   }
 
   @Override
@@ -126,12 +105,7 @@ public abstract class AbstractServerHttpExchange implements ServerHttpExchange {
     if (!read) {
       read = true;
       final Charset charset = Charset.forName(charsetName);
-      doRead(new Action<ByteBuffer>() {
-        @Override
-        public void on(ByteBuffer byteBuffer) {
-          chunkActions.fire(charset.decode(byteBuffer).toString());
-        }
-      });
+      doRead(byteBuffer -> chunkActions.fire(charset.decode(byteBuffer).toString()));
     }
     return this;
   }
@@ -140,12 +114,7 @@ public abstract class AbstractServerHttpExchange implements ServerHttpExchange {
   public ServerHttpExchange readAsBinary() {
     if (!read) {
       read = true;
-      doRead(new Action<ByteBuffer>() {
-        @Override
-        public void on(ByteBuffer byteBuffer) {
-          chunkActions.fire(byteBuffer);
-        }
-      });
+      doRead(chunkActions::fire);
     }
     return this;
   }
@@ -172,35 +141,17 @@ public abstract class AbstractServerHttpExchange implements ServerHttpExchange {
       readBody = true;
       if (hasTextBody()) {
         final StringBuilder body = new StringBuilder();
-        chunkActions.add(new Action<Object>() {
-          @Override
-          public void on(Object data) {
-            body.append((String) data);
-          }
-        });
-        endActions.add(new VoidAction() {
-          @Override
-          public void on() {
-            bodyActions.fire(body.toString());
-          }
-        });
+        chunkActions.add(data -> body.append((String) data));
+        endActions.add($ -> bodyActions.fire(body.toString()));
       } else {
         final ByteArrayOutputStream body = new ByteArrayOutputStream();
-        chunkActions.add(new Action<Object>() {
-          @Override
-          public void on(Object data) {
-            ByteBuffer byteBuffer = (ByteBuffer) data;
-            byte[] bytes = new byte[byteBuffer.remaining()];
-            byteBuffer.get(bytes);
-            body.write(bytes, 0, bytes.length);
-          }
+        chunkActions.add(data -> {
+          ByteBuffer byteBuffer = (ByteBuffer) data;
+          byte[] bytes = new byte[byteBuffer.remaining()];
+          byteBuffer.get(bytes);
+          body.write(bytes, 0, bytes.length);
         });
-        endActions.add(new VoidAction() {
-          @Override
-          public void on() {
-            bodyActions.fire(ByteBuffer.wrap(body.toByteArray()));
-          }
-        });
+        endActions.add($ -> bodyActions.fire(ByteBuffer.wrap(body.toByteArray())));
       }
     }
     bodyActions.add(action);

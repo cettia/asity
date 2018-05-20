@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,6 @@ import io.cettia.asity.websocket.ServerWebSocket;
 import javax.websocket.CloseReason;
 import javax.websocket.Endpoint;
 import javax.websocket.EndpointConfig;
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnOpen;
 import javax.websocket.Session;
 
 /**
@@ -53,20 +50,17 @@ public class AsityServerEndpoint extends Endpoint {
   private JwaServerWebSocket ws;
 
   @Override
-  @OnOpen
   public void onOpen(Session session, EndpointConfig config) {
     ws = new JwaServerWebSocket(session);
     wsActions.fire(ws);
   }
 
   @Override
-  @OnError
   public void onError(Session session, Throwable throwable) {
     ws.onError(throwable);
   }
 
   @Override
-  @OnClose
   public void onClose(Session session, CloseReason closeReason) {
     ws.onClose();
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,13 +46,10 @@ public class GrizzlyServerHttpExchangeTest extends ServerHttpExchangeTestBase {
 
   @Test
   public void unwrap() throws Throwable {
-    requestAction(new Action<ServerHttpExchange>() {
-      @Override
-      public void on(ServerHttpExchange http) {
-        threadAssertTrue(http.unwrap(Request.class) instanceof Request);
-        threadAssertTrue(http.unwrap(Response.class) instanceof Response);
-        resume();
-      }
+    requestAction(http -> {
+      threadAssertTrue(http.unwrap(Request.class) instanceof Request);
+      threadAssertTrue(http.unwrap(Response.class) instanceof Response);
+      resume();
     });
     client.newRequest(uri()).send(new org.eclipse.jetty.client.api.Response.Listener.Adapter());
     await();

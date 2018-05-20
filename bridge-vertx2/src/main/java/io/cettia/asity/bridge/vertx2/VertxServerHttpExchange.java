@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import io.cettia.asity.http.AbstractServerHttpExchange;
 import io.cettia.asity.http.HttpMethod;
 import io.cettia.asity.http.HttpStatus;
 import io.cettia.asity.http.ServerHttpExchange;
-import org.vertx.java.core.Handler;
 import org.vertx.java.core.VoidHandler;
 import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.http.HttpServerRequest;
@@ -43,18 +42,8 @@ public class VertxServerHttpExchange extends AbstractServerHttpExchange {
   public VertxServerHttpExchange(HttpServerRequest request) {
     this.request = request;
     this.response = request.response();
-    request.exceptionHandler(new Handler<Throwable>() {
-      @Override
-      public void handle(Throwable t) {
-        errorActions.fire(t);
-      }
-    });
-    response.exceptionHandler(new Handler<Throwable>() {
-      @Override
-      public void handle(Throwable t) {
-        errorActions.fire(t);
-      }
-    })
+    request.exceptionHandler(errorActions::fire);
+    response.exceptionHandler(errorActions::fire)
     .closeHandler(new VoidHandler() {
       @Override
       protected void handle() {
@@ -86,12 +75,7 @@ public class VertxServerHttpExchange extends AbstractServerHttpExchange {
 
   @Override
   protected void doRead(final Action<ByteBuffer> chunkAction) {
-    request.dataHandler(new Handler<Buffer>() {
-      @Override
-      public void handle(Buffer body) {
-        chunkAction.on(body.getByteBuf().nioBuffer());
-      }
-    })
+    request.dataHandler(body -> chunkAction.on(body.getByteBuf().nioBuffer()))
     .endHandler(new VoidHandler() {
       @Override
       protected void handle() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package io.cettia.asity.test;
 
 import io.cettia.asity.action.Action;
-import io.cettia.asity.action.VoidAction;
 import io.cettia.asity.websocket.ServerWebSocket;
 import net.jodah.concurrentunit.ConcurrentTestCase;
 import org.eclipse.jetty.websocket.api.Session;
@@ -65,12 +64,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
       port = serverSocket.getLocalPort();
     }
     client.start();
-    startServer(port, new Action<ServerWebSocket>() {
-      @Override
-      public void on(ServerWebSocket ws) {
-        websocketAction.on(ws);
-      }
-    });
+    startServer(port, websocketAction::on);
   }
 
   @After
@@ -99,12 +93,9 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
 
   @Test
   public void testURI() throws Throwable {
-    websocketAction(new Action<ServerWebSocket>() {
-      @Override
-      public void on(ServerWebSocket ws) {
-        threadAssertEquals(ws.uri(), "/test?hello=there");
-        resume();
-      }
+    websocketAction(ws -> {
+      threadAssertEquals(ws.uri(), "/test?hello=there");
+      resume();
     });
     client.connect(NOOP, URI.create(uri("/test?hello=there")));
     await();
@@ -112,12 +103,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
 
   @Test
   public void testClose() throws Throwable {
-    websocketAction(new Action<ServerWebSocket>() {
-      @Override
-      public void on(ServerWebSocket ws) {
-        ws.close();
-      }
-    });
+    websocketAction(ServerWebSocket::close);
     client.connect(new WebSocketAdapter() {
       @Override
       public void onWebSocketClose(int statusCode, String reason) {
@@ -129,12 +115,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
 
   @Test
   public void testSendTextFrame() throws Throwable {
-    websocketAction(new Action<ServerWebSocket>() {
-      @Override
-      public void on(ServerWebSocket ws) {
-        ws.send("A Will Remains in the Ashes");
-      }
-    });
+    websocketAction(ws -> ws.send("A Will Remains in the Ashes"));
     client.connect(new WebSocketAdapter() {
       @Override
       public void onWebSocketText(String message) {
@@ -147,12 +128,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
 
   @Test
   public void testSendBinaryFrame() throws Throwable {
-    websocketAction(new Action<ServerWebSocket>() {
-      @Override
-      public void on(ServerWebSocket ws) {
-        ws.send(ByteBuffer.wrap(new byte[]{0x00, 0x01, 0x02}).asReadOnlyBuffer());
-      }
-    });
+    websocketAction(ws -> ws.send(ByteBuffer.wrap(new byte[]{0x00, 0x01, 0x02}).asReadOnlyBuffer()));
     client.connect(new WebSocketAdapter() {
       @Override
       public void onWebSocketBinary(byte[] payload, int offset, int len) {
@@ -165,12 +141,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
 
   @Test
   public void testSendTextFrameAndBinaryFrameTogether() throws Throwable {
-    websocketAction(new Action<ServerWebSocket>() {
-      @Override
-      public void on(ServerWebSocket ws) {
-        ws.send("A Will Remains in the Ashes").send(ByteBuffer.wrap(new byte[]{0x00, 0x01, 0x02}));
-      }
-    });
+    websocketAction(ws -> ws.send("A Will Remains in the Ashes").send(ByteBuffer.wrap(new byte[]{0x00, 0x01, 0x02})));
     client.connect(new WebSocketAdapter() {
       boolean done;
 
@@ -199,18 +170,10 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
 
   @Test
   public void testOntext() throws Throwable {
-    websocketAction(new Action<ServerWebSocket>() {
-      @Override
-      public void on(ServerWebSocket ws) {
-        ws.ontext(new Action<String>() {
-          @Override
-          public void on(String data) {
-            threadAssertEquals(data, "A road of winds the water builds");
-            resume();
-          }
-        });
-      }
-    });
+    websocketAction(ws -> ws.ontext(data -> {
+      threadAssertEquals(data, "A road of winds the water builds");
+      resume();
+    }));
     client.connect(new WebSocketAdapter() {
       @Override
       public void onWebSocketConnect(Session session) {
@@ -222,18 +185,10 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
 
   @Test
   public void testOnbinary() throws Throwable {
-    websocketAction(new Action<ServerWebSocket>() {
-      @Override
-      public void on(ServerWebSocket ws) {
-        ws.onbinary(new Action<ByteBuffer>() {
-          @Override
-          public void on(ByteBuffer data) {
-            threadAssertEquals(data, ByteBuffer.wrap(new byte[]{0x00, 0x01, 0x02}));
-            resume();
-          }
-        });
-      }
-    });
+    websocketAction(ws -> ws.onbinary(data -> {
+      threadAssertEquals(data, ByteBuffer.wrap(new byte[]{0x00, 0x01, 0x02}));
+      resume();
+    }));
     client.connect(new WebSocketAdapter() {
       @Override
       public void onWebSocketConnect(Session session) {
@@ -250,26 +205,20 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
 
       @Override
       public void on(ServerWebSocket ws) {
-        ws.ontext(new Action<String>() {
-          @Override
-          public void on(String data) {
-            threadAssertEquals(data, "A road of winds the water builds");
-            if (done) {
-              resume();
-            } else {
-              done = true;
-            }
+        ws.ontext(data -> {
+          threadAssertEquals(data, "A road of winds the water builds");
+          if (done) {
+            resume();
+          } else {
+            done = true;
           }
         })
-        .onbinary(new Action<ByteBuffer>() {
-          @Override
-          public void on(ByteBuffer data) {
-            threadAssertEquals(data, ByteBuffer.wrap(new byte[]{0x00, 0x01, 0x02}));
-            if (done) {
-              resume();
-            } else {
-              done = true;
-            }
+        .onbinary(data -> {
+          threadAssertEquals(data, ByteBuffer.wrap(new byte[]{0x00, 0x01, 0x02}));
+          if (done) {
+            resume();
+          } else {
+            done = true;
           }
         });
       }
@@ -286,35 +235,15 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
 
   @Test
   public void testOncloseByServer() throws Throwable {
-    websocketAction(new Action<ServerWebSocket>() {
-      @Override
-      public void on(ServerWebSocket ws) {
-        ws.onclose(new VoidAction() {
-          @Override
-          public void on() {
-            resume();
-          }
-        })
-        .close();
-      }
-    });
+    websocketAction(ws -> ws.onclose($ -> resume())
+    .close());
     client.connect(NOOP, URI.create(uri()));
     await();
   }
 
   @Test
   public void testOncloseByClient() throws Throwable {
-    websocketAction(new Action<ServerWebSocket>() {
-      @Override
-      public void on(ServerWebSocket ws) {
-        ws.onclose(new VoidAction() {
-          @Override
-          public void on() {
-            resume();
-          }
-        });
-      }
-    });
+    websocketAction(ws -> ws.onclose($ -> resume()));
     client.connect(new WebSocketAdapter() {
       @Override
       public void onWebSocketConnect(Session session) {

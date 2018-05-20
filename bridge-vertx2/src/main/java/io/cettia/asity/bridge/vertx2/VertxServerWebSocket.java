@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,8 @@ package io.cettia.asity.bridge.vertx2;
 
 import io.cettia.asity.websocket.AbstractServerWebSocket;
 import io.cettia.asity.websocket.ServerWebSocket;
-import org.vertx.java.core.Handler;
 import org.vertx.java.core.VoidHandler;
 import org.vertx.java.core.buffer.Buffer;
-import org.vertx.java.core.http.WebSocketFrame;
 import org.vertx.java.core.http.impl.ws.WebSocketFrameInternal;
 
 import java.nio.ByteBuffer;
@@ -42,27 +40,19 @@ public class VertxServerWebSocket extends AbstractServerWebSocket {
         closeActions.fire();
       }
     })
-    .exceptionHandler(new Handler<Throwable>() {
-      @Override
-      public void handle(Throwable throwable) {
-        errorActions.fire(throwable);
-      }
-    })
-    .frameHandler(new Handler<WebSocketFrame>() {
-      @Override
-      public void handle(WebSocketFrame f) {
-        // Deal with only data frames
-        WebSocketFrameInternal frame = (WebSocketFrameInternal) f;
-        switch (frame.type()) {
-          case TEXT:
-            textActions.fire(frame.textData());
-            break;
-          case BINARY:
-            binaryActions.fire(frame.getBinaryData().nioBuffer());
-            break;
-          default:
-            break;
-        }
+    .exceptionHandler(errorActions::fire)
+    .frameHandler(f -> {
+      // Deal with only data frames
+      WebSocketFrameInternal frame = (WebSocketFrameInternal) f;
+      switch (frame.type()) {
+        case TEXT:
+          textActions.fire(frame.textData());
+          break;
+        case BINARY:
+          binaryActions.fire(frame.getBinaryData().nioBuffer());
+          break;
+        default:
+          break;
       }
     });
   }

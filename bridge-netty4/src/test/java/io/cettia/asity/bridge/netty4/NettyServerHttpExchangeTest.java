@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.util.concurrent.GlobalEventExecutor;
 import org.eclipse.jetty.client.api.Response;
 import org.junit.Test;
 
@@ -76,14 +75,11 @@ public class NettyServerHttpExchangeTest extends ServerHttpExchangeTestBase {
 
   @Test
   public void unwrap() throws Throwable {
-    requestAction(new Action<ServerHttpExchange>() {
-      @Override
-      public void on(ServerHttpExchange http) {
-        threadAssertTrue(http.unwrap(ChannelHandlerContext.class) instanceof ChannelHandlerContext);
-        threadAssertTrue(http.unwrap(HttpRequest.class) instanceof HttpRequest);
-        threadAssertTrue(http.unwrap(HttpResponse.class) instanceof HttpResponse);
-        resume();
-      }
+    requestAction(http -> {
+      threadAssertTrue(http.unwrap(ChannelHandlerContext.class) instanceof ChannelHandlerContext);
+      threadAssertTrue(http.unwrap(HttpRequest.class) instanceof HttpRequest);
+      threadAssertTrue(http.unwrap(HttpResponse.class) instanceof HttpResponse);
+      resume();
     });
     client.newRequest(uri()).send(new Response.Listener.Adapter());
     await();

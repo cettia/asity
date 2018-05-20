@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,14 +50,7 @@ public class GrizzlyServerHttpExchange extends AbstractServerHttpExchange {
   public GrizzlyServerHttpExchange(Request request, Response response) {
     this.request = request;
     this.response = response;
-    request.getContext().getConnection().addCloseListener(new CloseListener<Closeable,
-      ICloseType>() {
-      @Override
-      public void onClosed(Closeable closeable, ICloseType type) throws
-        IOException {
-        closeActions.fire();
-      }
-    });
+    request.getContext().getConnection().addCloseListener((CloseListener<Closeable, ICloseType>) (closeable, type) -> closeActions.fire());
     // To detect closed connection
     // From https://github.com/GrizzlyNIO/grizzly-mirror/blob/2_3_17/modules/comet/src/main/java
     // /org/glassfish/grizzly/comet/CometContext.java#L250

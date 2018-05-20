@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,13 +117,7 @@ public abstract class ActionsTestBase {
 
     final Actions<String> actions2 = createActions();
     MemoryAction<String> action2 = new MemoryAction<>();
-    actions2.add(action2).add(new Action<String>() {
-      @Override
-      public void on(String _) {
-        actions2.disable();
-      }
-    })
-      .add(action2).fire("A");
+    actions2.add(action2).add($ -> actions2.disable()).add(action2).fire("A");
     assertThat(action2.memory(), contains("A"));
   }
 

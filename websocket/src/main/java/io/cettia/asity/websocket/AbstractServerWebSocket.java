@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,18 +40,10 @@ public abstract class AbstractServerWebSocket implements ServerWebSocket {
   private State state = State.OPEN;
 
   public AbstractServerWebSocket() {
-    errorActions.add(new Action<Throwable>() {
-      @Override
-      public void on(Throwable throwable) {
-        logger.trace("{} has received a throwable {}", AbstractServerWebSocket.this, throwable);
-      }
-    });
-    closeActions.add(new Action<Void>() {
-      @Override
-      public void on(Void _) {
-        state = State.CLOSED;
-        logger.trace("{} has been closed", AbstractServerWebSocket.this);
-      }
+    errorActions.add(throwable -> logger.trace("{} has received a throwable {}", AbstractServerWebSocket.this, throwable));
+    closeActions.add($ -> {
+      state = State.CLOSED;
+      logger.trace("{} has been closed", AbstractServerWebSocket.this);
     });
   }
 
