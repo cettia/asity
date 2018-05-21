@@ -38,6 +38,7 @@
     <module>bridge-jwa1</module>
     <module>bridge-netty4</module>
     <module>bridge-servlet3</module>
+    <module>bridge-spring-webflux5</module>
     <module>bridge-vertx2</module>
   </modules>
   <licenses>
@@ -76,6 +77,7 @@
     <vertx.version>2.1.6</vertx.version>
     <jetty.version>9.2.14.v20151106</jetty.version>
     <grizzly.version>2.3.35</grizzly.version>
+    <spring-boot.version>2.0.2.RELEASE</spring-boot.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -202,6 +204,23 @@
         <artifactId>grizzly-http-servlet</artifactId>
         <version>${grizzly.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-webflux</artifactId>
+        <version>5.0.6.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter</artifactId>
+        <version>${spring-boot.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-reactor-netty</artifactId>
+        <version>${spring-boot.version}</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <build>
@@ -226,15 +245,6 @@
             <link>http://vertx.io/vertx2/api/java/</link>
             <link>http://netty.io/4.1/api/</link>
           </links>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-eclipse-plugin</artifactId>
-        <version>2.10</version>
-        <configuration>
-          <downloadJavadocs>true</downloadJavadocs>
-          <downloadSources>true</downloadSources>
         </configuration>
       </plugin>
     </plugins>
