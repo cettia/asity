@@ -34,9 +34,9 @@ import javax.websocket.Session;
  * "/cettia")
  * .configurator(new Configurator() {
  *     {@literal @}Override
- *     protected &ltT&gt T getEndpointInstance(Class&ltT&gt endpointClass) throws
+ *     protected &lt;T&gt; T getEndpointInstance(Class&lt;T&gt; endpointClass) throws
  *     InstantiationException {
- *         return endpointClass.cast(new AsityServerEndpoint().onwebsocket(ws -&gt {}));
+ *         return endpointClass.cast(new AsityServerEndpoint().onwebsocket(ws -&gt; {}));
  *     }
  * })
  * .build();

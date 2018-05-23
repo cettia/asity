@@ -39,7 +39,7 @@ import java.io.IOException;
  * <p/>
  * <p/>
  * <pre>
- * Servlet servlet = new AsityAtmosphereServlet().onhttp(http -&gt {}).onwebsocket(ws -&gt {});
+ * Servlet servlet = new AsityAtmosphereServlet().onhttp(http -&gt; {}).onwebsocket(ws -&gt; {});
  * ServletRegistration.Dynamic reg = context.addServlet(AsityAtmosphereServlet.class.getName(),
  * servlet);
  * <strong>reg.setAsyncSupported(true);</strong>

@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  * <p/>
  * <p/>
  * <pre>
- * Servlet servlet = new AsityServlet().onhttp(http -&gt {});
+ * Servlet servlet = new AsityServlet().onhttp(http -&gt; {});
  * ServletRegistration.Dynamic reg = context.addServlet(AsityServlet.class.getName(), servlet);
  * <strong>reg.setAsyncSupported(true);</strong>
  * reg.addMapping("/cettia");

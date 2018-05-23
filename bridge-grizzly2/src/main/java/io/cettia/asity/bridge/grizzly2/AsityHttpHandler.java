@@ -30,7 +30,7 @@ import org.glassfish.grizzly.http.server.Response;
  * <p/>
  * <pre>
  * ServerConfiguration config = httpServer.getServerConfiguration();
- * config.addHttpHandler(new AsityHttpHandler().onhttp(http -&gt {}), "/cettia");
+ * config.addHttpHandler(new AsityHttpHandler().onhttp(http -&gt; {}), "/cettia");
  * </pre>
  *
  * @author Donghwan Kim

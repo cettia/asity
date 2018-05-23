@@ -244,7 +244,10 @@
             <link>http://atmosphere.github.io/atmosphere/apidocs/</link>
             <link>http://vertx.io/vertx2/api/java/</link>
             <link>http://netty.io/4.1/api/</link>
+            <link>https://docs.spring.io/spring/docs/5.0.6.RELEASE/javadoc-api/</link>
+            <link>https://projectreactor.io/docs/core/release/api/</link>
           </links>
+          <additionalJOption>-Xdoclint:none</additionalJOption>
         </configuration>
       </plugin>
     </plugins>

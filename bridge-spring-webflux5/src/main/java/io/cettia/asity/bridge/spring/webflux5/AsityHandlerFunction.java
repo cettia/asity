@@ -33,7 +33,7 @@ import reactor.core.publisher.Mono;
  * RouterFunction&lt;ServerResponse&gt; routes = RouterFunctions.route(
  *   path("/cettia")
  *     // To exclude WebSocket handshake requests
- *     .and(headers(headers -> !"websocket".equalsIgnoreCase(headers.asHttpHeaders().getUpgrade()))),
+ *     .and(headers(headers -&gt; !"websocket".equalsIgnoreCase(headers.asHttpHeaders().getUpgrade()))),
  *       asityHandlerFunction);
  * </pre>
  *

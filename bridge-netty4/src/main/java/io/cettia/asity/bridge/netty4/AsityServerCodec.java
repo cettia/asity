@@ -59,7 +59,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *         return URI.create(req.getUri()).getPath().equals("/cettia");
  *     }
  * }
- * .onhttp(http -&gt {}).onwebsocket(ws -&gt {}));
+ * .onhttp(http -&gt; {}).onwebsocket(ws -&gt; {}));
  * </pre>
  *
  * @author Donghwan Kim

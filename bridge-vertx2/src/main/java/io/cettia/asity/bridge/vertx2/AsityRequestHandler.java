@@ -28,7 +28,7 @@ import org.vertx.java.core.http.HttpServerRequest;
  * <p/>
  * <p/>
  * <pre>
- * httpServer.requestHandler(new AsityRequestHandler().onhttp(http -&gt {}));
+ * httpServer.requestHandler(new AsityRequestHandler().onhttp(http -&gt; {}));
  * </pre>
  *
  * @author Donghwan Kim

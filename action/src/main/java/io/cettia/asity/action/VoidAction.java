@@ -23,7 +23,7 @@ package io.cettia.asity.action;
 public abstract class VoidAction implements Action<Void> {
 
   @Override
-  public void on(Void _) {
+  public void on(Void object) {
     on();
   }
 

@@ -27,7 +27,7 @@ import org.vertx.java.core.Handler;
  * <p/>
  * <p/>
  * <pre>
- * httpServer.websocketHandler(new AsityWebSocketHandler().onwebsocket(http -&gt {}));
+ * httpServer.websocketHandler(new AsityWebSocketHandler().onwebsocket(http -&gt; {}));
  * </pre>
  *
  * @author Donghwan Kim
