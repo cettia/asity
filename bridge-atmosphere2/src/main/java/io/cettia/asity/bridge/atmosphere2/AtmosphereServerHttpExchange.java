@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -89,12 +88,7 @@ public class AtmosphereServerHttpExchange extends AbstractServerHttpExchange {
 
   @Override
   public Set<String> headerNames() {
-    Set<String> headerNames = new LinkedHashSet<>();
-    Enumeration<String> enumeration = request.getHeaderNames();
-    while (enumeration.hasMoreElements()) {
-      headerNames.add(enumeration.nextElement());
-    }
-    return headerNames;
+    return new LinkedHashSet(Collections.list(request.getHeaderNames()));
   }
 
   @SuppressWarnings("unchecked")

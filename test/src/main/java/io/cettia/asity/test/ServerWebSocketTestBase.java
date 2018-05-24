@@ -22,6 +22,7 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.eclipse.jetty.websocket.api.WebSocketListener;
 import org.eclipse.jetty.websocket.api.WriteCallback;
+import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.junit.After;
 import org.junit.Before;
@@ -98,6 +99,32 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
       resume();
     });
     client.connect(NOOP, URI.create(uri("/test?hello=there")));
+    await();
+  }
+
+  @Test
+  public void testHeader() throws Throwable {
+    websocketAction(ws -> {
+      threadAssertTrue(ws.headerNames().containsAll(Arrays.asList("a", "b"))
+        || ws.headerNames().containsAll(Arrays.asList("A", "B")));
+      threadAssertEquals(ws.header("A"), "A");
+      // TODO should we separate a header value by a comma and handle it as a list?
+      threadAssertEquals(ws.header("B"), "B1, B2");
+      threadAssertTrue(ws.headers("A").containsAll(Arrays.asList("A")));
+      threadAssertTrue(ws.headers("B").containsAll(Arrays.asList("B1, B2")));
+      resume();
+    });
+
+    ClientUpgradeRequest request = new ClientUpgradeRequest();
+    request.setHeader("A", "A");
+    request.setHeader("B", Arrays.asList("B1", "B2"));
+
+    client.connect(new WebSocketAdapter() {
+      @Override
+      public void onWebSocketClose(int statusCode, String reason) {
+        resume();
+      }
+    }, URI.create(uri()), request);
     await();
   }
 

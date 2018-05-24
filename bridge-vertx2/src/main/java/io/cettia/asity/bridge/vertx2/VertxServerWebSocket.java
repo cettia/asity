@@ -22,6 +22,8 @@ import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.http.impl.ws.WebSocketFrameInternal;
 
 import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.Set;
 
 /**
  * {@link ServerWebSocket} for Vert.x 2.
@@ -60,6 +62,16 @@ public class VertxServerWebSocket extends AbstractServerWebSocket {
   @Override
   public String uri() {
     return socket.uri();
+  }
+
+  @Override
+  public Set<String> headerNames() {
+    return socket.headers().names();
+  }
+
+  @Override
+  public List<String> headers(String name) {
+    return socket.headers().getAll(name);
   }
 
   @Override

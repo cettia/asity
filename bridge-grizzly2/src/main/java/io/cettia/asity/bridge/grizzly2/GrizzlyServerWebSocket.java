@@ -24,6 +24,10 @@ import org.glassfish.grizzly.websockets.WebSocketAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.ByteBuffer;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * {@link ServerWebSocket} for Grizzly 2.
@@ -67,6 +71,16 @@ public class GrizzlyServerWebSocket extends AbstractServerWebSocket {
       uri += "?" + request.getQueryString();
     }
     return uri;
+  }
+
+  @Override
+  public Set<String> headerNames() {
+    return new LinkedHashSet(Collections.list(socket.getUpgradeRequest().getHeaderNames()));
+  }
+
+  @Override
+  public List<String> headers(String name) {
+    return Collections.list(socket.getUpgradeRequest().getHeaders(name));
   }
 
   @Override

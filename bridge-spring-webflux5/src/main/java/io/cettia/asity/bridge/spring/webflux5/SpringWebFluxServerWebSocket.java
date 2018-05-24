@@ -26,6 +26,8 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.Set;
 
 /**
  * {@link ServerWebSocket} for Spring WebFlux 5.
@@ -68,6 +70,16 @@ public class SpringWebFluxServerWebSocket extends AbstractServerWebSocket {
   public String uri() {
     URI uri = session.getHandshakeInfo().getUri();
     return uri.getPath() + (uri.getQuery() != null ? "?" + uri.getQuery() : "");
+  }
+
+  @Override
+  public Set<String> headerNames() {
+    return session.getHandshakeInfo().getHeaders().keySet();
+  }
+
+  @Override
+  public List<String> headers(String name) {
+    return session.getHandshakeInfo().getHeaders().get(name);
   }
 
   @Override

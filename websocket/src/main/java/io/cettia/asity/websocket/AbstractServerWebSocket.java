@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
+import java.util.List;
 
 /**
  * Abstract base class for {@link ServerWebSocket}.
@@ -45,6 +46,12 @@ public abstract class AbstractServerWebSocket implements ServerWebSocket {
       state = State.CLOSED;
       logger.trace("{} has been closed", AbstractServerWebSocket.this);
     });
+  }
+
+  @Override
+  public String header(String name) {
+    List<String> headers = headers(name);
+    return headers != null && headers.size() > 0 ? headers.get(0) : null;
   }
 
   @Override

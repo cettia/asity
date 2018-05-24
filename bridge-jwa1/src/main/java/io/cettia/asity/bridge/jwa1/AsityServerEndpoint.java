@@ -34,9 +34,13 @@ import javax.websocket.Session;
  * "/cettia")
  * .configurator(new Configurator() {
  *     {@literal @}Override
- *     protected &lt;T&gt; T getEndpointInstance(Class&lt;T&gt; endpointClass) throws
- *     InstantiationException {
+ *     protected &lt;T&gt; T getEndpointInstance(Class&lt;T&gt; endpointClass) {
  *         return endpointClass.cast(new AsityServerEndpoint().onwebsocket(ws -&gt; {}));
+ *     }
+ *
+ *     {@literal @}Override
+ *     public void modifyHandshake(ServerEndpointConfig config, HandshakeRequest request, HandshakeResponse response) {
+ *       config.getUserProperties().put(HandshakeRequest.class.getName(), request);
  *     }
  * })
  * .build();

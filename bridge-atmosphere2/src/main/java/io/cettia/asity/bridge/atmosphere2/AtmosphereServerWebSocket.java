@@ -26,6 +26,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * {@link ServerWebSocket} for Atmosphere 2.
@@ -80,6 +84,17 @@ public class AtmosphereServerWebSocket extends AbstractServerWebSocket {
       uri += "?" + resource.getRequest().getQueryString();
     }
     return uri;
+  }
+
+  @Override
+  public Set<String> headerNames() {
+    return new LinkedHashSet(Collections.list(resource.getRequest().getHeaderNames()));
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<String> headers(String name) {
+    return Collections.list(resource.getRequest().getHeaders(name));
   }
 
   @Override

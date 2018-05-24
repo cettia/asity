@@ -18,6 +18,8 @@ package io.cettia.asity.websocket;
 import io.cettia.asity.action.Action;
 
 import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a server-side WebSocket.
@@ -34,6 +36,23 @@ public interface ServerWebSocket {
    * The URI used to connect.
    */
   String uri();
+
+  /**
+   * The names of the handshake request headers. HTTP header is not case-sensitive
+   * but {@link Set} is case-sensitive.
+   */
+  Set<String> headerNames();
+
+  /**
+   * Returns the first handshake request header associated with the given name.
+   */
+  String header(String name);
+
+  /**
+   * Returns the handshake request headers associated with the given name or empty list
+   * if no header is found.
+   */
+  List<String> headers(String name);
 
   /**
    * Closes the connection. This method has no side effect if called more than

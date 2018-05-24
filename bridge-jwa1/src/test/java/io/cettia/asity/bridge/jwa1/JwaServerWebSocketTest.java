@@ -25,7 +25,9 @@ import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
 import org.junit.Test;
 
+import javax.websocket.HandshakeResponse;
 import javax.websocket.Session;
+import javax.websocket.server.HandshakeRequest;
 import javax.websocket.server.ServerContainer;
 import javax.websocket.server.ServerEndpointConfig;
 import javax.websocket.server.ServerEndpointConfig.Configurator;
@@ -52,8 +54,13 @@ public class JwaServerWebSocketTest extends ServerWebSocketTestBase {
       TEST_URI)
     .configurator(new Configurator() {
       @Override
-      public <T> T getEndpointInstance(Class<T> endpointClass) throws InstantiationException {
+      public <T> T getEndpointInstance(Class<T> endpointClass) {
         return endpointClass.cast(new AsityServerEndpoint().onwebsocket(websocketAction));
+      }
+
+      @Override
+      public void modifyHandshake(ServerEndpointConfig config, HandshakeRequest request, HandshakeResponse response) {
+        config.getUserProperties().put(HandshakeRequest.class.getName(), request);
       }
     })
     .build();

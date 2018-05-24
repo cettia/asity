@@ -27,6 +27,8 @@ import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
 
 import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.Set;
 
 /**
  * {@link ServerWebSocket} for Netty 4.
@@ -68,6 +70,16 @@ public class NettyServerWebSocket extends AbstractServerWebSocket {
   @Override
   public String uri() {
     return request.getUri();
+  }
+
+  @Override
+  public Set<String> headerNames() {
+    return request.headers().names();
+  }
+
+  @Override
+  public List<String> headers(String name) {
+    return request.headers().getAll(name);
   }
 
   @Override
