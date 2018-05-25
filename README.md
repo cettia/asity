@@ -12,7 +12,7 @@ Asity is a lightweight abstraction layer for web frameworks, which is designed t
 ```java
 Action<ServerHttpExchange> httpAction = (ServerHttpExchange http) -> {
   // Request properties
-  System.out.println(http.method() + " " + http.uri());  
+  System.out.println(http.method() + " " + http.uri());
   http.headerNames().stream().forEach(name -> System.out.println(name + ": " + http.header(name)));
   
   // Sets 200 OK response status
@@ -49,6 +49,7 @@ Action<ServerHttpExchange> httpAction = (ServerHttpExchange http) -> {
 Action<ServerWebSocket> wsAction = (ServerWebSocket ws) -> {
   // Handshake request properties
   System.out.println(HttpMethod.GET + " " + ws.uri());
+  ws.headerNames().stream().forEach(name -> System.out.println(name + ": " + ws.header(name)));
   
   // When a text frame is arrived, sends it back
   ws.ontext((String data) -> ws.send(data));
@@ -74,7 +75,7 @@ Action<ServerWebSocket> wsAction = (ServerWebSocket ws) -> {
 * Java WebSocket API 1
 * Netty 4
 * Spring WebFlux 5
-* Vert.x 2
+* Vert.x 2 and 3
 
 For details of how to set up a bridge module, check tests of each bridge module.
 
