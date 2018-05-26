@@ -40,26 +40,26 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 public class TestApplication {
 
   @Bean
-  public AsityHandlerFunction asityHandlerFunction() {
+  public AsityHandlerFunction handlerFunction() {
     return new AsityHandlerFunction();
   }
 
   @Bean
-  public RouterFunction<ServerResponse> httpMapping(AsityHandlerFunction asityHandlerFunction) {
+  public RouterFunction<ServerResponse> httpMapping() {
     return RouterFunctions.route(
       path("/test")
-        .and(headers(headers -> !"websocket".equalsIgnoreCase(headers.asHttpHeaders().getUpgrade()))), asityHandlerFunction);
+        .and(headers(headers -> !"websocket".equalsIgnoreCase(headers.asHttpHeaders().getUpgrade()))), handlerFunction());
   }
 
   @Bean
-  public AsityWebSocketHandler asityWebSocketHandler() {
+  public AsityWebSocketHandler webSocketHandler() {
     return new AsityWebSocketHandler();
   }
 
   @Bean
-  public HandlerMapping wsMapping(AsityWebSocketHandler asityWebSocketHandler) {
+  public HandlerMapping wsMapping() {
     Map<String, WebSocketHandler> map = new LinkedHashMap<>();
-    map.put("/test", asityWebSocketHandler);
+    map.put("/test", webSocketHandler());
 
     SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
     mapping.setUrlMap(map);

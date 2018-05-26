@@ -39,6 +39,7 @@
     <module>bridge-netty4</module>
     <module>bridge-servlet3</module>
     <module>bridge-spring-webflux5</module>
+    <module>bridge-spring-webmvc4</module>
     <module>bridge-vertx2</module>
     <module>bridge-vertx3</module>
   </modules>

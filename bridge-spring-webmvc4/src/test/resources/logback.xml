@@ -20,10 +20,8 @@
       <pattern>%d{HH:mm:ss.SSS} %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
     </encoder>
   </appender>
-  <logger name="io.cettia.asity.bridge.spring.webflex5" level="TRACE" />
+  <logger name="io.cettia.asity.bridge.spring.webmvc4" level="TRACE" />
   <logger name="org.eclipse.jetty" level="INFO" />
-  <logger name="io.netty" level="INFO" />
-  <logger name="reactor.ipc.netty" level="INFO" />
   <logger name="org.springframework" level="INFO" />
   <logger name="org.hibernate" level="INFO" />
   <root>

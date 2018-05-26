@@ -26,14 +26,22 @@ import reactor.core.publisher.Mono;
 /**
  * WebSocketHandler to provide {@link SpringWebFluxServerWebSocket}.
  * <p/>
- * <p/>
  * <pre>
- * AsityWebSocketHandler asityWebSocketHandler = new AsityWebSocketHandler().onwebsocket(ws -&gt; {});
- * Map&lt;String, WebSocketHandler&gt; map = new LinkedHashMap&lt;&gt;();
- * map.put("/cettia", asityWebSocketHandler);
+ *{@literal @}Bean
+ * public AsityWebSocketHandler webSocketHandler() {
+ *   return new AsityWebSocketHandler().onwebsocket(ws -&gt; {});
+ * }
  *
- * SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
- * mapping.setUrlMap(map);
+ *{@literal @}Bean
+ * public HandlerMapping wsMapping() {
+ *   AsityWebSocketHandler webSocketHandler = new AsityWebSocketHandler();
+ *   Map&lt;String, WebSocketHandler&gt; map = new LinkedHashMap&lt;&gt;();
+ *   map.put("/cettia", webSocketHandler());
+ *
+ *   SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
+ *   mapping.setUrlMap(map);
+ *   return mapping;
+ * }
  * </pre>
  *
  * @author Donghwan Kim

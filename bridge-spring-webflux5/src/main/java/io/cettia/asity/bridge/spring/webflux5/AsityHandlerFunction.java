@@ -27,14 +27,21 @@ import reactor.core.publisher.Mono;
 /**
  * HandlerFunction to provide {@link SpringWebFluxServerHttpExchange}.
  * <p/>
- * <p/>
  * <pre>
- * AsityHandlerFunction asityHandlerFunction = new AsityHandlerFunction().on(http -&gt; {});
- * RouterFunction&lt;ServerResponse&gt; routes = RouterFunctions.route(
- *   path("/cettia")
- *     // To exclude WebSocket handshake requests
- *     .and(headers(headers -&gt; !"websocket".equalsIgnoreCase(headers.asHttpHeaders().getUpgrade()))),
- *       asityHandlerFunction);
+ *{@literal @}Bean
+ * public AsityHandlerFunction handlerFunction() {
+ *   return new AsityHandlerFunction().on(http -&gt; {});
+ * }
+ *
+ *{@literal @}Bean
+ * public RouterFunction&lt;ServerResponse&gt; httpMapping() {
+ *   AsityHandlerFunction handlerFunction = handlerFunction();
+ *   return RouterFunction&lt;ServerResponse&gt; routes = RouterFunctions.route(
+ *     path("/cettia")
+ *       // To exclude WebSocket handshake requests
+ *       .and(headers(headers -&gt; !"websocket".equalsIgnoreCase(headers.asHttpHeaders().getUpgrade()))),
+ *         handlerFunction);
+ * }
  * </pre>
  *
  * @author Donghwan Kim
