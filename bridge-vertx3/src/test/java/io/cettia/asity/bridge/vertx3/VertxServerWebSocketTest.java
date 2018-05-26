@@ -24,6 +24,7 @@ import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.junit.Test;
 
 import java.net.URI;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @author Donghwan Kim
@@ -33,7 +34,7 @@ public class VertxServerWebSocketTest extends ServerWebSocketTestBase {
   private HttpServer server;
 
   @Override
-  protected void startServer(int port, Action<ServerWebSocket> websocketAction) {
+  protected void startServer(int port, Action<ServerWebSocket> websocketAction) throws Exception {
     server = Vertx.vertx().createHttpServer();
     AsityWebSocketHandler websocketHandler = new AsityWebSocketHandler().onwebsocket(websocketAction);
     server.websocketHandler(socket -> {
@@ -41,7 +42,10 @@ public class VertxServerWebSocketTest extends ServerWebSocketTestBase {
         websocketHandler.handle(socket);
       }
     });
-    server.listen(port);
+
+    CountDownLatch latch = new CountDownLatch(1);
+    server.listen(port, ar -> latch.countDown());
+    latch.await();
   }
 
   @Override

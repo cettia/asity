@@ -24,6 +24,7 @@ import org.vertx.java.core.VertxFactory;
 import org.vertx.java.core.http.HttpServer;
 
 import java.net.URI;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @author Donghwan Kim
@@ -33,16 +34,18 @@ public class VertxServerWebSocketTest extends ServerWebSocketTestBase {
   private HttpServer server;
 
   @Override
-  protected void startServer(int port, Action<ServerWebSocket> websocketAction) {
+  protected void startServer(int port, Action<ServerWebSocket> websocketAction) throws Exception{
     server = VertxFactory.newVertx().createHttpServer();
-    final AsityWebSocketHandler websocketHandler = new AsityWebSocketHandler().onwebsocket
-      (websocketAction);
+    AsityWebSocketHandler websocketHandler = new AsityWebSocketHandler().onwebsocket(websocketAction);
     server.websocketHandler(socket -> {
       if (socket.path().equals(TEST_URI)) {
         websocketHandler.handle(socket);
       }
     });
-    server.listen(port);
+
+    CountDownLatch latch = new CountDownLatch(1);
+    server.listen(port, ar -> latch.countDown());
+    latch.await();
   }
 
   @Override

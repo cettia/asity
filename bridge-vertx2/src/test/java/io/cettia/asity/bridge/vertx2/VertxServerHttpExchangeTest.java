@@ -25,6 +25,8 @@ import org.vertx.java.core.http.HttpServer;
 import org.vertx.java.core.http.HttpServerRequest;
 import org.vertx.java.core.http.RouteMatcher;
 
+import java.util.concurrent.CountDownLatch;
+
 /**
  * @author Donghwan Kim
  */
@@ -38,7 +40,10 @@ public class VertxServerHttpExchangeTest extends ServerHttpExchangeTestBase {
     RouteMatcher matcher = new RouteMatcher();
     matcher.all(TEST_URI, new AsityRequestHandler().onhttp(requestAction));
     server.requestHandler(matcher);
-    server.listen(port);
+
+    CountDownLatch latch = new CountDownLatch(1);
+    server.listen(port, ar -> latch.countDown());
+    latch.await();
   }
 
   @Override

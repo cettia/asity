@@ -24,6 +24,8 @@ import io.vertx.core.http.HttpServerRequest;
 import org.eclipse.jetty.client.api.Response;
 import org.junit.Test;
 
+import java.util.concurrent.CountDownLatch;
+
 /**
  * @author Donghwan Kim
  */
@@ -32,7 +34,7 @@ public class VertxServerHttpExchangeTest extends ServerHttpExchangeTestBase {
   private HttpServer server;
 
   @Override
-  protected void startServer(int port, Action<ServerHttpExchange> requestAction) {
+  protected void startServer(int port, Action<ServerHttpExchange> requestAction) throws Exception {
     server = Vertx.vertx().createHttpServer();
     AsityRequestHandler requestHandler = new AsityRequestHandler().onhttp(requestAction);
     server.requestHandler(request -> {
@@ -40,7 +42,10 @@ public class VertxServerHttpExchangeTest extends ServerHttpExchangeTestBase {
         requestHandler.handle(request);
       }
     });
-    server.listen(port);
+
+    CountDownLatch latch = new CountDownLatch(1);
+    server.listen(port, ar -> latch.countDown());
+    latch.await();
   }
 
   @Override
