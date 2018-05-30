@@ -1,14 +1,12 @@
 name: Asity
+title: Asity
 description: Asity is a lightweight abstraction layer for I/O frameworks which is designed to build applications that can run on any full-stack framework, any micro framework or any raw server on the JVM.
 url: http://asity.cettia.io/
 author:
   name: Donghwan Kim
   email: flowersinthesand@gmail.com
   twitter: flowersits
-relative_permalinks: false
-kramdown:
-  input: GFM
-gems:
+plugins:
   - jekyll-redirect-from
   - jekyll-sitemap
   - jekyll-seo-tag

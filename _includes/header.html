@@ -1,14 +1,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="{{ site.description | xml_escape }}" />
-<meta name="author" content="Donghwan Kim" />
-<title> 
-{% if page.title == "Asity" %} 
-    {{ page.title }} 
-{% else if %} 
-    {{ page.title }} - Asity
-{% endif %}
-</title>
-<link rel="stylesheet" href="/assets/css/app.css" />
-<link rel="stylesheet" href="/assets/css/foundation-icons.css" />
-<link rel="stylesheet" href="/assets/css/pygments-github.css" />
+<meta name="author" content="{{ site.author.name }}" />
+{% seo %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/foundation-sites@6.4.3/dist/css/foundation.min.css,npm/pygments-css@1.0.0/github.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic,700italic">
+<style type="text/css">
+{% capture styles %}
+  {% include app.scss %}
+{% endcapture %}
+{{ styles | scssify }}
+</style>
+
