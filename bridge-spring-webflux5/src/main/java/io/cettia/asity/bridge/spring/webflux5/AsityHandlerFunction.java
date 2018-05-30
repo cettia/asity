@@ -35,12 +35,11 @@ import reactor.core.publisher.Mono;
  *
  *{@literal @}Bean
  * public RouterFunction&lt;ServerResponse&gt; httpMapping() {
- *   AsityHandlerFunction handlerFunction = handlerFunction();
  *   return RouterFunction&lt;ServerResponse&gt; routes = RouterFunctions.route(
  *     path("/cettia")
  *       // To exclude WebSocket handshake requests
  *       .and(headers(headers -&gt; !"websocket".equalsIgnoreCase(headers.asHttpHeaders().getUpgrade()))),
- *         handlerFunction);
+ *         handlerFunction());
  * }
  * </pre>
  *

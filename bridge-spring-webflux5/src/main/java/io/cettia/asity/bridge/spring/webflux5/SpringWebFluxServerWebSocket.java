@@ -97,6 +97,9 @@ public class SpringWebFluxServerWebSocket extends AbstractServerWebSocket {
     messageEmitter.complete();
   }
 
+  /**
+   * {@link WebSocketSession} is available.
+   */
   @Override
   public <T> T unwrap(Class<T> clazz) {
     return WebSocketSession.class.isAssignableFrom(clazz) ? clazz.cast(session) : null;

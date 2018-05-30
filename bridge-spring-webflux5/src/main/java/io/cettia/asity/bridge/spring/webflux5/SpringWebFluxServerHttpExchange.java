@@ -107,6 +107,9 @@ public class SpringWebFluxServerHttpExchange extends AbstractServerHttpExchange 
     chunkEmitter.complete();
   }
 
+  /**
+   * {@link ServerRequest} and {@link ServerHttpResponse} are available.
+   */
   @Override
   public <T> T unwrap(Class<T> clazz) {
     return ServerRequest.class.isAssignableFrom(clazz) ?

@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  * <pre>
  *{@literal @}Bean
  * public AsityController asityController() {
- *   return new AsityController();
+ *   return new AsityController().onhttp(http -&gt; {});
  * }
  *
  *{@literal @}Bean

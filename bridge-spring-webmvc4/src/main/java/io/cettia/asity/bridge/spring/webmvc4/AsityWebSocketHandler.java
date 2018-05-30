@@ -34,13 +34,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * <pre>
  *{@literal @}Bean
  * public AsityWebSocketHandler webSocketHandler() {
- *   return new AsityWebSocketHandler();
+ *   return new AsityWebSocketHandler().onwebsocket(ws -&gt; {});
  * }
  *
  *{@literal @}Override // A contract from WebSocketConfigurer
  * public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
- *   AsityWebSocketHandler webSocketHandler = new AsityWebSocketHandler().onwebsocket(ws -&gt; {});
- *   registry.addHandler(webSocketHandler, "/cettia");
+ *   registry.addHandler(webSocketHandler(), "/cettia");
  * }
  * </pre>
  *
