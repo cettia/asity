@@ -75,6 +75,7 @@ Action<ServerWebSocket> wsAction = (ServerWebSocket ws) -> {
 * Java WebSocket API 1
 * Netty 4
 * Spring WebFlux 5
+* Spring Web MVC 4
 * Vert.x 2 and 3
 
 For details of how to set up a bridge module, check tests of each bridge module.

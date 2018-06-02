@@ -25,7 +25,7 @@ import io.vertx.core.Handler;
  * <code>Handler&lt;io.vertx.core.http.ServerWebSocket&gt;</code> to provide {@link VertxServerWebSocket}.
  * <p/>
  * <pre>
- * AsityWebSocketHandler websocketHandler = new AsityWebSocketHandler().onhttp(http -&gt; {});
+ * AsityWebSocketHandler websocketHandler = new AsityWebSocketHandler().onwebsocket(ws -&gt; {});
  * httpServer.websocketHandler(socket -> {
  *   if (socket.path().equals("/cettia")) {
  *     websocketHandler.handle(socket);
