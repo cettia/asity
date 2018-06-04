@@ -24,7 +24,7 @@
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-parent</artifactId>
   <packaging>pom</packaging>
-  <version>2.0.0-Alpha2-SNAPSHOT</version>
+  <version>2.0.0-Alpha2</version>
   <name>Asity</name>
   <url>http://asity.cettia.io</url>
   <inceptionYear>2015</inceptionYear>
@@ -54,7 +54,7 @@
     <url>https://github.com/cettia/asity</url>
     <connection>scm:git:git@github.com:cettia/asity.git</connection>
     <developerConnection>scm:git:git@github.com:cettia/asity.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>2.0.0-Alpha2</tag>
   </scm>
   <developers>
     <developer>

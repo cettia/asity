@@ -19,7 +19,7 @@
   <parent>
     <groupId>io.cettia.asity</groupId>
     <artifactId>asity-parent</artifactId>
-    <version>2.0.0-Alpha2-SNAPSHOT</version>
+    <version>2.0.0-Alpha2</version>
   </parent>
   <artifactId>asity-bridge-spring-webmvc4</artifactId>
   <name>Asity/Bridge/Spring Web MVC 4</name>
