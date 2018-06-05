@@ -80,6 +80,7 @@
     <jetty.version>9.2.14.v20151106</jetty.version>
     <grizzly.version>2.3.35</grizzly.version>
     <spring-boot.version>2.0.2.RELEASE</spring-boot.version>
+    <netty.version>4.1.25.Final</netty.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -189,7 +190,12 @@
       <dependency>
         <groupId>io.netty</groupId>
         <artifactId>netty-codec-http</artifactId>
-        <version>4.0.56.Final</version>
+        <version>${netty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-handler</artifactId>
+        <version>${netty.version}</version>
       </dependency>
       <dependency>
         <groupId>org.glassfish.grizzly</groupId>
