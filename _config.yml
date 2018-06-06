@@ -1,6 +1,6 @@
 name: Asity
 title: Asity
-description: Asity is a lightweight abstraction layer for I/O frameworks which is designed to build applications that can run on any full-stack framework, any micro framework or any raw server on the JVM.
+description: Asity is a lightweight abstraction layer for various web frameworks on the Java Virtual Machine. It is designed to build asynchronous web applications that can run on any full-stack framework, any micro framework or any raw server on the JVM without any modification whatsoever, and provides HTTP and WebSocket abstractions.
 url: http://asity.cettia.io/
 author:
   name: Donghwan Kim

@@ -8,4 +8,4 @@ $("h2,h3").each(function () {
     $link.hide();
   });
 });
-$('span.n:contains("myHttpAction"), span.n:contains("myWebSocketAction")').addClass('highlighted');
+$('span.n:contains("httpAction"),span.n:contains("wsAction"),span.s:contains("\\"/asity\\"")').addClass('highlighted');
