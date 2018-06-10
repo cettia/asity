@@ -24,6 +24,7 @@ import org.eclipse.jetty.client.api.Response;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -67,6 +68,7 @@ public class AtmosphereServerHttpExchangeTest extends ServerHttpExchangeTestBase
       }
     });
     server.setHandler(handler);
+    WebSocketServerContainerInitializer.configureContext(handler);
     server.start();
   }
 

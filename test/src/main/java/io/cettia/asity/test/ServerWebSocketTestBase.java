@@ -108,10 +108,9 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
       threadAssertTrue(ws.headerNames().containsAll(Arrays.asList("a", "b"))
         || ws.headerNames().containsAll(Arrays.asList("A", "B")));
       threadAssertEquals(ws.header("A"), "A");
-      // TODO should we separate a header value by a comma and handle it as a list?
-      threadAssertEquals(ws.header("B"), "B1, B2");
+      threadAssertEquals(ws.header("B"), "B1");
       threadAssertTrue(ws.headers("A").containsAll(Arrays.asList("A")));
-      threadAssertTrue(ws.headers("B").containsAll(Arrays.asList("B1, B2")));
+      threadAssertTrue(ws.headers("B").containsAll(Arrays.asList("B1", "B2")));
       resume();
     });
 
