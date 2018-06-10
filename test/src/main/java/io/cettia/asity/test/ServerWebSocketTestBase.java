@@ -53,7 +53,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
   };
 
   @Rule
-  public Timeout globalTimeout = Timeout.seconds(30);
+  public Timeout globalTimeout = Timeout.seconds(60);
   protected WebSocketClient client = new WebSocketClient();
 
   private int port;

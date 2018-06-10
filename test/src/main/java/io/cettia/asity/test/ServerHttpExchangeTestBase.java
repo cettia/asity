@@ -49,7 +49,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
   private static final CompleteListener ASYNC = new Response.Listener.Adapter();
 
   @Rule
-  public Timeout globalTimeout = Timeout.seconds(30);
+  public Timeout globalTimeout = Timeout.seconds(60);
   protected HttpClient client = new HttpClient();
 
   private int port;
