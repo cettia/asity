@@ -257,7 +257,14 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
 
   @Test
   public void testSetHeader() throws Throwable {
-    requestAction(http -> http.setHeader("A", "A").setHeader("B", Arrays.asList("B1", "B2")).end());
+    requestAction(http -> {
+      http
+        .setHeader("A", "A")
+        .setHeader("B", Arrays.asList("B1", "B2"))
+        .setHeader("C", "C")
+        .setHeader("C", "C1")
+        .end();
+    });
     client.newRequest(uri()).send(new Response.Listener.Adapter() {
       @Override
       public void onSuccess(Response res) {
@@ -265,6 +272,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
         threadAssertTrue(headers.getFieldNamesCollection().containsAll(Arrays.asList("A", "B")));
         threadAssertEquals(headers.get("A"), "A");
         threadAssertEquals(headers.get("B"), "B1, B2");
+        threadAssertEquals(headers.get("C"), "C1");
         resume();
       }
     });
