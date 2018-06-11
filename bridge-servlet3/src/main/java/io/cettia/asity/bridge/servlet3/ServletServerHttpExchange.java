@@ -108,13 +108,15 @@ public class ServletServerHttpExchange extends AbstractServerHttpExchange {
     try {
       ServletInputStream input = request.getInputStream();
       int version = getServletMinorVersion();
+      BodyReader bodyReader;
       if (version > 0) {
         // 3.1+ asynchronous
-        new AsyncBodyReader(input, chunkAction, endActions, errorActions);
+        bodyReader = new AsyncBodyReader(input, chunkAction, endActions, errorActions);
       } else {
         // 3.0 synchronous
-        new SyncBodyReader(input, chunkAction, endActions, errorActions);
+        bodyReader = new SyncBodyReader(input, chunkAction, endActions, errorActions, request.getAsyncContext());
       }
+      bodyReader.start();
     } catch (IOException e) {
       errorActions.fire(e);
     }
@@ -185,7 +187,6 @@ public class ServletServerHttpExchange extends AbstractServerHttpExchange {
       this.chunkAction = chunkAction;
       this.endActions = endActions;
       this.errorActions = errorActions;
-      start();
     }
 
     abstract void start();
@@ -238,21 +239,24 @@ public class ServletServerHttpExchange extends AbstractServerHttpExchange {
   }
 
   private static class SyncBodyReader extends BodyReader {
+    private AsyncContext asyncContext;
+
     public SyncBodyReader(ServletInputStream input, Action<ByteBuffer> action, Actions<Void>
-      endActions, Actions<Throwable> errorActions) {
+      endActions, Actions<Throwable> errorActions, AsyncContext asyncContext) {
       super(input, action, endActions, errorActions);
+      this.asyncContext = asyncContext;
     }
 
     @Override
     void start() {
-      new Thread(() -> {
+      asyncContext.start(() -> {
         try {
           read();
           end();
         } catch (IOException e) {
           errorActions.fire(e);
         }
-      }).start();
+      });
     }
 
     @Override

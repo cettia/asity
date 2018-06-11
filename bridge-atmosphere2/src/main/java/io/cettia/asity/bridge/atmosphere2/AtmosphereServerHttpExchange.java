@@ -27,6 +27,7 @@ import org.atmosphere.cpr.AtmosphereResourceEvent;
 import org.atmosphere.cpr.AtmosphereResourceEventListenerAdapter;
 import org.atmosphere.cpr.AtmosphereResourceImpl;
 import org.atmosphere.cpr.AtmosphereResponse;
+import org.atmosphere.util.ExecutorsFactory;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
@@ -37,6 +38,8 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 /**
  * {@link ServerHttpExchange} for Atmosphere 2.
@@ -102,13 +105,17 @@ public class AtmosphereServerHttpExchange extends AbstractServerHttpExchange {
     try {
       ServletInputStream input = request.getInputStream();
       int version = getServletMinorVersion();
+      BodyReader bodyReader;
       if (version > 0) {
         // 3.1+ asynchronous
-        new AsyncBodyReader(input, chunkAction, endActions, errorActions);
+        bodyReader = new AsyncBodyReader(input, chunkAction, endActions, errorActions);
       } else {
         // 3.0 synchronous
-        new SyncBodyReader(input, chunkAction, endActions, errorActions);
+        Executor executor = ExecutorsFactory.getAsyncOperationExecutor(resource
+          .getAtmosphereConfig(), "Asity");
+        bodyReader = new SyncBodyReader(input, chunkAction, endActions, errorActions, executor);
       }
+      bodyReader.start();
     } catch (IOException e) {
       errorActions.fire(e);
     }
@@ -175,7 +182,6 @@ public class AtmosphereServerHttpExchange extends AbstractServerHttpExchange {
       this.chunkAction = chunkAction;
       this.endActions = endActions;
       this.errorActions = errorActions;
-      start();
     }
 
     abstract void start();
@@ -228,21 +234,24 @@ public class AtmosphereServerHttpExchange extends AbstractServerHttpExchange {
   }
 
   private static class SyncBodyReader extends BodyReader {
+    private Executor executor;
+
     public SyncBodyReader(ServletInputStream input, Action<ByteBuffer> action, Actions<Void>
-      endActions, Actions<Throwable> errorActions) {
+      endActions, Actions<Throwable> errorActions, Executor executor) {
       super(input, action, endActions, errorActions);
+      this.executor = executor;
     }
 
     @Override
     void start() {
-      new Thread(() -> {
+      executor.execute(() -> {
         try {
           read();
           end();
         } catch (IOException e) {
           errorActions.fire(e);
         }
-      }).start();
+      });
     }
 
     @Override
