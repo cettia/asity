@@ -96,17 +96,20 @@ public class GrizzlyServerHttpExchange extends AbstractServerHttpExchange {
     in.notifyAvailable(new ReadHandler() {
       @Override
       public void onDataAvailable() throws Exception {
-        int bytesRead = -1;
         byte buffer[] = new byte[8192];
-        while (in.isReady() && (bytesRead = in.read(buffer)) != -1) {
-          chunkAction.on(ByteBuffer.wrap(buffer, 0, bytesRead));
+        int bytesRead = in.read(buffer);
+        chunkAction.on(ByteBuffer.wrap(buffer, 0, bytesRead));
+        if (!in.isFinished()) {
+          in.notifyAvailable(this);
         }
       }
 
       @Override
       public void onAllDataRead() throws Exception {
-        // Unlike Servlet 3.1, there may be remaining data
-        onDataAvailable();
+        // Read data first if it's ready
+        if (in.isReady()) {
+          onDataAvailable();
+        }
         endActions.fire();
       }
 

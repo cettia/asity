@@ -24,6 +24,7 @@ import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.api.Response;
 import org.eclipse.jetty.client.api.Response.CompleteListener;
 import org.eclipse.jetty.client.util.BytesContentProvider;
+import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.client.util.StringContentProvider;
 import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.HttpMethod;
@@ -213,6 +214,38 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
     client.newRequest(uri()).method(HttpMethod.POST)
     .content(new BytesContentProvider(new byte[]{'h', 'i'}), "text/plain")
     .send(ASYNC);
+    await();
+  }
+
+  @Test
+  public void testReadAsync() throws Throwable {
+    DeferredContentProvider content = new DeferredContentProvider();
+    requestAction(http -> {
+      StringBuilder body = new StringBuilder();
+      http.onchunk((String text) -> {
+        body.append(text);
+        switch (text) {
+          case "A":
+            content.offer(ByteBuffer.wrap("B".getBytes()));
+            break;
+          case "B":
+            content.offer(ByteBuffer.wrap("C".getBytes()));
+            break;
+          case "C":
+            content.close();
+            break;
+          default:
+            throw new IllegalStateException();
+        }
+      })
+      .onend($ -> {
+        threadAssertEquals(body.toString(), "ABC");
+        resume();
+      })
+      .read();
+    });
+    client.POST(uri()).content(content, "text/plain; charset=utf-8").send(ASYNC);
+    content.offer(ByteBuffer.wrap("A".getBytes()));
     await();
   }
 
