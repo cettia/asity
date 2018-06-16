@@ -153,6 +153,7 @@ public class Bootstrap implements ServletContextListener {
         <p>Now you can handle HTTP requests from <code>/asity</code> asynchronously through a <code>AsityServlet</code>'s <code>onhttp</code> method.</p>
         <p><strong>Note</strong></p>
         <ul>
+          <li>It works with Servlet 3.1 and 4 containers.</li>
           <li><code>ServerHttpExchange</code>'s <code>onclose</code> isn't supported.</li>
         </ul>
         <h3 id="spring-webflux-5">Spring WebFlux 5</h3>
@@ -257,6 +258,10 @@ public class TestApplication implements WebSocketConfigurer {
 ```
 {% endcapture %}{{ panel | markdownify }}
         <p>Now you can handle HTTP requests and WebSocket connections from <code>/asity</code> asynchronously through a <code>AsityController</code>'s <code>onhttp</code> method and a <code>AsityWebSocketHandler</code>'s <code>onwebsocket</code> method.</p>
+        <p><strong>Note</strong></p>
+        <ul>
+          <li><code>ServerHttpExchange</code>'s <code>onclose</code> isn't supported.</li>
+        </ul>
         <h3 id="vert-x-3">Vert.x 3</h3>
         <p>Add a <code>io.cettia.asity:asity-bridge-vertx3:2.0.0-Alpha2</code> as a dependency of your application.</p>
 {% capture panel %}
@@ -322,6 +327,10 @@ public class Bootstrap {
 ```
 {% endcapture %}{{ panel | markdownify }}
         <p>Now you can handle HTTP requests and WebSocket connections from <code>/asity</code> asynchronously through a <code>AsityHttpHandler</code>'s <code>onhttp</code> method and a <code>AsityWebSocketApplication</code>'s <code>onwebsocket</code> method.</p>
+        <p><strong>Note</strong></p>
+        <ul>
+          <li>Grizzly 2.4 requires <code>javax.servlet:javax.servlet-api:4.y.z</code>.</li>
+        </ul>
         <h3 id="netty-4">Netty 4</h3>
         <p>Add a <code>io.cettia.asity:asity-bridge-netty4:2.0.0-Alpha2</code> as a dependency of your application.</p>
 {% capture panel %}
@@ -437,8 +446,9 @@ public class Bootstrap implements ServletContextListener {
         <p>Now you can handle HTTP requests and WebSocket connections from <code>/asity</code> asynchronously through a <code>AsityAtmosphereServlet</code>'s <code>onhttp</code> and <code>onwebsocket</code> methods.</p>
         <p><strong>Note</strong></p>
         <ul>
-          <li>Requires Atmosphere 2.2 and above.</li>
+          <li>It requires Atmosphere 2.2 and above.</li>
           <li><code>ServerHttpExchange</code>'s <code>onclose</code> isn't supported.</li>
+          <li><code>ServerWebSocket</code>'s <code>headers</code> doesn't support a header with multiple values.</li>
         </ul>
       </div>
     </div>
