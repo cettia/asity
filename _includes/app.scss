@@ -78,3 +78,9 @@ h2 > a, h3 > a {
   color: #e6e6e6;
   background-color: #272727;
 }
+
+#announcement {
+  & > p {
+    visibility: hidden;
+  }
+}
