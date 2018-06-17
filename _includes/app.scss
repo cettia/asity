@@ -65,10 +65,6 @@ article {
   }
 }
 
-#content, .content {
-  margin-top: 2rem;
-}
-
 h2 > a, h3 > a {
   color: #888;
 }
@@ -77,6 +73,10 @@ h2 > a, h3 > a {
   font-weight: bold;
   color: #e6e6e6;
   background-color: #272727;
+}
+
+.menu.supported-frameworks {
+  margin-bottom: 1rem;
 }
 
 #announcement {
