@@ -1,9 +1,9 @@
-Github repository contains latest information about the project for now (The website will be updated later).
-
 # Asity
 #### Build web framework-agnostic applications on the JVM
 
-Asity is a lightweight abstraction layer for web frameworks, which is designed to build applications and frameworks that can run on any full-stack framework, any micro framework or any raw server on the JVM without degrading the underlying framework's performance. It provides HTTP and WebSocket abstractions.
+Asity is a lightweight abstraction layer for various web frameworks on the Java Virtual Machine, which is designed to build asynchronous web applications including reusable server-side web components and high-level frameworks on top of HTTP and WebSocket, and run them seamlessly across different full-stack frameworks, micro frameworks and raw servers in the Java ecosystem.
+
+For more details, please visit the [Asity](http://asity.cettia.io) website.
 
 ### HTTP
 
@@ -77,7 +77,5 @@ Action<ServerWebSocket> wsAction = (ServerWebSocket ws) -> {
 * Spring WebFlux 5
 * Spring Web MVC 4
 * Vert.x 2 and 3
-
-For details of how to set up a bridge module, check tests of each bridge module.
 
 Please let us, [Cettia Groups](http://groups.google.com/group/cettia), know if you have any question or feedback.
