@@ -12,7 +12,6 @@ title: Build web framework-agnostic applications on the JVM
         <h1>Asity</h1>
         <h4 class="subheader">Build web framework-agnostic applications on the JVM</h4>
         <p>Asity is a lightweight abstraction layer for various web frameworks on the Java Virtual Machine, which is designed to build asynchronous web applications including reusable server-side web components and high-level frameworks on top of HTTP and WebSocket, and run them seamlessly across different full-stack frameworks, micro frameworks and raw servers in the Java ecosystem.</p>
-        <p>TODO</p>
         <p>The following frameworks are supported officially by the Asity team:</p>
         <ul class="menu supported-frameworks">
           <li><a href="#java-api-for-websocket-1">Java API for WebSocket 1</a></li>
@@ -25,11 +24,10 @@ title: Build web framework-agnostic applications on the JVM
           <li><a href="#vert-x-2">Vert.x 2</a></li>
           <li><a href="#atmosphere-2">Atmosphere 2</a></li>
         </ul>
-        <p>TODO</p>
         <hr>
         <h2 id="write-once">Write Once, <a href="#run-anywhere">Run Anywhere</a></h2>
         <p>TODO</p>
-        <p><code>io.cettia.asity:asity-http:2.0.0-Alpha2</code></p>
+        <p><code>io.cettia.asity:asity-http:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-http/" target="_blank">Javadoc</a>).</p>
 {% capture panel %}
 ```java
 Action<ServerHttpExchange> httpAction = (ServerHttpExchange http) -> {
@@ -56,7 +54,7 @@ Action<ServerHttpExchange> httpAction = (ServerHttpExchange http) -> {
 ```
 {% endcapture %}{{ panel | markdownify }}
         <p>TODO</p>
-        <p><code>io.cettia.asity:asity-websocket:2.0.0-Alpha2</code></p>
+        <p><code>io.cettia.asity:asity-websocket:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-websocket/" target="_blank">Javadoc</a>).</p>
 {% capture panel %}
 ```java
 Action<ServerWebSocket> wsAction = (ServerWebSocket ws) -> {
@@ -77,13 +75,13 @@ Action<ServerWebSocket> wsAction = (ServerWebSocket ws) -> {
         <h2 id="run-anywhere"><a href="#write-once">Write Once</a>, Run Anywhere</a></h2>
         <p>TODO</p>
         <h3 id="java-api-for-websocket-1">Java API for WebSocket 1</h3>
-        <p>Add a <code>io.cettia.asity:asity-bridge-spring-jwa1:2.0.0-Alpha2</code> as a dependency of your application.</p>
+        <p>Add a <code>io.cettia.asity:asity-bridge-jwa1:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-jwa1/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-jwa1</artifactId>
-  <version>2.0.0-Alpha2</version>
+  <version>2.0.0-RC1</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -122,13 +120,13 @@ public class Bootstrap implements ServletContextListener {
 {% endcapture %}{{ panel | markdownify }}
         <p>Now you can handle WebSocket connections from <code>/asity</code> asynchronously through a <code>AsityServerEndpoint</code>'s <code>onwebsocket</code> method.</p>
         <h3 id="servlet-3">Servlet 3</h3>
-        <p>Add <code>io.cettia.asity:asity-bridge-spring-servlet3:2.0.0-Alpha2</code> as a dependency of your application.</p>
+        <p>Add <code>io.cettia.asity:asity-bridge-servlet3:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-servlet3/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-spring-servlet3</artifactId>
-  <version>2.0.0-Alpha2</version>
+  <version>2.0.0-RC1</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -158,13 +156,13 @@ public class Bootstrap implements ServletContextListener {
           <li><code>ServerHttpExchange</code>'s <code>onclose</code> isn't supported.</li>
         </ul>
         <h3 id="spring-webflux-5">Spring WebFlux 5</h3>
-        <p>Add a <code>io.cettia.asity:asity-bridge-spring-webflux5:2.0.0-Alpha2</code> as a dependency of your application.</p>
+        <p>Add a <code>io.cettia.asity:asity-bridge-spring-webflux5:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-spring-webflux5/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-spring-webflux5</artifactId>
-  <version>2.0.0-Alpha2</version>
+  <version>2.0.0-RC1</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -213,13 +211,13 @@ public class Application {
           <li><code>ServerHttpExchange</code>'s <code>onclose</code> isn't supported.</li>
         </ul>
         <h3 id="spring-mvc-4">Spring MVC 4</h3>
-        <p>Add a <code>io.cettia.asity:asity-bridge-spring-webmvc4:2.0.0-Alpha2</code> as a dependency of your application.</p>
+        <p>Add a <code>io.cettia.asity:asity-bridge-spring-webmvc4:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-spring-webmvc4/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-spring-webmvc4</artifactId>
-  <version>2.0.0-Alpha2</version>
+  <version>2.0.0-RC1</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -264,13 +262,13 @@ public class TestApplication implements WebSocketConfigurer {
           <li><code>ServerHttpExchange</code>'s <code>onclose</code> isn't supported.</li>
         </ul>
         <h3 id="vert-x-3">Vert.x 3</h3>
-        <p>Add a <code>io.cettia.asity:asity-bridge-vertx3:2.0.0-Alpha2</code> as a dependency of your application.</p>
+        <p>Add a <code>io.cettia.asity:asity-bridge-vertx3:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-vertx3/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-vertx3</artifactId>
-  <version>2.0.0-Alpha2</version>
+  <version>2.0.0-RC1</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -300,13 +298,13 @@ public class Bootstrap extends AbstractVerticle {
 {% endcapture %}{{ panel | markdownify }}
         <p>Now you can handle HTTP requests and WebSocket connections from <code>/asity</code> asynchronously through a <code>AsityRequestHandler</code>'s <code>onhttp</code> method and a <code>AsityWebSocketHandler</code>'s <code>onwebsocket</code> method.</p>
         <h3 id="grizzly-2">Grizzly 2</h3>
-        <p>Add a <code>io.cettia.asity:asity-bridge-grizzly2:2.0.0-Alpha2</code> as a dependency of your application.</p>
+        <p>Add a <code>io.cettia.asity:asity-bridge-grizzly2:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-grizzly2/" target="_blank">Javadoc</a>)as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-grizzly2</artifactId>
-  <version>2.0.0-Alpha2</version>
+  <version>2.0.0-RC1</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -333,13 +331,13 @@ public class Bootstrap {
           <li>Grizzly 2.4 requires <code>javax.servlet:javax.servlet-api:4.y.z</code>.</li>
         </ul>
         <h3 id="netty-4">Netty 4</h3>
-        <p>Add a <code>io.cettia.asity:asity-bridge-netty4:2.0.0-Alpha2</code> as a dependency of your application.</p>
+        <p>Add a <code>io.cettia.asity:asity-bridge-netty4:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-netty4/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-netty4</artifactId>
-  <version>2.0.0-Alpha2</version>
+  <version>2.0.0-RC1</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -381,13 +379,13 @@ public class Bootstrap {
 {% endcapture %}{{ panel | markdownify }}
         <p>Now you can handle HTTP requests and WebSocket connections from <code>/asity</code> asynchronously through a <code>AsityServerCodec</code>'s <code>onhttp</code> and <code>onwebsocket</code> methods.</p>
         <h3 id="vert-x-2">Vert.x 2</h3>
-        <p>Add a <code>io.cettia.asity:asity-bridge-vertx2:2.0.0-Alpha2</code> as a dependency of your application.</p>
+        <p>Add a <code>io.cettia.asity:asity-bridge-vertx2:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-vertx2/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-vertx2</artifactId>
-  <version>2.0.0-Alpha2</version>
+  <version>2.0.0-RC1</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -414,13 +412,13 @@ public class Bootstrap extends Verticle {
 {% endcapture %}{{ panel | markdownify }}
         <p>Now you can handle HTTP requests and WebSocket connections from <code>/asity</code> asynchronously through a <code>AsityRequestHandler</code>'s <code>onhttp</code> method and a <code>AsityWebSocketHandler</code>'s <code>onwebsocket</code> method.</p>
         <h3 id="atmosphere-2">Atmosphere 2</h3>
-        <p>Add a <code>io.cettia.asity:asity-bridge-atmosphere2:2.0.0-Alpha2</code> as a dependency of your application.</p>
+        <p>Add a <code>io.cettia.asity:asity-bridge-atmosphere2:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-atmosphere2/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-atmosphere2</artifactId>
-  <version>2.0.0-Alpha2</version>
+  <version>2.0.0-RC1</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
