@@ -9,26 +9,9 @@ code {
   font-size: 0.875rem;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  code {
-    font-size: 0.875em;
-  }
-}
-
 a {
   code {
     color: inherit;
-  }
-}
-
-.top-bar-wrapper {
-  background-color: #333333;
-}
-
-.top-bar, .top-bar ul {
-  background-color: #333333;
-  .menu .button, .menu a {
-    color: #eee;
   }
 }
 
@@ -48,23 +31,6 @@ div.highlighter-rouge {
   }
 }
 
-.copyright {
-  color: #777;
-  p, ul {
-    font-size: 0.875rem;
-  }
-}
-
-article {
-  .information {
-    color: #888;
-    .post-author {
-      height: 24px;
-      display: inline-block;
-    }
-  }
-}
-
 h2 > a, h3 > a {
   color: #888;
 }
@@ -75,12 +41,33 @@ h2 > a, h3 > a {
   background-color: #272727;
 }
 
-.menu.supported-frameworks {
-  margin-bottom: 1rem;
-}
-
 #announcement {
   & > p {
     visibility: hidden;
+  }
+}
+
+code {
+  word-break: break-all;
+}
+
+em {
+  // TODO use box-shadow
+  text-decoration: underline;
+}
+
+section {
+  // TODO support responsive design
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  border-bottom: 1px solid #dedede;
+
+  .menu {
+    margin-bottom: 1rem;
+  }
+
+  &:first-of-type {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
   }
 }

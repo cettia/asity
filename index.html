@@ -1,19 +1,27 @@
 ---
 layout: default
-title: Build web framework agnostic applications on the JVM
+title: Build universally reusable web fragments on the JVM
 ---
-<div class="grid-container">
-  <div class="grid-x">
-    <div class="cell">
-      <div class="content">
-        <div id="announcement" class="callout secondary">
-          <p>News - <a href="#" target="_blank" class="link"></a> on <span class="date"></span></p>
-        </div>
-        <h1>Asity</h1>
-        <h4 class="subheader">Build web framework agnostic applications on the JVM</h4>
-        <p>Asity is a lightweight abstraction layer for various web frameworks on the Java Virtual Machine, which is designed to build asynchronous web applications including <em>reusable server-side web components</em> and <em>high-level frameworks on top of HTTP and WebSocket</em>, and run them seamlessly across different full-stack frameworks, micro frameworks and raw servers in the Java ecosystem.</p>
-        <p>The vision of Asity is to <em>achieve and exploit "Write Once, Run Anywhere"</em> by establishing an ecosystem of reusable web fragments that run across different frameworks in Java ecosystem without degrading framework's performance.</p>
-        <p>The following frameworks are supported officially by the Asity team:</p>
+<div id="announcement" class="callout secondary hide">
+  <p>News - <a href="#" target="_blank" class="link"></a> on <span class="date"></span></p>
+</div>
+<section>
+  <div class="grid-container">
+   <div class="grid-x">
+     <div class="cell">
+      <h1>Asity</h1>
+      <h4 class="subheader">Build universally reusable web fragments on the JVM</h4>
+      </div>
+    </div>
+  </div>
+</section>
+<section>
+  <div class="grid-container">
+   <div class="grid-x">
+     <div class="cell">
+        <h2>Introduction</h2>
+        <p>Asity is a lightweight abstraction layer for various web frameworks on the Java Virtual Machine, which is designed to build web fragments from <em>reusable server-side web components</em> to <em>high-level frameworks on top of HTTP and WebSocket</em>, and run them seamlessly across different full-stack frameworks, micro frameworks and raw servers in the Java ecosystem.</p>
+        <p>A web fragment based on Asity is compatible with the following frameworks:</p>
         <ul class="menu supported-frameworks">
           <li><a href="#java-api-for-websocket-1">Java API for WebSocket 1</a></li>
           <li><a href="#servlet-3">Servlet 3</a></li>
@@ -25,56 +33,99 @@ title: Build web framework agnostic applications on the JVM
           <li><a href="#vert-x-2">Vert.x 2</a></li>
           <li><a href="#atmosphere-2">Atmosphere 2</a></li>
         </ul>
-        <hr>
-        <h2 id="write-once">Write Once, <a href="#run-anywhere">Run Anywhere</a></h2>
-        <p>TODO</p>
-        <p><code>io.cettia.asity:asity-http:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-http/" target="_blank">Javadoc</a>).</p>
+        <p>The vision of Asity is to <em>achieve and exploit "Write Once, Run Anywhere"</em> by establishing an ecosystem of universally reusable web fragments that run across different frameworks in the Java ecosystem without degrading framework's performance. If you are interested in this vision and would like to be more involved, feel free to join the community and share your feedback.</p>
+        <ul class="menu">
+          <li class="menu-text">Community links</li>
+          <li><a href="http://groups.google.com/group/cettia" target="_blank">Mailing list</a></li>
+          <li><a href="https://github.com/cettia/asity" target="_blank">GitHub</a></li>
+          <li><a href="https://twitter.com/flowersits" target="_blank">Twitter</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<section>
+  <div class="grid-container">
+   <div class="grid-x">
+     <div class="cell">
+        <h2 id="write-once">Write Once</h2>
+        <p>At the code level, an Asity web fragment is a set of <code>Action</code>s to handle <code>ServerHttpExchange</code> or <code>ServerWebSocket</code>, which represents HTTP request-response exchange and WebSocket connection, respectively. These APIs are asynchronous and designed to conform the relevant RFC specifications, i.e. RFC2616 and RFC6455, from a pragmatic perspective.</p>
+        <p>Let's take a look at the APIs by building echo fragments which simply respond to the client with whatever data the client sent. The data will be a chunk of the Chunked transfer encoding in case of HTTP, and a text frame and a binary frame in case of WebSocket.</p>
+        <h3 id="http">HTTP</h3>
+        <p>Add a <code>io.cettia.asity:asity-http:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-http/" target="_blank">Javadoc</a>) as a dependency of your fragment.</p>
+{% capture panel %}
+```xml
+<dependency>
+  <groupId>io.cettia.asity</groupId>
+  <artifactId>asity-http</artifactId>
+  <version>2.0.0-RC1</version>
+</dependency>
+```
+{% endcapture %}{{ panel | markdownify }}
+        <p>Then write an <code>Action</code> consuming <code>ServerHttpExchange</code>.</p>
 {% capture panel %}
 ```java
-Action<ServerHttpExchange> httpAction = (ServerHttpExchange http) -> {
-  // Request properties
+Action<ServerHttpExchange> httpAction = http -> {
+  // Reads request URI, method and headers
   System.out.println(http.method() + " " + http.uri());
-  http.headerNames().stream().forEach(name -> System.out.println(name + ": " + http.header(name)));
-  // Sets 200 OK response status
-  http.setStatus(HttpStatus.OK);
-  // Copies the content-type header of the request to the response
-  http.setHeader("content-type", http.header("content-type"));
-  // When a chunk is read from the request body, writes it to the response body
-  http.onchunk((ByteBuffer bytes) -> http.write(bytes));
-  // When the request is fully read, ends the response
+  http.headerNames().stream().forEach(name -> System.out.println(name + ": " + String.join(", ", http.headers(name))));
+
+  // Writes response status code and headers
+  http.setStatus(HttpStatus.OK).setHeader("content-type", http.header("content-type"));
+
+  // Reads a chunk from request body and writes it to response body
+  http.readAsBinary().onchunk((ByteBuffer binary) -> http.write(binary));
+  // Or, http.readAsText().onchunk((String text) -> http.write(text));
+
+  // Ends response if request ends
   http.onend((Void v) -> http.end());
-  // Reads the request body as binary to circumvent encoding issue
-  http.readAsBinary();
-  // When the response is fully written and ends,
-  http.onfinish((Void v) -> System.out.println("on finish"));
-  // When some error happens in the request-response exchange,
-  http.onerror((Throwable t) -> t.printStackTrace());
-  // When the underlying connection is terminated,
-  http.onclose((Void v) -> System.out.println("on close"));
+
+  // Exception handling
+  http.onerror((Throwable t) -> t.printStackTrace()).onclose((Void v) -> System.out.println("disconnected"));
 };
 ```
 {% endcapture %}{{ panel | markdownify }}
-        <p>TODO</p>
-        <p><code>io.cettia.asity:asity-websocket:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-websocket/" target="_blank">Javadoc</a>).</p>
+        <p>TODO working example</p>
+        <h3 id="websocket">WebSocket</h3>
+        <p>Add a <code>io.cettia.asity:asity-websocket:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-websocket/" target="_blank">Javadoc</a>) as a dependency of your fragment.</p>
+{% capture panel %}
+```xml
+<dependency>
+  <groupId>io.cettia.asity</groupId>
+  <artifactId>asity-websocket</artifactId>
+  <version>2.0.0-RC1</version>
+</dependency>
+```
+{% endcapture %}{{ panel | markdownify }}
+        <p>Then write an <code>Action</code> consuming <code>ServerWebSocket</code>.</p>
 {% capture panel %}
 ```java
-Action<ServerWebSocket> wsAction = (ServerWebSocket ws) -> {
-  // Handshake request properties
-  System.out.println(HttpMethod.GET + " " + ws.uri());
-  ws.headerNames().stream().forEach(name -> System.out.println(name + ": " + ws.header(name)));
-  // When a text frame is arrived, sends it back
-  ws.ontext((String data) -> ws.send(data));
-  // When a binary frame is arrived, sends it back
-  ws.onbinary((ByteBuffer bytes) -> ws.send(bytes));
-  // When some error happens in the connection,
-  ws.onerror((Throwable t) -> t.printStackTrace());
-  // When the connection is closed for any reason,
-  ws.onclose((Void v) -> System.out.println("on close"));
+Action<ServerWebSocket> wsAction = ws -> {
+  // Reads handshake request URI and headers
+  System.out.println(ws.uri());
+  ws.headerNames().stream().forEach(name -> System.out.println(name + ": " + String.join(", ", ws.headers(name))));
+
+  // Sends the received text frame and binary frame back
+  ws.ontext((String text) -> ws.send(text)).onbinary((ByteBuffer binary) -> ws.send(binary));
+
+  // Exception handling
+  ws.onerror((Throwable t) -> t.printStackTrace()).onclose((Void v) -> System.out.println("disconnected"));
 };
 ```
 {% endcapture %}{{ panel | markdownify }}
-        <h2 id="run-anywhere"><a href="#write-once">Write Once</a>, Run Anywhere</a></h2>
-        <p>TODO</p>
+        <p>TODO working example</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section>
+  <div class="grid-container">
+   <div class="grid-x">
+     <div class="cell">
+        <h2 id="run-anywhere">Run Anywhere</a></h2>
+        <p>To run an Asity web fragment on your framework, you need to plug the fragment in to the framework through a dedicated Asity bridge for the framework. An Asity bridge is a minimal implementation; just enough to convert a framework's HTTP request-response exchange and WebSocket connection to the Asity's <code>ServerHttpExchange</code> and <code>ServerWebSocket</code>, and feed Asity web fragments with them. Note that even if your favorite framework is not supported, with about 200 lines of code, you can write an Asity bridge to your framework.</p>
+        <p>Let's assume that it maps <code>httpAction</code>, a HTTP fragment, and <code>wsAction</code>, a Websocket fragment, to the path <code>/asity</code>.</p>
+        <p>TODO use vertical tabs</p>
         <h3 id="java-api-for-websocket-1">Java API for WebSocket 1</h3>
         <p>Add a <code>io.cettia.asity:asity-bridge-jwa1:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-jwa1/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
@@ -453,4 +504,4 @@ public class Bootstrap implements ServletContextListener {
       </div>
     </div>
   </div>
-</div>
+</section>
