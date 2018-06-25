@@ -56,6 +56,20 @@ em {
   text-decoration: underline;
 }
 
+dd {
+  margin-bottom: 1rem;
+}
+
+#example-tabs {
+  border: none;
+  & + .tabs-content {
+    border: none;
+    & > div {
+      padding: 1rem 0 0 0;
+    }
+  }
+}
+
 section {
   // TODO support responsive design
   padding-top: 4rem;
@@ -66,8 +80,13 @@ section {
     margin-bottom: 1rem;
   }
 
+
   &:first-of-type {
     padding-top: 6rem;
     padding-bottom: 6rem;
+    // text-align: center;
+    // .supported-frameworks {
+    //   justify-content: center;
+    // }
   }
 }
