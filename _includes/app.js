@@ -1,10 +1,8 @@
 (function() {
-  $(document).foundation();
-
   $("h2,h3").each(function() {
     var $this = $(this);
-    var $link = $("<a />").attr("href", "#" + $this.attr('id')).text(String.fromCharCode("182"));
-    $this.append($link.hide()).hover(function() {
+    var $link = $("<a />").attr("href", "#" + $this.attr('id')).text(String.fromCharCode("182")).hide();
+    $this.append($link).hover(function() {
       $link.show();
     }, function () {
       $link.hide();
@@ -23,11 +21,10 @@
     $this.attr("href", "#" + $id);
     $("<div>").attr("id", $id).addClass("tabs-panel")
       .append($("<p>").html("A working example is available at TODO example link."))
-      .append($($examples[i]).clone())
+      .append($examples.eq(i).clone())
       .append($("<p>").html("For more information, see <a href='#" + $id.substring(8) + "'>" + $text + "</a>."))
       .appendTo($tabsContent);
   });
-  new Foundation.Tabs($tabs);
 
   $.get("http://cettia.io/feed.xml", function(doc) {
     var $announcement = $("#announcement");
@@ -41,4 +38,6 @@
     $announcement.find(".date").text(new Intl.DateTimeFormat("en-US", options).format(date));
     $announcement.find("p").css({visibility: "visible"});
   });
+
+  $(document).foundation();
 })();

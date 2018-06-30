@@ -7,12 +7,24 @@ body, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
 code {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   font-size: 0.875rem;
+  word-break: break-all;
 }
 
-a {
-  code {
-    color: inherit;
-  }
+em {
+  // TODO use box-shadow
+  text-decoration: underline;
+}
+
+dd {
+  margin-bottom: 1rem;
+}
+
+h3 {
+  margin-top: 2rem;
+}
+
+h2 > a, h3 > a {
+  color: #888;
 }
 
 div.highlighter-rouge {
@@ -31,33 +43,23 @@ div.highlighter-rouge {
   }
 }
 
-h2 > a, h3 > a {
-  color: #888;
-}
-
 .highlighted {
   font-weight: bold;
   color: #e6e6e6;
   background-color: #272727;
 }
 
+section {
+  // TODO support responsive design
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  border-bottom: 1px solid #dedede;
+}
+
 #announcement {
   & > p {
     visibility: hidden;
   }
-}
-
-code {
-  word-break: break-all;
-}
-
-em {
-  // TODO use box-shadow
-  text-decoration: underline;
-}
-
-dd {
-  margin-bottom: 1rem;
 }
 
 #example-tabs {
@@ -67,26 +69,5 @@ dd {
     & > div {
       padding: 1rem 0 0 0;
     }
-  }
-}
-
-section {
-  // TODO support responsive design
-  padding-top: 4rem;
-  padding-bottom: 4rem;
-  border-bottom: 1px solid #dedede;
-
-  .menu {
-    margin-bottom: 1rem;
-  }
-
-
-  &:first-of-type {
-    padding-top: 6rem;
-    padding-bottom: 6rem;
-    // text-align: center;
-    // .supported-frameworks {
-    //   justify-content: center;
-    // }
   }
 }

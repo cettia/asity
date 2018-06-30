@@ -11,15 +11,19 @@ title: Build universally reusable web fragments on the JVM
       <div class="cell">
         <h1>Asity</h1>
         <h4 class="subheader">Build universally reusable web fragments on the JVM</h4>
-        <p>Write echo web fragments that sends the received data back</p>
+        <p>Write echo web fragments that sends the received data back.</p>
 {% capture panel %}
 ```java
 Action httpAction = http -> http.readAsBinary().onchunk((ByteBuffer chunk) -> http.write(chunk)).onend((Void v) -> http.end());
+```
+{% endcapture %}{{ panel | markdownify }}
+{% capture panel %}
+```java
 Action wsAction = ws -> ws.ontext((String text) -> ws.send(text)).onbinary((ByteBuffer binary) -> ws.send(binary));
 ```
 {% endcapture %}{{ panel | markdownify }}
         <p>And run across different frameworks in the Java ecosystem.</p>
-        <ul class="tabs" data-deep-link="true" data-update-history="true" data-deep-link-smudge="true" data-active-collapse="true" data-tabs id="example-tabs">
+        <ul class="tabs" data-responsive-accordion-tabs="tabs small-accordion large-tabs" data-active-collapse="true" data-deep-link="true" data-update-history="true" data-allow-all-closed="true" id="example-tabs">
           <li class="tabs-title"><a>Java API for WebSocket 1</a></li>
           <li class="tabs-title"><a>Servlet 3</a></li>
           <li class="tabs-title"><a>Spring WebFlux 5</a></li>
@@ -39,8 +43,8 @@ Action wsAction = ws -> ws.ontext((String text) -> ws.send(text)).onbinary((Byte
   <div class="grid-container">
     <div class="grid-x">
       <div class="cell">
-        <h2>Introduction</h2>
-        <p>Asity is a lightweight abstraction layer for various web frameworks on the Java Virtual Machine, which is designed to <em>achieve and exploit "Write Once, Run Anywhere"</em> by establishing an ecosystem of universally reusable web fragments<sup>*</sup> that run across different frameworks in the Java ecosystem. It provides abstractions for HTTP and WebSocket, and implementations per framework called bridges which are transparent to end-users and don't affect framework's performance, productivity and philosophy. Web fragment authors can write a web fragement once and support almost all popular web frameworks in Java, and end-users can choose any technology stack as they wish and use web fragments without being frustrated by compatibility issues.</p>
+        <h2 id="introduction">Introduction</h2>
+        <p>Asity is a lightweight abstraction layer for various web frameworks on the Java Virtual Machine, which is designed to <em>achieve and exploit "Write Once, Run Anywhere"</em> by establishing an ecosystem of universally reusable web fragments<sup>*</sup> that run across different frameworks in the Java ecosystem. It provides abstractions for HTTP and WebSocket, and implementations per framework called bridges which are transparent to end-users and don't affect framework's performance, productivity and philosophy. Web fragment authors can write a web fragment once and support almost all popular web frameworks in Java, and end-users can choose any technology stack as they wish and use web fragments without being frustrated by compatibility issues.</p>
         <p>* A web fragment means a component to handle HTTP request-response exchange and WebSocket connection.</p>
       </div>
     </div>
@@ -50,11 +54,11 @@ Action wsAction = ws -> ws.ontext((String text) -> ws.send(text)).onbinary((Byte
   <div class="grid-container">
     <div class="grid-x">
       <div class="cell">
-        <h2>Showcase</h2>
-        <p>TODO A web fragment is not limited to ... nature allows to ...</p>
+        <h2 id="showcase">Showcase</h2>
+        <p>A web fragment is not just limited to echo. Here are some of the projects to demonstrate the real world use case of Asity.</p>
         <dl>
           <dt><a href="http://cettia.io" target="_blank">Cettia</a></dt>
-          <dd>A full-featured real-time web application framework that you can use to exchange events between server and client in real-time. TODO HTTP streaming and long polling transports, WebSocket transport. 2nd layer and 3rd layer</dd>
+          <dd>A full-featured real-time web application framework that you can use to exchange events between server and client in real-time.</dd>
         </dl>
       </div>
     </div>
@@ -65,7 +69,7 @@ Action wsAction = ws -> ws.ontext((String text) -> ws.send(text)).onbinary((Byte
    <div class="grid-x">
      <div class="cell">
         <h2 id="write-once">Write Once</h2>
-        <p>At the code level, an Asity web fragment is a set of <code>Action</code>s to handle <code>ServerHttpExchange</code> or <code>ServerWebSocket</code>, which represents HTTP request-response exchange and WebSocket connection, respectively. These APIs are asynchronous and designed to conform the relevant RFC specifications, i.e. RFC2616 and RFC6455, from a pragmatic perspective.</p>
+        <p>At the code level, a web fragment is a set of <code>Action</code>s to handle <code>ServerHttpExchange</code> or <code>ServerWebSocket</code>, which represents HTTP request-response exchange and WebSocket connection, respectively. These APIs are asynchronous and designed to conform the relevant RFC specifications, i.e. RFC2616 and RFC6455, from a pragmatic perspective.</p>
         <p>Let's take a look at the APIs by building echo fragments which simply respond to the client with whatever data the client sent. The data will be a chunk of the Chunked transfer encoding in case of HTTP, and a text frame and a binary frame in case of WebSocket.</p>
         <h3 id="http">HTTP</h3>
         <p>Add a <code>io.cettia.asity:asity-http:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-http/" target="_blank">Javadoc</a>) as a dependency of your fragment.</p>
@@ -137,7 +141,7 @@ Action<ServerWebSocket> wsAction = ws -> {
     <div class="grid-x">
       <div class="cell">
         <h2 id="run-anywhere">Run Anywhere</a></h2>
-        <p>To run an Asity web fragment on your framework, you need to plug the fragment in to the framework through a dedicated Asity bridge for the framework. An Asity bridge is a minimal implementation; just enough to convert a framework's HTTP request-response exchange and WebSocket connection to the Asity's <code>ServerHttpExchange</code> and <code>ServerWebSocket</code>, and feed Asity web fragments with them. Note that even if your favorite framework is not supported, with about 200 lines of code, you can write an Asity bridge to your framework.</p>
+        <p>To run a web fragment on your framework, you need to plug the fragment in to the framework through a dedicated bridge for the framework. A bridge is a minimal implementation; just enough to convert a framework's HTTP request-response exchange and WebSocket connection to the Asity's <code>ServerHttpExchange</code> and <code>ServerWebSocket</code>, and feed web fragments with them. Note that even if your favorite framework is not supported, with about 200 lines of code, you can write a bridge to your framework.</p>
         <p>Let's assume that it maps <code>httpAction</code>, a HTTP fragment, and <code>wsAction</code>, a Websocket fragment, to the path <code>/path</code>.</p>
         <h3 id="java-api-for-websocket-1">Java API for WebSocket 1</h3>
         <p>Add a <code>io.cettia.asity:asity-bridge-jwa1:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-jwa1/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
