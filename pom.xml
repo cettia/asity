@@ -42,6 +42,16 @@
     <module>bridge-spring-webmvc4</module>
     <module>bridge-vertx2</module>
     <module>bridge-vertx3</module>
+    <module>example</module>
+    <module>example-atmosphere2</module>
+    <module>example-grizzly2</module>
+    <module>example-jwa1</module>
+    <module>example-netty4</module>
+    <module>example-servlet3</module>
+    <module>example-spring-webflux5</module>
+    <module>example-spring-webmvc4</module>
+    <module>example-vertx2</module>
+    <module>example-vertx3</module>
   </modules>
   <licenses>
     <license>
@@ -232,6 +242,20 @@
     </dependencies>
   </dependencyManagement>
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.eclipse.jetty</groupId>
+          <artifactId>jetty-maven-plugin</artifactId>
+          <version>${jetty.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.6.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

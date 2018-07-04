@@ -1,81 +1,25 @@
 # Asity
-#### Build web framework-agnostic applications on the JVM
+#### Build universally reusable web fragments on the JVM
 
-Asity is a lightweight abstraction layer for various web frameworks on the Java Virtual Machine, which is designed to build asynchronous web applications including reusable server-side web components and high-level frameworks on top of HTTP and WebSocket, and run them seamlessly across different full-stack frameworks, micro frameworks and raw servers in the Java ecosystem.
-
-For more details, please visit the [Asity](http://asity.cettia.io) website.
-
-### HTTP
-
-`io.cettia.asity:asity-http` provides an HTTP abstraction. Here's an echo HTTP server:
+Write echo web fragments that sends the received data back.
 
 ```java
-Action<ServerHttpExchange> httpAction = (ServerHttpExchange http) -> {
-  // Request properties
-  System.out.println(http.method() + " " + http.uri());
-  http.headerNames().stream().forEach(name -> System.out.println(name + ": " + http.header(name)));
-  
-  // Sets 200 OK response status
-  http.setStatus(HttpStatus.OK);
-  
-  // Copies the content-type header of the request to the response
-  http.setHeader("content-type", http.header("content-type"));
-  
-  // When a chunk is read from the request body, writes it to the response body
-  http.onchunk((ByteBuffer bytes) -> http.write(bytes));
-  
-  // When the request is fully read, ends the response
-  http.onend((Void v) -> http.end());
-  
-  // Reads the request body as binary to circumvent encoding issue
-  http.readAsBinary();
-  
-  // When the response is fully written and ends,
-  http.onfinish((Void v) -> System.out.println("on finish"));
-  
-  // When some error happens in the request-response exchange,
-  http.onerror((Throwable t) -> t.printStackTrace());
-  
-  // When the underlying connection is terminated,
-  http.onclose((Void v) -> System.out.println("on close"));
-};
+Action httpAction = http -> http.readAsBinary().onchunk((ByteBuffer chunk) -> http.write(chunk)).onend((Void v) -> http.end());
 ```
-
-### WebSocket
-
-`io.cettia.asity:asity-websocket` provides a WebSocket abstraction. Here's an echo WebSocket server:
-
 ```java
-Action<ServerWebSocket> wsAction = (ServerWebSocket ws) -> {
-  // Handshake request properties
-  System.out.println(HttpMethod.GET + " " + ws.uri());
-  ws.headerNames().stream().forEach(name -> System.out.println(name + ": " + ws.header(name)));
-  
-  // When a text frame is arrived, sends it back
-  ws.ontext((String data) -> ws.send(data));
-  
-  // When a binary frame is arrived, sends it back
-  ws.onbinary((ByteBuffer bytes) -> ws.send(bytes));
-  
-  // When some error happens in the connection,
-  ws.onerror((Throwable t) -> t.printStackTrace());
-  
-  // When the connection is closed for any reason,
-  ws.onclose((Void v) -> System.out.println("on close"));
-};
+Action wsAction = ws -> ws.ontext((String text) -> ws.send(text)).onbinary((ByteBuffer binary) -> ws.send(binary));
 ```
 
-### Bridge
+And run across different frameworks in the Java ecosystem. Before getting started, be sure that you have Java 8+ and Maven 3+ installed.
 
-`io.cettia.asity:asity-bridge-xxx` is a module to process and convert framework-specific resources into Asity's `ServerHttpExchange` and `ServerWebSocket`. The following bridges are available, which means that an application or framework based on Asity can run on the following frameworks seamlessly:
+- [example-atmosphere2](https://github.com/cettia/asity/tree/master/example-atmosphere2) 
+- [example-grizzly2](https://github.com/cettia/asity/tree/master/example-grizzly2) 
+- [example-jwa1](https://github.com/cettia/asity/tree/master/example-jwa1) 
+- [example-netty4](https://github.com/cettia/asity/tree/master/example-netty4) 
+- [example-servlet3](https://github.com/cettia/asity/tree/master/example-servlet3) 
+- [example-spring-webflux5](https://github.com/cettia/asity/tree/master/example-spring-webflux5) 
+- [example-spring-webmvc4](https://github.com/cettia/asity/tree/master/example-spring-webmvc4) 
+- [example-vertx2](https://github.com/cettia/asity/tree/master/example-vertx2) 
+- [example-vertx3](https://github.com/cettia/asity/tree/master/example-vertx3)
 
-* Atmosphere 2
-* Grizzly 2
-* Java Servlet 3
-* Java WebSocket API 1
-* Netty 4
-* Spring WebFlux 5
-* Spring Web MVC 4
-* Vert.x 2 and 3
-
-Please let us, [Cettia Groups](http://groups.google.com/group/cettia), know if you have any question or feedback.
+For more information about Asity, please visit the [Asity](http://asity.cettia.io) website and follow [@flowersits](https://twitter.com/flowersits) on Twitter.
