@@ -1,5 +1,5 @@
 (function() {
-  $("h2,h3").each(function() {
+  $("h2[id],h3[id]").each(function() {
     var $this = $(this);
     var $link = $("<a />").attr("href", "#" + $this.attr('id')).text(String.fromCharCode("182")).hide();
     $this.append($link).hover(function() {
