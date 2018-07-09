@@ -34,18 +34,19 @@ public abstract class AbstractServerWebSocket implements ServerWebSocket {
   protected final Actions<String> textActions = new SimpleActions<>();
   protected final Actions<ByteBuffer> binaryActions = new SimpleActions<>();
   protected final Actions<Throwable> errorActions = new SimpleActions<>();
-  protected final Actions<Void> closeActions = new SimpleActions<>(new Actions.Options().once
-    (true).memory(true));
+  protected final Actions<Void> closeActions = new SimpleActions<>(new Actions.Options().once(true).memory(true));
 
   private final Logger logger = LoggerFactory.getLogger(AbstractServerWebSocket.class);
   private State state = State.OPEN;
 
   public AbstractServerWebSocket() {
-    errorActions.add(throwable -> logger.trace("{} has received a throwable {}", AbstractServerWebSocket.this, throwable));
-    closeActions.add($ -> {
-      state = State.CLOSED;
-      logger.trace("{} has been closed", AbstractServerWebSocket.this);
-    });
+    closeActions.add($ -> state = State.CLOSED);
+    if (logger.isDebugEnabled()) {
+      textActions.add(frame -> logger.debug("{} receives a text frame {}", this, frame));
+      binaryActions.add(frame -> logger.debug("{} receives a binary frame {}", this, frame));
+      errorActions.add(throwable -> logger.debug("{} has received a throwable {}", this, throwable));
+      closeActions.add($ -> logger.debug("{} has been closed", this));
+    }
   }
 
   @Override
@@ -56,7 +57,9 @@ public abstract class AbstractServerWebSocket implements ServerWebSocket {
 
   @Override
   public void close() {
-    logger.trace("{} has started to close the connection", this);
+    if (logger.isDebugEnabled()) {
+      logger.debug("{} has started to close the connection", this);
+    }
     if (state != State.CLOSING && state != State.CLOSED) {
       state = State.CLOSING;
       doClose();
@@ -67,15 +70,17 @@ public abstract class AbstractServerWebSocket implements ServerWebSocket {
 
   @Override
   public ServerWebSocket send(String data) {
-    logger.trace("{} sends a text message {}", this, data);
+    if (logger.isDebugEnabled()) {
+      logger.debug("{} sends a text frame {}", this, data);
+    }
     doSend(data);
     return this;
   }
 
   @Override
   public ServerWebSocket send(ByteBuffer byteBuffer) {
-    if (logger.isTraceEnabled() && byteBuffer.hasArray()) {
-      logger.trace("{} sends a text message {}", this, new String(byteBuffer.array()));
+    if (logger.isDebugEnabled()) {
+      logger.debug("{} sends a binary frame {}", this, byteBuffer);
     }
     doSend(byteBuffer);
     return this;
@@ -109,6 +114,11 @@ public abstract class AbstractServerWebSocket implements ServerWebSocket {
     return this;
   }
 
+  @Override
+  public String toString() {
+    return String.format("%s@%x[state=%s]", getClass().getSimpleName(), hashCode(), state);
+  }
+
   /**
    * Represents the state of the connection.
    *
@@ -117,7 +127,7 @@ public abstract class AbstractServerWebSocket implements ServerWebSocket {
    * href="http://www.w3.org/TR/websockets/#dom-websocket-readystate">The
    * WebSocket API by W3C - The readyState attribute</a>
    */
-  private static enum State {
+  private enum State {
 
     /**
      * The connection has not yet been established.

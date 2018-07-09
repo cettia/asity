@@ -34,28 +34,36 @@ import java.util.List;
  */
 public abstract class AbstractServerHttpExchange implements ServerHttpExchange {
 
-  protected final Actions<Void> endActions = new SimpleActions<>(new Actions.Options().once(true)
-    .memory(true));
+  // HTTP 1.1 says that the default charset is ISO-8859-1
+  // http://www.w3.org/International/O-HTTP-charset#charset
+  private static final String DEFAULT_CHARSET_NAME = "ISO-8859-1";
+
+  protected final Actions<Void> endActions = new SimpleActions<>(new Actions.Options().once(true).memory(true));
   protected final Actions<Throwable> errorActions = new SimpleActions<>();
-  protected final Actions<Void> closeActions = new SimpleActions<>(new Actions.Options().once
-    (true).memory(true));
+  protected final Actions<Void> closeActions = new SimpleActions<>(new Actions.Options().once(true).memory(true));
 
   private final Logger logger = LoggerFactory.getLogger(AbstractServerHttpExchange.class);
   private final Actions<Object> chunkActions = new SimpleActions<>();
-  private final Actions<Object> bodyActions = new SimpleActions<>(new Actions.Options().once
-    (true).memory(true));
-  private final Actions<Void> finishActions = new SimpleActions<>(new Actions.Options().once
-    (true).memory(true));
-  private boolean read;
-  private boolean readBody;
-  private boolean ended;
-  private String writeCharsetName = "ISO-8859-1";
+  private final Actions<Object> bodyActions = new SimpleActions<>(new Actions.Options().once(true).memory(true));
+  private final Actions<Void> finishActions = new SimpleActions<>(new Actions.Options().once(true).memory(true));
+  private String writeCharsetName = DEFAULT_CHARSET_NAME;
+
+  // Request state
+  private boolean reading;
+  private boolean readingBody;
+  private boolean requestEnded;
+  // Response state
+  private boolean writing;
+  private boolean responseEnded;
 
   public AbstractServerHttpExchange() {
-    endActions.add($ -> logger.trace("{}'s request has ended", AbstractServerHttpExchange.this));
-    finishActions.add($ -> logger.trace("{}'s response has ended", AbstractServerHttpExchange.this));
-    errorActions.add(throwable -> logger.trace("{} has received a throwable {}", AbstractServerHttpExchange.this, throwable));
-    closeActions.add($ -> logger.trace("{} has been closed", AbstractServerHttpExchange.this));
+    endActions.add($ -> requestEnded = true);
+    if (logger.isDebugEnabled()) {
+      endActions.add($ -> logger.debug("{} request has ended", this));
+      finishActions.add($ -> logger.debug("{} response has ended", this));
+      errorActions.add(throwable -> logger.debug("{} has received a throwable {}", this, throwable));
+      closeActions.add($ -> logger.debug("{} has been aborted", this));
+    }
   }
 
   @Override
@@ -66,7 +74,7 @@ public abstract class AbstractServerHttpExchange implements ServerHttpExchange {
 
   @Override
   public ServerHttpExchange read() {
-    if (!read) {
+    if (!reading) {
       if (hasTextBody()) {
         readAsText();
       } else {
@@ -88,9 +96,7 @@ public abstract class AbstractServerHttpExchange implements ServerHttpExchange {
   }
 
   private String findCharsetName(String contentType) {
-    // HTTP 1.1 says that the default charset is ISO-8859-1
-    // http://www.w3.org/International/O-HTTP-charset#charset
-    String charsetName = "ISO-8859-1";
+    String charsetName = DEFAULT_CHARSET_NAME;
     if (contentType != null) {
       int idx = contentType.indexOf("charset=");
       if (idx != -1) {
@@ -102,19 +108,30 @@ public abstract class AbstractServerHttpExchange implements ServerHttpExchange {
 
   @Override
   public ServerHttpExchange readAsText(String charsetName) {
-    if (!read) {
-      read = true;
+    if (!reading) {
+      reading = true;
       final Charset charset = Charset.forName(charsetName);
-      doRead(byteBuffer -> chunkActions.fire(charset.decode(byteBuffer).toString()));
+      doRead(byteBuffer -> {
+        String chunk = charset.decode(byteBuffer).toString();
+        if (logger.isDebugEnabled()) {
+          logger.debug("{} reads a text chunk {} with charset {}", this, chunk, charsetName);
+        }
+        chunkActions.fire(chunk);
+      });
     }
     return this;
   }
 
   @Override
   public ServerHttpExchange readAsBinary() {
-    if (!read) {
-      read = true;
-      doRead(chunkActions::fire);
+    if (!reading) {
+      reading = true;
+      doRead(byteBuffer -> {
+        if (logger.isDebugEnabled()) {
+          logger.debug("{} reads a binary chunk {}", this, byteBuffer);
+        }
+        chunkActions.fire(byteBuffer);
+      });
     }
     return this;
   }
@@ -137,8 +154,8 @@ public abstract class AbstractServerHttpExchange implements ServerHttpExchange {
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Override
   public ServerHttpExchange onbody(Action action) {
-    if (!readBody) {
-      readBody = true;
+    if (!readingBody) {
+      readingBody = true;
       if (hasTextBody()) {
         final StringBuilder body = new StringBuilder();
         chunkActions.add(data -> body.append((String) data));
@@ -160,7 +177,9 @@ public abstract class AbstractServerHttpExchange implements ServerHttpExchange {
 
   @Override
   public ServerHttpExchange setStatus(HttpStatus status) {
-    logger.trace("{} sets a response status, {}", this, status);
+    if (logger.isDebugEnabled()) {
+      logger.debug("{} sets a response status {}", this, status);
+    }
     doSetStatus(status);
     return this;
   }
@@ -180,7 +199,9 @@ public abstract class AbstractServerHttpExchange implements ServerHttpExchange {
 
   @Override
   public ServerHttpExchange setHeader(String name, String value) {
-    logger.trace("{} sets a response header {} to {}", this, name, value);
+    if (logger.isDebugEnabled()) {
+      logger.debug("{} sets a response header {} to {}", this, name, value);
+    }
     // Intercepts content-type header to find charset
     if (name.equalsIgnoreCase("content-type")) {
       writeCharsetName = findCharsetName(value);
@@ -198,14 +219,20 @@ public abstract class AbstractServerHttpExchange implements ServerHttpExchange {
 
   @Override
   public ServerHttpExchange write(String data, String charsetName) {
-    logger.trace("{} sends a text chunk {} with charset {}", this, data, charsetName);
+    writing = true;
+    if (logger.isDebugEnabled()) {
+      logger.debug("{} writes a text chunk {} with charset {}", this, data, charsetName);
+    }
     doWrite(Charset.forName(charsetName).encode(data));
     return this;
   }
 
   @Override
   public ServerHttpExchange write(ByteBuffer byteBuffer) {
-    logger.trace("{} sends a binary chunk {}", this, byteBuffer);
+    writing = true;
+    if (logger.isDebugEnabled()) {
+      logger.debug("{} writes a binary chunk {}", this, byteBuffer);
+    }
     doWrite(byteBuffer);
     return this;
   }
@@ -214,9 +241,11 @@ public abstract class AbstractServerHttpExchange implements ServerHttpExchange {
 
   @Override
   public ServerHttpExchange end() {
-    logger.trace("{} ends the response", this);
-    if (!ended) {
-      ended = true;
+    if (!responseEnded) {
+      responseEnded = true;
+      if (logger.isDebugEnabled()) {
+        logger.debug("{} ends the response", this);
+      }
       doEnd();
       finishActions.fire();
     }
@@ -256,6 +285,15 @@ public abstract class AbstractServerHttpExchange implements ServerHttpExchange {
   public ServerHttpExchange onerror(Action<Throwable> action) {
     errorActions.add(action);
     return this;
+  }
+
+  @Override
+  public String toString() {
+    String requestState = requestEnded ? "ENDED" : reading ? "READING" : "UNREAD";
+    String responseState = responseEnded ? "ENDED" : writing ? "WRITING" : "UNWRITTEN";
+
+    return String.format("%s@%x[request=%s,response=%s]", getClass().getSimpleName(),
+      hashCode(), requestState, responseState);
   }
 
 }
