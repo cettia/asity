@@ -36,11 +36,13 @@
     </dependency>
     <dependency>
       <groupId>io.netty</groupId>
-      <artifactId>netty-handler</artifactId>
+      <artifactId>netty-codec-http</artifactId>
+      <version>${netty4.version}</version>
     </dependency>
     <dependency>
       <groupId>io.netty</groupId>
-      <artifactId>netty-codec-http</artifactId>
+      <artifactId>netty-handler</artifactId>
+      <version>${netty4.version}</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -58,6 +60,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
+        <version>${exec.plugin.version}</version>
         <configuration>
           <mainClass>io.cettia.asity.example.netty4.EchoServer</mainClass>
         </configuration>

@@ -25,20 +25,14 @@
   <artifactId>asity-example-spring-webmvc4</artifactId>
   <name>Asity/Example/Spring Web MVC 4</name>
   <properties>
-    <spring-boot.version>1.5.13.RELEASE</spring-boot.version>
     <failOnMissingWebXml>false</failOnMissingWebXml>
   </properties>
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter</artifactId>
-        <scope>compile</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>${spring-boot.version}</version>
+        <version>${spring-boot1.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -58,11 +52,12 @@
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
+      <version>${servlet3.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-websocket</artifactId>
-      <version>${spring-boot.version}</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -80,7 +75,7 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>${spring-boot.version}</version>
+        <version>${spring-boot1.version}</version>
       </plugin>
     </plugins>
   </build>

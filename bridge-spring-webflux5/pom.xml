@@ -55,14 +55,19 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webflux</artifactId>
+      <version>${spring5.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
+      <version>${spring-boot2.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-reactor-netty</artifactId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+      <version>${spring-boot2.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

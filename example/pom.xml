@@ -58,6 +58,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
+        <version>${exec.plugin.version}</version>
         <executions>
           <execution>
             <id>http-echo-client</id>

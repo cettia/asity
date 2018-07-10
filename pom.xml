@@ -86,11 +86,20 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <slf4j.version>1.7.25</slf4j.version>
     <logback.version>1.2.3</logback.version>
-    <vertx.version>2.1.6</vertx.version>
     <jetty.version>9.4.11.v20180605</jetty.version>
-    <grizzly.version>2.3.35</grizzly.version>
-    <spring-boot.version>2.0.2.RELEASE</spring-boot.version>
-    <netty.version>4.1.25.Final</netty.version>
+    <exec.plugin.version>1.6.0</exec.plugin.version>
+    <!--Framework dependencies for bridge and example modules -->
+    <atmosphere2.version>2.4.24</atmosphere2.version>
+    <grizzly2.version>2.3.35</grizzly2.version>
+    <jwa1.version>1.1</jwa1.version>
+    <netty4.version>4.1.25.Final</netty4.version>
+    <servlet3.version>3.1.0</servlet3.version>
+    <spring-boot2.version>2.0.2.RELEASE</spring-boot2.version>
+    <spring5.version>5.0.6.RELEASE</spring5.version>
+    <spring-boot1.version>1.5.13.RELEASE</spring-boot1.version>
+    <spring4.version>4.3.17.RELEASE</spring4.version>
+    <vertx2.version>2.1.6</vertx2.version>
+    <vertx3.version>3.5.1</vertx3.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -110,15 +119,15 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
         <groupId>io.cettia.asity</groupId>
         <artifactId>asity-test</artifactId>
         <version>${project.version}</version>
         <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>${slf4j.version}</version>
       </dependency>
       <dependency>
         <groupId>ch.qos.logback</groupId>
@@ -168,94 +177,9 @@
         <version>${jetty.version}</version>
         <scope>test</scope>
       </dependency>
-      <dependency>
-        <groupId>io.vertx</groupId>
-        <artifactId>vertx-core</artifactId>
-        <version>${vertx.version}</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>io.vertx</groupId>
-        <artifactId>vertx-platform</artifactId>
-        <version>${vertx.version}</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.atmosphere</groupId>
-        <artifactId>atmosphere-runtime</artifactId>
-        <version>2.4.24</version>
-      </dependency>
-      <dependency>
-        <groupId>javax.servlet</groupId>
-        <artifactId>javax.servlet-api</artifactId>
-        <version>3.1.0</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>javax.websocket</groupId>
-        <artifactId>javax.websocket-api</artifactId>
-        <version>1.1</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>io.netty</groupId>
-        <artifactId>netty-codec-http</artifactId>
-        <version>${netty.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.netty</groupId>
-        <artifactId>netty-handler</artifactId>
-        <version>${netty.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.glassfish.grizzly</groupId>
-        <artifactId>grizzly-http-server</artifactId>
-        <version>${grizzly.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.glassfish.grizzly</groupId>
-        <artifactId>grizzly-websockets</artifactId>
-        <version>${grizzly.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.glassfish.grizzly</groupId>
-        <artifactId>grizzly-http-servlet</artifactId>
-        <version>${grizzly.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-webflux</artifactId>
-        <version>5.0.6.RELEASE</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter</artifactId>
-        <version>${spring-boot.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-reactor-netty</artifactId>
-        <version>${spring-boot.version}</version>
-        <scope>test</scope>
-      </dependency>
     </dependencies>
   </dependencyManagement>
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.eclipse.jetty</groupId>
-          <artifactId>jetty-maven-plugin</artifactId>
-          <version>${jetty.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>exec-maven-plugin</artifactId>
-          <version>1.6.0</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

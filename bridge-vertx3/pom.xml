@@ -55,7 +55,7 @@
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
-      <version>3.5.1</version>
+      <version>${vertx3.version}</version>
     </dependency>
   </dependencies>
 </project>

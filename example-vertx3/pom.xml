@@ -24,8 +24,6 @@
   <artifactId>asity-example-vertx3</artifactId>
   <name>Asity/Example/Vert.x 3</name>
   <properties>
-    <!--TODO-->
-    <vertx.version>3.5.1</vertx.version>
     <main.verticle>io.cettia.asity.example.vertx3.EchoServerVerticle</main.verticle>
   </properties>
   <dependencyManagement>
@@ -33,7 +31,7 @@
       <dependency>
         <groupId>io.vertx</groupId>
         <artifactId>vertx-stack-depchain</artifactId>
-        <version>${vertx.version}</version>
+        <version>${vertx3.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -53,8 +51,7 @@
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
-      <version>${vertx.version}</version>
-      <scope>compile</scope>
+      <version>${vertx3.version}</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -101,6 +98,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
+        <version>${exec.plugin.version}</version>
         <configuration>
           <mainClass>io.vertx.core.Launcher</mainClass>
           <arguments>

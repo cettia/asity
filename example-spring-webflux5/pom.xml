@@ -27,13 +27,8 @@
     <dependencies>
       <dependency>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter</artifactId>
-        <scope>compile</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>${spring-boot.version}</version>
+        <version>${spring-boot2.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -70,7 +65,7 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>${spring-boot.version}</version>
+        <version>${spring-boot2.version}</version>
       </plugin>
     </plugins>
   </build>

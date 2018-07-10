@@ -55,18 +55,23 @@
     <dependency>
       <groupId>org.glassfish.grizzly</groupId>
       <artifactId>grizzly-http-server</artifactId>
+      <version>${grizzly2.version}</version>
     </dependency>
     <dependency>
       <groupId>org.glassfish.grizzly</groupId>
       <artifactId>grizzly-websockets</artifactId>
+      <version>${grizzly2.version}</version>
     </dependency>
     <dependency>
       <groupId>org.glassfish.grizzly</groupId>
       <artifactId>grizzly-http-servlet</artifactId>
+      <version>${grizzly2.version}</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
+      <version>${servlet3.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
