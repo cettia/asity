@@ -1,7 +1,7 @@
 (function() {
   $("h2[id],h3[id]").each(function() {
     var $this = $(this);
-    var $link = $("<a />").attr("href", "#" + $this.attr('id')).text(String.fromCharCode("182")).hide();
+    var $link = $("<a />").attr({href: "#" + $this.attr('id'), "data-smooth-scroll": true, "data-offset": 55.375}).text(String.fromCharCode("182")).hide();
     $this.append($link).hover(function() {
       $link.show();
     }, function () {
@@ -10,23 +10,6 @@
   });
 
   $('span.n:contains("httpAction"),span.n:contains("wsAction"),span.s:contains("\\"/echo\\"")').addClass('highlighted');
-
-  var $tabs = $("#example-tabs");
-  var $tabsContent = $("div.tabs-content[data-tabs-content=" + $tabs.attr("id") + "]");
-  var $examples = $("div.example");
-  var $exampleLinks = $("a.example-link");
-  $tabs.find("li > a").each(function(i) {
-    var $this = $(this);
-    var $text = $this.text();
-    var $id = "example-" + $text.toLowerCase().replace(/\W/g, "-");
-    var exampleLink = $exampleLinks.eq(i).attr("href");
-    $this.attr("href", "#" + $id);
-    $("<div>").attr("id", $id).addClass("tabs-panel")
-      .append($("<p>").html("A working example is available at <a target=\"_blank\" href=\"" + exampleLink + "\">" + exampleLink + "</a>."))
-      .append($examples.eq(i).clone())
-      .append($("<p>").html("For more information, see <a href='#" + $id.substring(8) + "'>" + $text + "</a>."))
-      .appendTo($tabsContent);
-  });
 
   $.get("http://cettia.io/feed.xml", function(doc) {
     var $announcement = $("#announcement");
@@ -41,5 +24,21 @@
     $announcement.find("p").css({visibility: "visible"});
   });
 
+  Foundation.SmoothScroll._scrollToLoc = Foundation.SmoothScroll.scrollToLoc;
+  Foundation.SmoothScroll.scrollToLoc = function(loc, options, callback) {
+    if (loc === "#") {
+      loc = "html";
+    }
+
+    return Foundation.SmoothScroll._scrollToLoc.call(this, loc, options, function() {
+      if (loc === "html") {
+        loc = "#";
+      }
+      history.pushState({}, "", loc);
+      if (callback && typeof callback == "function"){
+        callback();
+      }
+    });
+  };
   $(document).foundation();
 })();

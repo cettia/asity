@@ -25,12 +25,43 @@ dd {
   margin-bottom: 1rem;
 }
 
+h2 > a, h3 > a {
+  color: #888;
+}
+
 h3 {
   margin-top: 2.5rem;
 }
 
-h2 > a, h3 > a {
-  color: #888;
+#announcement {
+  margin: 0;
+  padding: 0.5rem;
+  border: none;
+  text-align: center;
+  p {
+    visibility: hidden;
+    margin: 0;
+  }
+}
+
+#top-bar-wrapper > div[data-sticky] {
+  background: white;
+  border-bottom: 1px solid #dedede;
+  .top-bar, .top-bar ul {
+    background-color: transparent;
+    a {
+      color: #333;
+    }
+  }
+}
+
+section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  border-bottom: 1px solid #dedede;
+  strong {
+    font-weight: 600;
+  }
 }
 
 div.highlighter-rouge {
@@ -55,21 +86,6 @@ div.highlighter-rouge {
   background-color: #272727;
 }
 
-section {
-  padding-top: 4rem;
-  padding-bottom: 4rem;
-  border-bottom: 1px solid #dedede;
-}
-
-#announcement {
-  margin: 0;
-  padding: 0.5rem;
-  border: none;
-  & > p {
-    visibility: hidden;
-  }
-}
-
 #example-tabs {
   border: none;
   & + .tabs-content {
@@ -78,29 +94,29 @@ section {
       padding: 1rem 0 0 0;
     }
   }
-}
-
-#hero {
-  $background-color: #fff;
-  padding-top: 4rem;
-  padding-bottom: 2rem;
-
-  background-color: $background-color;
-  border-bottom: none;
-  h1 {
-    margin: 0;
-    font-weight: 600;
+  .tabs-title > a, .tabs-title > a:hover {
+    border-bottom: 1px solid #aaa;
+    color: inherit;
+    font-size: 0.875rem;
   }
-  h2 {
-    margin-bottom: 1rem;
-    font-weight: 300;
-    letter-spacing: -0.0625rem;
+  .tabs-title > a:focus, .tabs-title > a[aria-selected=true] {
+    background: inherit;
+    border-bottom: 2px solid #222;
+    color: inherit;
   }
-  & + div[data-sticky-container] > div[data-sticky] {
-    background-color: $background-color;
-    border-bottom: 1px solid #dedede;
-    .top-bar, .top-bar ul {
-      background-color: transparent;
+  .accordion-title, .accordion-title:hover {
+    background: inherit;
+    border: none;
+    border-bottom: 1px solid #e6e6e6;
+    color: inherit;
+  }
+  .accordion-title:focus {
+    background: inherit;
+    border-bottom: 2px solid #222;
+  }
+  .accordion-item.is-active {
+    .accordion-title {
+      border-bottom: 2px solid #222;
     }
   }
 }

@@ -3,31 +3,23 @@ layout: default
 title: Build universally reusable web fragments on the JVM
 ---
 <div id="announcement" class="callout secondary hide">
-  <p>News - <a href="#" target="_blank" class="link"></a> on <span class="date"></span></p>
-</div>
-<section id="hero">
   <div class="grid-container">
     <div class="grid-x">
       <div class="cell">
-        <h1 class="h5">Asity</h1>
-        <h2>Build universally reusable web fragments on the JVM</h2>
-        <p>Asity is a lightweight abstraction layer for various web frameworks on the Java Virtual Machine, which is designed to <em>achieve and exploit "Write Once, Run Anywhere"</em> by establishing an ecosystem of universally reusable web fragments<sup>*</sup> that run across different frameworks in the Java ecosystem. It provides abstractions for HTTP and WebSocket, and implementations per framework called bridges which are transparent to end-users and don't affect framework's performance, productivity and philosophy.</p>
-        <p>Web fragment authors can write a web fragment once and support almost all popular web frameworks in Java, and end-users can choose any technology stack as they wish and use web fragments without being frustrated by compatibility issues.</p>
-        <p>* A web fragment means a component to handle HTTP request-response exchange and WebSocket connection.</p>
+        <p><a href="#" target="_blank" class="link"></a> on <span class="date"></span></p>
       </div>
     </div>
   </div>
-</section>
+</div>
 <div data-sticky-container id="top-bar-wrapper">
-  <div data-sticky data-margin-top="0" data-top-anchor="top-bar-wrapper:top">
+  <div data-sticky data-margin-top="0" data-top-anchor="top-bar-wrapper:top" data-sticky-on="small">
     <div class="grid-container">
       <div class="grid-x">
         <div class="cell">
           <div class="top-bar">
             <div class="top-bar-left">
-              <ul class="menu" data-smooth-scroll data-offset="93">
-                <li><a href="#hero">Asity</a></li>
-                <li><a href="#quick-start">Quick Start</a></li>
+              <ul class="menu" data-smooth-scroll data-offset="55.375">
+                <li><a href="#"><strong>Asity</strong></a></li>
                 <li><a href="#write-once">Write Once</a></li>
                 <li><a href="#run-anywhere">Run Anywhere</a></li>
                 <li><a href="#showcase">Showcase</a></li>
@@ -44,42 +36,21 @@ title: Build universally reusable web fragments on the JVM
   <div class="grid-container">
     <div class="grid-x">
       <div class="cell">
-        <h2 id="quick-start">Quick Start</h2>
-          <p>Write echo web fragments that sends the received data back.</p>
-{% capture panel %}
-```java
-Action httpAction = http -> http.readAsBinary().onchunk((ByteBuffer chunk) -> http.write(chunk)).onend((Void v) -> http.end());
-```
-{% endcapture %}{{ panel | markdownify }}
-{% capture panel %}
-```java
-Action wsAction = ws -> ws.ontext((String text) -> ws.send(text)).onbinary((ByteBuffer binary) -> ws.send(binary));
-```
-{% endcapture %}{{ panel | markdownify }}
-        <p>And run across different frameworks in the Java ecosystem.</p>
-        <ul class="tabs" data-responsive-accordion-tabs="tabs small-accordion large-tabs" data-active-collapse="true" data-deep-link="true" data-allow-all-closed="true" id="example-tabs">
-          <li class="tabs-title"><a>Java API for WebSocket 1</a></li>
-          <li class="tabs-title"><a>Servlet 3</a></li>
-          <li class="tabs-title"><a>Spring WebFlux 5</a></li>
-          <li class="tabs-title"><a>Spring MVC 4</a></li>
-          <li class="tabs-title"><a>Vert.x 3</a></li>
-          <li class="tabs-title"><a>Grizzly 2</a></li>
-          <li class="tabs-title"><a>Netty 4</a></li>
-          <li class="tabs-title"><a>Vert.x 2</a></li>
-          <li class="tabs-title"><a>Atmosphere 2</a></li>
-        </ul>
-        <div class="tabs-content" data-tabs-content="example-tabs"></div>
+        <h1>Asity</h1>
+        <p><strong>Asity is a lightweight abstraction layer for various web frameworks on the Java Virtual Machine, which is designed to <em>achieve and exploit "Write Once, Run Anywhere"</em> by establishing an ecosystem of universally reusable web fragments<sup>*</sup> that run across different frameworks in the Java ecosystem.</strong> It provides abstractions for HTTP and WebSocket, and implementations per framework called bridges which are transparent to end-users and don't affect framework's performance, productivity and philosophy.</p>
+        <p>Web fragment authors can write a web fragment once and support almost all popular web frameworks in Java, and end-users can choose any technology stack as they wish and use web fragments without being frustrated by compatibility issues.</p>
+        <p>* Web fragment represents a component that receives HTTP request-response or WebSocket connection like a controller in MVC but is able to be compatible with any web framework on the JVM.</p>
       </div>
     </div>
   </div>
 </section>
 <section>
   <div class="grid-container">
-   <div class="grid-x">
-     <div class="cell">
+    <div class="grid-x">
+      <div class="cell">
         <h2 id="write-once">Write Once</h2>
         <p>At the code level, a web fragment is a set of <code>Action</code>s to handle <code>ServerHttpExchange</code> or <code>ServerWebSocket</code>, which represents HTTP request-response exchange and WebSocket connection, respectively. These APIs are asynchronous and designed to conform the relevant RFC specifications, i.e. RFC2616 and RFC6455, from a pragmatic perspective.</p>
-        <p>Let's take a look at the APIs by building echo fragments which simply respond to the client with whatever data the client sent. The data will be a chunk of the Chunked transfer encoding in case of HTTP, and a text frame and a binary frame in case of WebSocket.</p>
+        <p>Let's take a look at the APIs by building an echo fragment which simply respond to the client with whatever data the client sent. The data to exchange between server and client is a chunk of the Chunked transfer encoding in case of HTTP, and a text frame and a binary frame in case of WebSocket. Before getting started, be sure that you have Java 8+ and Maven 3+ installed.</p>
         <h3 id="http">HTTP</h3>
         <p>Add a <code>io.cettia.asity:asity-http:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-http/" target="_blank">Javadoc</a>) as a dependency of your fragment.</p>
 {% capture panel %}
@@ -94,25 +65,36 @@ Action wsAction = ws -> ws.ontext((String text) -> ws.send(text)).onbinary((Byte
         <p>Then write an <code>Action</code> consuming <code>ServerHttpExchange</code>.</p>
 {% capture panel %}
 ```java
-Action<ServerHttpExchange> httpAction = http -> {
-  // Reads request URI, method and headers
-  System.out.println(http.method() + " " + http.uri());
-  http.headerNames().stream().forEach(name -> System.out.println(name + ": " + String.join(", ", http.headers(name))));
+package io.cettia.asity.example.echo;
 
-  // Writes response status code and headers
-  http.setStatus(HttpStatus.OK).setHeader("content-type", http.header("content-type"));
+import io.cettia.asity.action.Action;
+import io.cettia.asity.http.HttpStatus;
+import io.cettia.asity.http.ServerHttpExchange;
 
-  // Reads a chunk from request body and writes it to response body
-  http.readAsText().onchunk((String chunk) -> http.write(chunk));
-  // If request body is binary,
-  // http.readAsBinary().onchunk((ByteBuffer binary) -> http.write(binary));
+import java.nio.ByteBuffer;
 
-  // Ends response if request ends
-  http.onend((Void v) -> http.end());
+public class HttpEchoServer implements Action<ServerHttpExchange> {
+  @Override
+  public void on(ServerHttpExchange http) {
+    // Reads request URI, method and headers
+    System.out.println(http.method() + " " + http.uri());
+    http.headerNames().stream().forEach(name -> System.out.println(name + ": " + String.join(", ", http.headers(name))));
 
-  // Exception handling
-  http.onerror((Throwable t) -> t.printStackTrace()).onclose((Void v) -> System.out.println("disconnected"));
-};
+    // Writes response status code and headers
+    http.setStatus(HttpStatus.OK).setHeader("content-type", http.header("content-type"));
+
+    // Reads a chunk from request body and writes it to response body
+    http.readAsBinary().onchunk((ByteBuffer binary) -> http.write(binary));
+    // If request body is supposed to be text,
+    // http.readAsText().onchunk((String chunk) -> http.write(chunk));
+
+    // Ends response if request ends
+    http.onend((Void v) -> http.end());
+
+    // Exception handling
+    http.onerror((Throwable t) -> t.printStackTrace()).onclose((Void v) -> System.out.println("disconnected"));
+  }
+}
 ```
 {% endcapture %}{{ panel | markdownify }}
         <h3 id="websocket">WebSocket</h3>
@@ -129,17 +111,27 @@ Action<ServerHttpExchange> httpAction = http -> {
         <p>Then write an <code>Action</code> consuming <code>ServerWebSocket</code>.</p>
 {% capture panel %}
 ```java
-Action<ServerWebSocket> wsAction = ws -> {
-  // Reads handshake request URI and headers
-  System.out.println(ws.uri());
-  ws.headerNames().stream().forEach(name -> System.out.println(name + ": " + String.join(", ", ws.headers(name))));
+package io.cettia.asity.example.echo;
 
-  // Sends the received text frame and binary frame back
-  ws.ontext((String text) -> ws.send(text)).onbinary((ByteBuffer binary) -> ws.send(binary));
+import io.cettia.asity.action.Action;
+import io.cettia.asity.websocket.ServerWebSocket;
 
-  // Exception handling
-  ws.onerror((Throwable t) -> t.printStackTrace());
-};
+import java.nio.ByteBuffer;
+
+public class WebSocketEchoServer implements Action<ServerWebSocket> {
+  @Override
+  public void on(ServerWebSocket ws) {
+    // Reads handshake request URI and headers
+    System.out.println(ws.uri());
+    ws.headerNames().stream().forEach(name -> System.out.println(name + ": " + String.join(", ", ws.headers(name))));
+
+    // Sends the received text frame and binary frame back
+    ws.ontext((String text) -> ws.send(text)).onbinary((ByteBuffer binary) -> ws.send(binary));
+
+    // Exception handling
+    ws.onerror((Throwable t) -> t.printStackTrace());
+  }
+}
 ```
 {% endcapture %}{{ panel | markdownify }}
       </div>
@@ -150,11 +142,23 @@ Action<ServerWebSocket> wsAction = ws -> {
   <div class="grid-container">
     <div class="grid-x">
       <div class="cell">
-        <h2 id="run-anywhere">Run Anywhere</a></h2>
+        <h2 id="run-anywhere">Run Anywhere</h2>
         <p>To run a web fragment on your framework, you need to plug the fragment in to the framework through a dedicated bridge for the framework. A bridge is a minimal implementation; just enough to convert a framework's HTTP request-response exchange and WebSocket connection to the Asity's <code>ServerHttpExchange</code> and <code>ServerWebSocket</code>, and feed web fragments with them. Note that even if your favorite framework is not supported, with about 200 lines of code, you can write a bridge to your framework.</p>
-        <p>Let's assume that it maps <code>httpAction</code>, a HTTP fragment, and <code>wsAction</code>, a Websocket fragment, to the path <code>/echo</code>.</p>
-        <h3 id="java-api-for-websocket-1">Java API for WebSocket 1</h3>
-        <p>Add a <code>io.cettia.asity:asity-bridge-jwa1:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-jwa1/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+        <p>Let's map the echo fragment above to the path <code>/echo</code>.</p>
+        <ul class="tabs" data-responsive-accordion-tabs="tabs small-accordion large-tabs" data-deep-link="true" id="example-tabs">
+          <li class="tabs-title is-active"><a href="#java-api-for-websocket-1" aria-selected="true">Java API for WebSocket 1</a></li>
+          <li class="tabs-title"><a href="#servlet-3">Servlet 3</a></li>
+          <li class="tabs-title"><a href="#spring-webflux-5">Spring WebFlux 5</a></li>
+          <li class="tabs-title"><a href="#spring-mvc-4">Spring MVC 4</a></li>
+          <li class="tabs-title"><a href="#vert-x-3">Vert.x 3</a></li>
+          <li class="tabs-title"><a href="#netty-4">Netty 4</a></li>
+          <li class="tabs-title"><a href="#grizzly-2">Grizzly 2</a></li>
+          <li class="tabs-title"><a href="#vert-x-2">Vert.x 2</a></li>
+          <li class="tabs-title"><a href="#atmosphere-2">Atmosphere 2</a></li>
+        </ul>
+        <div class="tabs-content" data-tabs-content="example-tabs">
+          <div class="tabs-panel is-active" id="java-api-for-websocket-1">
+            <p>Add a <code>io.cettia.asity:asity-bridge-jwa1:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-jwa1/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
@@ -164,14 +168,33 @@ Action<ServerWebSocket> wsAction = ws -> {
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
-        <p>Then register a <code>AsityServerEndpoint</code> as a WebSocket server endpoint in a server container. When registering the server endpoint, you should put a handshake request instance into a map returned by <code>ServerEndpointConfig#getUserProperties</code> with the <code>javax.websocket.server.HandshakeRequest</code> key by overriding a <code>Configurator#modifyHandshake</code> method.</p>
-        <div class="example">
+            <p>Then register a <code>AsityServerEndpoint</code> as a WebSocket server endpoint in a server container. When registering the server endpoint, you should put a handshake request instance into a map returned by <code>ServerEndpointConfig#getUserProperties</code> with the <code>javax.websocket.server.HandshakeRequest</code> key by overriding a <code>Configurator#modifyHandshake</code> method.</p>
 {% capture A %}
 ```java
+package io.cettia.asity.example.jwa1;
+
+import io.cettia.asity.action.Action;
+import io.cettia.asity.bridge.jwa1.AsityServerEndpoint;
+import io.cettia.asity.example.echo.WebSocketEchoServer;
+import io.cettia.asity.websocket.ServerWebSocket;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+import javax.websocket.DeploymentException;
+import javax.websocket.HandshakeResponse;
+import javax.websocket.server.HandshakeRequest;
+import javax.websocket.server.ServerContainer;
+import javax.websocket.server.ServerEndpointConfig;
+
 @WebListener
 public class EchoServerInitializer implements ServletContextListener {
   @Override
   public void contextInitialized(ServletContextEvent event) {
+    // Web fragments
+    Action<ServerWebSocket> wsAction = new WebSocketEchoServer();
+
     ServletContext context = event.getServletContext();
     ServerContainer container = (ServerContainer) context.getAttribute(ServerContainer.class.getName());
     ServerEndpointConfig.Configurator configurator = new ServerEndpointConfig.Configurator() {
@@ -198,32 +221,49 @@ public class EchoServerInitializer implements ServletContextListener {
 }
 ```
 {% endcapture %}{{ A | markdownify }}
-        </div>
-        <p>Now you can handle WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityServerEndpoint</code>'s <code>onwebsocket</code> method.</p>
-        <h4>Working Example</h4>
-        <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-jwa1">https://github.com/cettia/asity/tree/master/example-jwa1</a>.</p>
-        <h3 id="servlet-3">Servlet 3</h3>
-        <p>Add <code>io.cettia.asity:asity-bridge-servlet3:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-servlet3/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            <p>Now you can handle WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityServerEndpoint</code>'s <code>onwebsocket</code> method.</p>
+            <h4>Working Example</h4>
+            <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-jwa1">https://github.com/cettia/asity/tree/master/example-jwa1</a>.</p>
+          </div>
+          <div class="tabs-panel" id="servlet-3">
+            <p>Add <code>io.cettia.asity:asity-bridge-servlet3:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-servlet3/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
-  <artifactId>asity-bridge-spring-servlet3</artifactId>
+  <artifactId>asity-bridge-servlet3</artifactId>
   <version>2.0.0-RC1</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
-        <p>Then register a <code>AsityServlet</code> as a servlet in a servlet context. When registering the servlet, you should set <code>asyncSupported</code> to <code>true</code>.</p>
-        <div class="example">
+            <p>Then register a <code>AsityServlet</code> as a servlet in a servlet context. When registering the servlet, you should set <code>asyncSupported</code> to <code>true</code>.</p>
+            <div class="example">
 {% capture panel %}
 ```java
+package io.cettia.asity.example.servlet3;
+
+import io.cettia.asity.action.Action;
+import io.cettia.asity.bridge.servlet3.AsityServlet;
+import io.cettia.asity.example.echo.HttpEchoServer;
+import io.cettia.asity.http.ServerHttpExchange;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletRegistration;
+import javax.servlet.annotation.WebListener;
+
 @WebListener
 public class EchoServerInitializer implements ServletContextListener {
   @Override
   public void contextInitialized(ServletContextEvent event) {
+    // Web fragments
+    Action<ServerHttpExchange> httpAction = new HttpEchoServer();
+
     ServletContext context = event.getServletContext();
-    AsityServlet asityServlet = new AsityServlet().onhttp(httpAction);
-    ServletRegistration.Dynamic reg = context.addServlet(AsityServlet.class.getName(), asityServlet);
+    Servlet servlet = new AsityServlet().onhttp(httpAction);
+    ServletRegistration.Dynamic reg = context.addServlet(AsityServlet.class.getName(), servlet);
     reg.setAsyncSupported(true);
     reg.addMapping("/echo");
   }
@@ -233,17 +273,18 @@ public class EchoServerInitializer implements ServletContextListener {
 }
 ```
 {% endcapture %}{{ panel | markdownify }}
-        </div>
-        <p>Now you can handle HTTP requests from <code>/echo</code> asynchronously through a <code>AsityServlet</code>'s <code>onhttp</code> method.</p>
-        <p><strong>Note</strong></p>
-        <ul>
-          <li>It works with Servlet 3.1 and 4 containers.</li>
-          <li><code>ServerHttpExchange</code>'s <code>onclose</code> isn't supported.</li>
-        </ul>
-        <h4>Working Example</h4>
-        <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-servlet3">https://github.com/cettia/asity/tree/master/example-servlet3</a>.</p>
-        <h3 id="spring-webflux-5">Spring WebFlux 5</h3>
-        <p>Add a <code>io.cettia.asity:asity-bridge-spring-webflux5:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-spring-webflux5/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            </div>
+            <p>Now you can handle HTTP requests from <code>/echo</code> asynchronously through a <code>AsityServlet</code>'s <code>onhttp</code> method.</p>
+            <p><strong>Note</strong></p>
+            <ul>
+              <li>It works with Servlet 3.1 and 4 containers.</li>
+              <li><code>ServerHttpExchange</code>'s <code>onclose</code> isn't supported.</li>
+            </ul>
+            <h4>Working Example</h4>
+            <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-servlet3">https://github.com/cettia/asity/tree/master/example-servlet3</a>.</p>
+          </div>
+          <div class="tabs-panel" id="spring-webflux-5">
+            <p>Add a <code>io.cettia.asity:asity-bridge-spring-webflux5:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-spring-webflux5/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
@@ -253,16 +294,53 @@ public class EchoServerInitializer implements ServletContextListener {
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
-        <p>Then register a <code>AsityHandlerFunction</code> as a handler function and a <code>AsityWebSocketHandler</code> as a WebSocket handler.</p>
-        <div class="example">
+            <p>Then register a <code>AsityHandlerFunction</code> as a handler function and a <code>AsityWebSocketHandler</code> as a WebSocket handler.</p>
+            <div class="example">
 {% capture panel %}
 ```java
+package io.cettia.asity.example.spring.webflux5;
+
+import io.cettia.asity.action.Action;
+import io.cettia.asity.bridge.spring.webflux5.AsityHandlerFunction;
+import io.cettia.asity.bridge.spring.webflux5.AsityWebSocketHandler;
+import io.cettia.asity.example.echo.HttpEchoServer;
+import io.cettia.asity.example.echo.WebSocketEchoServer;
+import io.cettia.asity.http.ServerHttpExchange;
+import io.cettia.asity.websocket.ServerWebSocket;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.reactive.HandlerMapping;
+import org.springframework.web.reactive.config.EnableWebFlux;
+import org.springframework.web.reactive.function.server.RouterFunction;
+import org.springframework.web.reactive.function.server.RouterFunctions;
+import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.reactive.handler.SimpleUrlHandlerMapping;
+import org.springframework.web.reactive.socket.WebSocketHandler;
+import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAdapter;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static org.springframework.web.reactive.function.server.RequestPredicates.headers;
+import static org.springframework.web.reactive.function.server.RequestPredicates.path;
+
 @SpringBootApplication
 @EnableWebFlux
 public class EchoServer {
   @Bean
+  public Action<ServerHttpExchange> httpAction() {
+    return new HttpEchoServer();
+  }
+
+  @Bean
+  public Action<ServerWebSocket> wsAction() {
+    return new WebSocketEchoServer();
+  }
+
+  @Bean
   public RouterFunction<ServerResponse> httpMapping() {
-    AsityHandlerFunction asityHandlerFunction = new AsityHandlerFunction().onhttp(httpAction);
+    AsityHandlerFunction asityHandlerFunction = new AsityHandlerFunction().onhttp(httpAction());
 
     return RouterFunctions.route(
       path("/echo")
@@ -272,7 +350,7 @@ public class EchoServer {
 
   @Bean
   public HandlerMapping wsMapping() {
-    AsityWebSocketHandler asityWebSocketHandler = new AsityWebSocketHandler().onwebsocket(wsAction);
+    AsityWebSocketHandler asityWebSocketHandler = new AsityWebSocketHandler().onwebsocket(wsAction());
     Map<String, WebSocketHandler> map = new LinkedHashMap<>();
     map.put("/echo", asityWebSocketHandler);
 
@@ -291,18 +369,20 @@ public class EchoServer {
     SpringApplication.run(EchoServer.class, args);
   }
 }
+
 ```
 {% endcapture %}{{ panel | markdownify }}
-        </div>
-        <p>Now you can handle HTTP requests and WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityHandlerFunction</code>'s <code>onhttp</code> method and a <code>AsityWebSocketHandler</code>'s <code>onwebsocket</code> method.</p>
-        <p><strong>Note</strong></p>
-        <ul>
-          <li><code>ServerHttpExchange</code>'s <code>onclose</code> isn't supported.</li>
-        </ul>
-        <h4>Working Example</h4>
-        <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-spring-webflux5">https://github.com/cettia/asity/tree/master/example-spring-webflux5</a>.</p>
-        <h3 id="spring-mvc-4">Spring MVC 4</h3>
-        <p>Add a <code>io.cettia.asity:asity-bridge-spring-webmvc4:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-spring-webmvc4/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            </div>
+            <p>Now you can handle HTTP requests and WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityHandlerFunction</code>'s <code>onhttp</code> method and a <code>AsityWebSocketHandler</code>'s <code>onwebsocket</code> method.</p>
+            <p><strong>Note</strong></p>
+            <ul>
+              <li><code>ServerHttpExchange</code>'s <code>onclose</code> isn't supported.</li>
+            </ul>
+            <h4>Working Example</h4>
+            <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-spring-webflux5">https://github.com/cettia/asity/tree/master/example-spring-webflux5</a>.</p>
+          </div>
+          <div class="tabs-panel" id="spring-mvc-4">
+            <p>Add a <code>io.cettia.asity:asity-bridge-spring-webmvc4:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-spring-webmvc4/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
@@ -312,17 +392,49 @@ public class EchoServer {
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
-        <p>Then register a <code>AsityController</code> as a controller bean and a <code>AsityWebSocketHandler</code> as a WebSocket handler bean.</p>
-        <div class="example">
+            <p>Then register a <code>AsityController</code> as a controller bean and a <code>AsityWebSocketHandler</code> as a WebSocket handler bean.</p>
+            <div class="example">
 {% capture panel %}
 ```java
+package io.cettia.asity.example.spring.webmvc4;
+
+import io.cettia.asity.action.Action;
+import io.cettia.asity.bridge.spring.webmvc4.AsityController;
+import io.cettia.asity.bridge.spring.webmvc4.AsityWebSocketHandler;
+import io.cettia.asity.example.echo.HttpEchoServer;
+import io.cettia.asity.example.echo.WebSocketEchoServer;
+import io.cettia.asity.http.ServerHttpExchange;
+import io.cettia.asity.websocket.ServerWebSocket;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.Ordered;
+import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.handler.AbstractHandlerMapping;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+
+import javax.servlet.http.HttpServletRequest;
+
 @SpringBootApplication
 @EnableWebMvc
 @EnableWebSocket
 public class EchoServer implements WebSocketConfigurer {
   @Bean
+  public Action<ServerHttpExchange> httpAction() {
+    return new HttpEchoServer();
+  }
+
+  @Bean
+  public Action<ServerWebSocket> wsAction() {
+    return new WebSocketEchoServer();
+  }
+
+  @Bean
   public HandlerMapping httpMapping() {
-    AsityController asityController = new AsityController().onhttp(httpAction);
+    AsityController asityController = new AsityController().onhttp(httpAction());
     AbstractHandlerMapping mapping = new AbstractHandlerMapping() {
       @Override
       protected Object getHandlerInternal(HttpServletRequest request) {
@@ -338,7 +450,7 @@ public class EchoServer implements WebSocketConfigurer {
 
   @Override
   public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-    AsityWebSocketHandler asityWebSocketHandler = new AsityWebSocketHandler().onwebsocket(wsAction);
+    AsityWebSocketHandler asityWebSocketHandler = new AsityWebSocketHandler().onwebsocket(wsAction());
     registry.addHandler(asityWebSocketHandler, "/echo");
   }
 
@@ -349,15 +461,16 @@ public class EchoServer implements WebSocketConfigurer {
 ```
 {% endcapture %}{{ panel | markdownify }}
         </div>
-        <p>Now you can handle HTTP requests and WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityController</code>'s <code>onhttp</code> method and a <code>AsityWebSocketHandler</code>'s <code>onwebsocket</code> method.</p>
-        <p><strong>Note</strong></p>
-        <ul>
-          <li><code>ServerHttpExchange</code>'s <code>onclose</code> isn't supported.</li>
-        </ul>
-        <h4>Working Example</h4>
-        <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-spring-webmvc4">https://github.com/cettia/asity/tree/master/example-spring-webmvc4</a>.</p>
-        <h3 id="vert-x-3">Vert.x 3</h3>
-        <p>Add a <code>io.cettia.asity:asity-bridge-vertx3:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-vertx3/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            <p>Now you can handle HTTP requests and WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityController</code>'s <code>onhttp</code> method and a <code>AsityWebSocketHandler</code>'s <code>onwebsocket</code> method.</p>
+            <p><strong>Note</strong></p>
+            <ul>
+              <li><code>ServerHttpExchange</code>'s <code>onclose</code> isn't supported.</li>
+            </ul>
+            <h4>Working Example</h4>
+            <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-spring-webmvc4">https://github.com/cettia/asity/tree/master/example-spring-webmvc4</a>.</p>
+          </div>
+          <div class="tabs-panel" id="vert-x-3">
+            <p>Add a <code>io.cettia.asity:asity-bridge-vertx3:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-vertx3/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
@@ -367,13 +480,29 @@ public class EchoServer implements WebSocketConfigurer {
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
-        <p>Then register a <code>AsityRequestHandler</code> as a HTTP request handler and a <code>AsityWebSocketHandler</code> as a WebSocket connection handler in a http server.</p>
-        <div class="example">
+            <p>Then register a <code>AsityRequestHandler</code> as a HTTP request handler and a <code>AsityWebSocketHandler</code> as a WebSocket connection handler in a http server.</p>
+            <div class="example">
 {% capture panel %}
 ```java
+package io.cettia.asity.example.vertx3;
+
+import io.cettia.asity.action.Action;
+import io.cettia.asity.bridge.vertx3.AsityRequestHandler;
+import io.cettia.asity.bridge.vertx3.AsityWebSocketHandler;
+import io.cettia.asity.example.echo.HttpEchoServer;
+import io.cettia.asity.example.echo.WebSocketEchoServer;
+import io.cettia.asity.http.ServerHttpExchange;
+import io.cettia.asity.websocket.ServerWebSocket;
+import io.vertx.core.AbstractVerticle;
+import io.vertx.core.http.HttpServer;
+
 public class EchoServerVerticle extends AbstractVerticle {
   @Override
   public void start() {
+    // Web fragments
+    Action<ServerHttpExchange> httpAction = new HttpEchoServer();
+    Action<ServerWebSocket> wsAction = new WebSocketEchoServer();
+
     HttpServer httpServer = vertx.createHttpServer();
     AsityRequestHandler asityRequestHandler = new AsityRequestHandler().onhttp(httpAction);
     httpServer.requestHandler(request -> {
@@ -393,48 +522,12 @@ public class EchoServerVerticle extends AbstractVerticle {
 ```
 {% endcapture %}{{ panel | markdownify }}
         </div>
-        <p>Now you can handle HTTP requests and WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityRequestHandler</code>'s <code>onhttp</code> method and a <code>AsityWebSocketHandler</code>'s <code>onwebsocket</code> method.</p>
-        <h4>Working Example</h4>
-        <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-vertx3">https://github.com/cettia/asity/tree/master/example-vertx3</a>.</p>
-        <h3 id="grizzly-2">Grizzly 2</h3>
-        <p>Add a <code>io.cettia.asity:asity-bridge-grizzly2:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-grizzly2/" target="_blank">Javadoc</a>)as a dependency of your application.</p>
-{% capture panel %}
-```xml
-<dependency>
-  <groupId>io.cettia.asity</groupId>
-  <artifactId>asity-bridge-grizzly2</artifactId>
-  <version>2.0.0-RC1</version>
-</dependency>
-```
-{% endcapture %}{{ panel | markdownify }}
-        <p>Then register a <code>AsityHttpHandler</code> as a HTTP request handler in a server configuration and a <code>AsityWebSocketApplication</code> as a WebSocket application in a WebSocket engine.</p>
-        <div class="example">
-{% capture panel %}
-```java
-public class EchoServer {
-  public static void main(String[] args) throws Exception {
-    HttpServer httpServer = HttpServer.createSimpleServer();
-    ServerConfiguration config = httpServer.getServerConfiguration();
-    config.addHttpHandler(new AsityHttpHandler().onhttp(httpAction), "/echo");
-    NetworkListener listener = httpServer.getListener("grizzly");
-    listener.registerAddOn(new WebSocketAddOn());
-    WebSocketEngine.getEngine().register("", "/echo", new AsityWebSocketApplication().onwebsocket(wsAction));
-    httpServer.start();
-    System.in.read();
-  }
-}
-```
-{% endcapture %}{{ panel | markdownify }}
-        </div>
-        <p>Now you can handle HTTP requests and WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityHttpHandler</code>'s <code>onhttp</code> method and a <code>AsityWebSocketApplication</code>'s <code>onwebsocket</code> method.</p>
-        <p><strong>Note</strong></p>
-        <ul>
-          <li>Grizzly 2.4 requires <code>javax.servlet:javax.servlet-api:4.y.z</code>.</li>
-        </ul>
-        <h4>Working Example</h4>
-        <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-grizzly2">https://github.com/cettia/asity/tree/master/example-grizzly2</a>.</p>
-        <h3 id="netty-4">Netty 4</h3>
-        <p>Add a <code>io.cettia.asity:asity-bridge-netty4:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-netty4/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            <p>Now you can handle HTTP requests and WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityRequestHandler</code>'s <code>onhttp</code> method and a <code>AsityWebSocketHandler</code>'s <code>onwebsocket</code> method.</p>
+            <h4>Working Example</h4>
+            <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-vertx3">https://github.com/cettia/asity/tree/master/example-vertx3</a>.</p>
+          </div>
+          <div class="tabs-panel" id="netty-4">
+            <p>Add a <code>io.cettia.asity:asity-bridge-netty4:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-netty4/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
@@ -444,33 +537,58 @@ public class EchoServer {
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
-        <p>Then add a <code>AsityServerCodec</code> as a channel handler to a channel pipeline. When configuring the handler, you should add <code>HttpServerCodec</code> in front of the handler.</p>
-        <div class="example">
+            <p>Then add a <code>AsityServerCodec</code> as a channel handler to a channel pipeline. When configuring the handler, you should add <code>HttpServerCodec</code> in front of the handler.</p>
+            <div class="example">
 {% capture panel %}
 ```java
+package io.cettia.asity.example.netty4;
+
+import io.cettia.asity.action.Action;
+import io.cettia.asity.bridge.netty4.AsityServerCodec;
+import io.cettia.asity.example.echo.HttpEchoServer;
+import io.cettia.asity.example.echo.WebSocketEchoServer;
+import io.cettia.asity.http.ServerHttpExchange;
+import io.cettia.asity.websocket.ServerWebSocket;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.HttpRequest;
+import io.netty.handler.codec.http.HttpServerCodec;
+
+import java.net.URI;
+
 public class EchoServer {
   public static void main(String[] args) throws Exception {
+    // Web fragments
+    Action<ServerHttpExchange> httpAction = new HttpEchoServer();
+    Action<ServerWebSocket> wsAction = new WebSocketEchoServer();
+
     EventLoopGroup bossGroup = new NioEventLoopGroup();
     EventLoopGroup workerGroup = new NioEventLoopGroup();
     try {
       ServerBootstrap bootstrap = new ServerBootstrap();
       bootstrap.group(bossGroup, workerGroup)
-      .channel(NioServerSocketChannel.class)
-      .childHandler(new ChannelInitializer<SocketChannel>() {
-        @Override
-        public void initChannel(SocketChannel ch) {
-          AsityServerCodec asityServerCodec = new AsityServerCodec() {
-            @Override
-            protected boolean accept(HttpRequest req) {
-              return URI.create(req.getUri()).getPath().equals("/echo");
-            }
-          };
-          asityServerCodec.onhttp(httpAction).onwebsocket(wsAction);
+        .channel(NioServerSocketChannel.class)
+        .childHandler(new ChannelInitializer<SocketChannel>() {
+          @Override
+          public void initChannel(SocketChannel ch) {
+            AsityServerCodec asityServerCodec = new AsityServerCodec() {
+              @Override
+              protected boolean accept(HttpRequest req) {
+                return URI.create(req.uri()).getPath().equals("/echo");
+              }
+            };
+            asityServerCodec.onhttp(httpAction).onwebsocket(wsAction);
 
-          ChannelPipeline pipeline = ch.pipeline();
-          pipeline.addLast(new HttpServerCodec()).addLast(asityServerCodec);
-        }
-      });
+            ChannelPipeline pipeline = ch.pipeline();
+            pipeline.addLast(new HttpServerCodec()).addLast(asityServerCodec);
+          }
+        });
       Channel channel = bootstrap.bind(8080).sync().channel();
       channel.closeFuture().sync();
     } finally {
@@ -482,11 +600,70 @@ public class EchoServer {
 ```
 {% endcapture %}{{ panel | markdownify }}
         </div>
-        <p>Now you can handle HTTP requests and WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityServerCodec</code>'s <code>onhttp</code> and <code>onwebsocket</code> methods.</p>
-        <h4>Working Example</h4>
-        <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-netty4">https://github.com/cettia/asity/tree/master/example-netty4</a>.</p>
-        <h3 id="vert-x-2">Vert.x 2</h3>
-        <p>Add a <code>io.cettia.asity:asity-bridge-vertx2:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-vertx2/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            <p>Now you can handle HTTP requests and WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityServerCodec</code>'s <code>onhttp</code> and <code>onwebsocket</code> methods.</p>
+            <h4>Working Example</h4>
+            <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-netty4">https://github.com/cettia/asity/tree/master/example-netty4</a>.</p>
+          </div>
+          <div class="tabs-panel" id="grizzly-2">
+            <p>Add a <code>io.cettia.asity:asity-bridge-grizzly2:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-grizzly2/" target="_blank">Javadoc</a>)as a dependency of your application.</p>
+{% capture panel %}
+```xml
+<dependency>
+  <groupId>io.cettia.asity</groupId>
+  <artifactId>asity-bridge-grizzly2</artifactId>
+  <version>2.0.0-RC1</version>
+</dependency>
+```
+{% endcapture %}{{ panel | markdownify }}
+            <p>Then register a <code>AsityHttpHandler</code> as a HTTP request handler in a server configuration and a <code>AsityWebSocketApplication</code> as a WebSocket application in a WebSocket engine.</p>
+            <div class="example">
+{% capture panel %}
+```java
+package io.cettia.asity.example.grizzly2;
+
+import io.cettia.asity.action.Action;
+import io.cettia.asity.bridge.grizzly2.AsityHttpHandler;
+import io.cettia.asity.bridge.grizzly2.AsityWebSocketApplication;
+import io.cettia.asity.example.echo.HttpEchoServer;
+import io.cettia.asity.example.echo.WebSocketEchoServer;
+import io.cettia.asity.http.ServerHttpExchange;
+import io.cettia.asity.websocket.ServerWebSocket;
+import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.grizzly.http.server.NetworkListener;
+import org.glassfish.grizzly.http.server.ServerConfiguration;
+import org.glassfish.grizzly.websockets.WebSocketAddOn;
+import org.glassfish.grizzly.websockets.WebSocketEngine;
+
+public class EchoServer {
+  public static void main(String[] args) throws Exception {
+    // Web fragments
+    Action<ServerHttpExchange> httpAction = new HttpEchoServer();
+    Action<ServerWebSocket> wsAction = new WebSocketEchoServer();
+
+    HttpServer httpServer = HttpServer.createSimpleServer();
+    ServerConfiguration config = httpServer.getServerConfiguration();
+    config.addHttpHandler(new AsityHttpHandler().onhttp(httpAction), "/echo");
+    NetworkListener listener = httpServer.getListener("grizzly");
+    listener.registerAddOn(new WebSocketAddOn());
+    WebSocketEngine.getEngine().register("", "/echo", new AsityWebSocketApplication().onwebsocket(wsAction));
+    httpServer.start();
+
+    System.in.read();
+  }
+}
+```
+{% endcapture %}{{ panel | markdownify }}
+        </div>
+            <p>Now you can handle HTTP requests and WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityHttpHandler</code>'s <code>onhttp</code> method and a <code>AsityWebSocketApplication</code>'s <code>onwebsocket</code> method.</p>
+            <p><strong>Note</strong></p>
+            <ul>
+              <li>Grizzly 2.4 requires <code>javax.servlet:javax.servlet-api:4.y.z</code>.</li>
+            </ul>
+            <h4>Working Example</h4>
+            <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-grizzly2">https://github.com/cettia/asity/tree/master/example-grizzly2</a>.</p>
+          </div>
+          <div class="tabs-panel" id="vert-x-2">
+            <p>Add a <code>io.cettia.asity:asity-bridge-vertx2:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-vertx2/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
@@ -496,34 +673,53 @@ public class EchoServer {
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
-        <p>Then register a <code>AsityRequestHandler</code> as a HTTP request handler and a <code>AsityWebSocketHandler</code> as a WebSocket connection handler in a http server.</p>
-        <div class="example">
+            <p>Then register a <code>AsityRequestHandler</code> as a HTTP request handler and a <code>AsityWebSocketHandler</code> as a WebSocket connection handler in a http server.</p>
+            <div class="example">
 {% capture panel %}
 ```java
+package io.cettia.asity.example.vertx2;
+
+import io.cettia.asity.action.Action;
+import io.cettia.asity.bridge.vertx2.AsityRequestHandler;
+import io.cettia.asity.bridge.vertx2.AsityWebSocketHandler;
+import io.cettia.asity.example.echo.HttpEchoServer;
+import io.cettia.asity.example.echo.WebSocketEchoServer;
+import io.cettia.asity.http.ServerHttpExchange;
+import io.cettia.asity.websocket.ServerWebSocket;
+import org.vertx.java.core.http.HttpServer;
+import org.vertx.java.core.http.RouteMatcher;
+import org.vertx.java.platform.Verticle;
+
 public class EchoServerVerticle extends Verticle {
   @Override
   public void start() {
+    // Web fragments
+    Action<ServerHttpExchange> httpAction = new HttpEchoServer();
+    Action<ServerWebSocket> wsAction = new WebSocketEchoServer();
+
     HttpServer httpServer = vertx.createHttpServer();
     RouteMatcher httpMatcher = new RouteMatcher();
     httpMatcher.all("/echo", new AsityRequestHandler().onhttp(httpAction));
     httpServer.requestHandler(httpMatcher);
-    AsityWebSocketHandler asityWebsocketHandler = new AsityWebSocketHandler().onwebsocket(wsAction);
+    AsityWebSocketHandler websocketHandler = new AsityWebSocketHandler().onwebsocket(wsAction);
     httpServer.websocketHandler(socket -> {
       if (socket.path().equals("/echo")) {
-        asityWebsocketHandler.handle(socket);
+        websocketHandler.handle(socket);
       }
     });
     httpServer.listen(8080);
   }
 }
+
 ```
 {% endcapture %}{{ panel | markdownify }}
-        </div>
-        <p>Now you can handle HTTP requests and WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityRequestHandler</code>'s <code>onhttp</code> method and a <code>AsityWebSocketHandler</code>'s <code>onwebsocket</code> method.</p>
-        <h4>Working Example</h4>
-        <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-vertx2">https://github.com/cettia/asity/tree/master/example-vertx2</a>.</p>
-        <h3 id="atmosphere-2">Atmosphere 2</h3>
-        <p>Add a <code>io.cettia.asity:asity-bridge-atmosphere2:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-atmosphere2/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            </div>
+            <p>Now you can handle HTTP requests and WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityRequestHandler</code>'s <code>onhttp</code> method and a <code>AsityWebSocketHandler</code>'s <code>onwebsocket</code> method.</p>
+            <h4>Working Example</h4>
+            <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-vertx2">https://github.com/cettia/asity/tree/master/example-vertx2</a>.</p>
+          </div>
+          <div class="tabs-panel" id="atmosphere-2">
+            <p>Add a <code>io.cettia.asity:asity-bridge-atmosphere2:2.0.0-RC1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-atmosphere2/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
@@ -533,14 +729,35 @@ public class EchoServerVerticle extends Verticle {
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
-        <p>Then register a <code>AsityAtmosphereServlet</code> as a servlet in a servlet context. When registering the servlet, you should set <code>asyncSupported</code> to <code>true</code> and an init parameter <code>org.atmosphere.cpr.AtmosphereInterceptor.disableDefaults</code> to <code>true</code>.</p>
-        <div class="example">
+            <p>Then register a <code>AsityAtmosphereServlet</code> as a servlet in a servlet context. When registering the servlet, you should set <code>asyncSupported</code> to <code>true</code> and an init parameter <code>org.atmosphere.cpr.AtmosphereInterceptor.disableDefaults</code> to <code>true</code>.</p>
+            <div class="example">
 {% capture panel %}
 ```java
+package io.cettia.asity.example.atmosphere2;
+
+import io.cettia.asity.action.Action;
+import io.cettia.asity.bridge.atmosphere2.AsityAtmosphereServlet;
+import io.cettia.asity.example.echo.HttpEchoServer;
+import io.cettia.asity.example.echo.WebSocketEchoServer;
+import io.cettia.asity.http.ServerHttpExchange;
+import io.cettia.asity.websocket.ServerWebSocket;
+import org.atmosphere.cpr.ApplicationConfig;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletRegistration;
+import javax.servlet.annotation.WebListener;
+
 @WebListener
 public class EchoServerInitializer implements ServletContextListener {
   @Override
   public void contextInitialized(ServletContextEvent event) {
+    // Web fragments
+    Action<ServerHttpExchange> httpAction = new HttpEchoServer();
+    Action<ServerWebSocket> wsAction = new WebSocketEchoServer();
+
     ServletContext context = event.getServletContext();
     Servlet servlet = new AsityAtmosphereServlet().onhttp(httpAction).onwebsocket(wsAction);
     ServletRegistration.Dynamic reg = context.addServlet(AsityAtmosphereServlet.class.getName(), servlet);
@@ -554,16 +771,18 @@ public class EchoServerInitializer implements ServletContextListener {
 }
 ```
 {% endcapture %}{{ panel | markdownify }}
+            </div>
+            <p>Now you can handle HTTP requests and WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityAtmosphereServlet</code>'s <code>onhttp</code> and <code>onwebsocket</code> methods.</p>
+            <p><strong>Note</strong></p>
+            <ul>
+              <li>It requires Atmosphere 2.2 and above.</li>
+              <li><code>ServerHttpExchange</code>'s <code>onclose</code> isn't supported.</li>
+              <li><code>ServerWebSocket</code>'s <code>headers</code> doesn't support a header with multiple values.</li>
+            </ul>
+            <h4>Working Example</h4>
+            <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-atmosphere2">https://github.com/cettia/asity/tree/master/example-atmosphere2</a>.</p>
+          </div>
         </div>
-        <p>Now you can handle HTTP requests and WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityAtmosphereServlet</code>'s <code>onhttp</code> and <code>onwebsocket</code> methods.</p>
-        <p><strong>Note</strong></p>
-        <ul>
-          <li>It requires Atmosphere 2.2 and above.</li>
-          <li><code>ServerHttpExchange</code>'s <code>onclose</code> isn't supported.</li>
-          <li><code>ServerWebSocket</code>'s <code>headers</code> doesn't support a header with multiple values.</li>
-        </ul>
-        <h4>Working Example</h4>
-        <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-atmosphere2">https://github.com/cettia/asity/tree/master/example-atmosphere2</a>.</p>
       </div>
     </div>
   </div>
