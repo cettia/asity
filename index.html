@@ -37,8 +37,8 @@ title: Build universally reusable web fragments on the JVM
     <div class="grid-x">
       <div class="cell">
         <h1>Asity</h1>
-        <p><strong>Asity is a lightweight abstraction layer for various web frameworks on the Java Virtual Machine, which is designed to <em>achieve and exploit "Write Once, Run Anywhere"</em> by establishing an ecosystem of universally reusable web fragments<sup>*</sup> that run across different frameworks in the Java ecosystem.</strong> It provides abstractions for HTTP and WebSocket, and implementations per framework called bridges which are transparent to end-users and don't affect framework's performance, productivity and philosophy.</p>
-        <p>Web fragment authors can write a web fragment once and support almost all popular web frameworks in Java, and end-users can choose any technology stack as they wish and use web fragments without being frustrated by compatibility issues.</p>
+        <p><strong>Asity is a lightweight abstraction layer for various web frameworks on the Java Virtual Machine. It is designed to <em>achieve and exploit "Write Once, Run Anywhere"</em> by establishing an ecosystem of universally reusable web fragments<sup>*</sup> that run across different frameworks in the Java ecosystem.</strong> It provides abstractions for HTTP and WebSocket, and implementations per framework called bridges which are transparent to end-users and don't sacrifice the framework's performance, productivity and philosophy.</p>
+        <p>Web fragment authors can write a web fragment once and support almost all popular web frameworks in Java, and end-users can choose any technology stack they wish and use web fragments without being frustrated by compatibility issues.</p>
         <p>* Web fragment represents a component that receives HTTP request-response or WebSocket connection like a controller in MVC but is able to be compatible with any web framework on the JVM.</p>
       </div>
     </div>
@@ -792,7 +792,7 @@ public class EchoServerInitializer implements ServletContextListener {
     <div class="grid-x">
       <div class="cell">
         <h2 id="showcase">Showcase</h2>
-        <p>A web fragment is not just limited to echo. Here are some of the projects to demonstrate the real world use case of Asity.</p>
+        <p>A web fragment is not just limited to echo. Check out <a href="https://jaxenter.com/asity-jvm-java-interview-kim-147329.html" target="_blank">an interview with the creator of Asity</a> to learn more about use cases for Asity. You can build a framework built on top of HTTP and WebSocket, a server-side Java implementation, a middleware layer for Java, etc. The followings are some of the projects to demonstrate the real world use case of Asity.</p>
         <dl>
           <dt><a href="http://cettia.io" target="_blank">Cettia</a></dt>
           <dd>A full-featured real-time web application framework that you can use to exchange events between server and client in real-time.</dd>
