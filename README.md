@@ -75,10 +75,8 @@ public class EchoServer {
   public RouterFunction<ServerResponse> httpMapping() {
     AsityHandlerFunction asityHandlerFunction = new AsityHandlerFunction().onhttp(httpAction());
 
-    return RouterFunctions.route(
-      path("/echo")
-        // Excludes WebSocket handshake requests
-        .and(headers(headers -> !"websocket".equalsIgnoreCase(headers.asHttpHeaders().getUpgrade()))), asityHandlerFunction);
+    RequestPredicate isNotWebSocket = headers(h -> !"websocket".equalsIgnoreCase(h.asHttpHeaders().getUpgrade()));
+    return RouterFunctions.route(path("/cettia").and(isNotWebSocket), asityHandlerFunction);
   }
 
   @Bean
