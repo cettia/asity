@@ -10,8 +10,8 @@
   });
 
   $('span.n:contains("httpAction"),span.n:contains("wsAction"),span.s:contains("\\"/echo\\"")').addClass('highlighted');
-
-  $.get("http://cettia.io/feed.xml", function(doc) {
+/*
+  $.get("https://cettia.io/feed.xml", function(doc) {
     var $announcement = $("#announcement");
     var $entry = $(doc).find("entry:contains(Asity):first");
 
@@ -23,7 +23,7 @@
     $announcement.find(".date").text(new Intl.DateTimeFormat("en-US", options).format(date));
     $announcement.find("p").css({visibility: "visible"});
   });
-
+*/
   Foundation.SmoothScroll._scrollToLoc = Foundation.SmoothScroll.scrollToLoc;
   Foundation.SmoothScroll.scrollToLoc = function(loc, options, callback) {
     if (loc === "#") {

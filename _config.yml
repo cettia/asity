@@ -1,7 +1,7 @@
 name: Asity
 title: Asity
 description: Asity is a lightweight abstraction layer for various web frameworks on the Java Virtual Machine, which is designed to achieve and exploit "Write Once, Run Anywhere" by establishing an ecosystem of universally reusable web fragments that run across different frameworks in the Java ecosystem.
-url: http://asity.cettia.io/
+url: https://asity.cettia.io/
 author:
   name: Donghwan Kim
   email: flowersinthesand@gmail.com
