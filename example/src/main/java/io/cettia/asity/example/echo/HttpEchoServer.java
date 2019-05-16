@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import io.cettia.asity.action.Action;
 import io.cettia.asity.http.HttpStatus;
 import io.cettia.asity.http.ServerHttpExchange;
 
-
 /**
  * @author Donghwan Kim
  */
@@ -34,9 +33,9 @@ public class HttpEchoServer implements Action<ServerHttpExchange> {
     http.setStatus(HttpStatus.OK).setHeader("content-type", http.header("content-type"));
 
     // Reads a chunk from request body and writes it to response body
-    http.readAsText().onchunk((String chunk) -> http.write(chunk));
+    http.onchunk((String chunk) -> http.write(chunk)).readAsText();
     // If request body is binary,
-    // http.readAsBinary().onchunk((ByteBuffer binary) -> http.write(binary));
+    // http.onchunk((ByteBuffer binary) -> http.write(binary)).readAsBinary();
 
     // Ends response if request ends
     http.onend((Void v) -> http.end());

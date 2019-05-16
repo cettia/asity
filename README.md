@@ -142,14 +142,15 @@ public class EchoServer {
 
 As you would intuitively expect, `HttpEchoServer` and `WebSocketEchoServer` are a web fragment, and can be reused in other frameworks through other bridges like `asity-bridge-spring-webmvc4`. Also, note that a bridge implementation is completely transparent to end-users. End-users still have the full-control over web fragments on framework they selected. If they want to filter out requests, they can do that in the way they use the framework, and pass only proper requests to web fragments instead of learning how to filter out requests in Asity.
 
-Now Asity supports Java API for WebSocket 1, Servlet 3, Spring WebFlux 5, Spring MVC 4, Vert.x 3, Netty 4, Grizzly 2,
+Now Asity supports Java API for WebSocket 1, Servlet 3, Spring WebFlux 5, Spring MVC 4, Vert.x 3, Netty 4, Play framework 2, Grizzly 2,
  Vert.x 2 and Atmosphere 2. Here's a list of working examples per supported framework. They include the corresponding
-  client to enable you to test the example as well. The full documentation is available at the [Asity website](http://asity.cettia.io).
+  client to enable you to test the example as well. The full documentation is available at the [Asity website](https://asity.cettia.io).
 
 - [Atmosphere 2](https://github.com/cettia/asity/tree/master/example-atmosphere2)
 - [Grizzly 2](https://github.com/cettia/asity/tree/master/example-grizzly2)
 - [Java API for WebSocket 1](https://github.com/cettia/asity/tree/master/example-jwa1)
 - [Netty 4](https://github.com/cettia/asity/tree/master/example-netty4)
+- [Play framework 2](https://github.com/cettia/asity/tree/master/example-play2)
 - [Servlet 3](https://github.com/cettia/asity/tree/master/example-servlet3)
 - [Spring WebFlux 5](https://github.com/cettia/asity/tree/master/example-spring-webflux5)
 - [Spring MVC 4](https://github.com/cettia/asity/tree/master/example-spring-webmvc4)

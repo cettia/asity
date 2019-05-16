@@ -37,6 +37,7 @@
     <module>bridge-grizzly2</module>
     <module>bridge-jwa1</module>
     <module>bridge-netty4</module>
+    <module>bridge-play2</module>
     <module>bridge-servlet3</module>
     <module>bridge-spring-webflux5</module>
     <module>bridge-spring-webmvc4</module>
@@ -47,6 +48,7 @@
     <module>example-grizzly2</module>
     <module>example-jwa1</module>
     <module>example-netty4</module>
+    <module>example-play2</module>
     <module>example-servlet3</module>
     <module>example-spring-webflux5</module>
     <module>example-spring-webmvc4</module>
@@ -90,6 +92,7 @@
     <grizzly2.version>2.3.35</grizzly2.version>
     <jwa1.version>1.1</jwa1.version>
     <netty4.version>4.1.36.Final</netty4.version>
+    <play2.version>2.7.3</play2.version>
     <servlet3.version>3.1.0</servlet3.version>
     <spring-boot2.version>2.1.5.RELEASE</spring-boot2.version>
     <spring5.version>5.1.8.RELEASE</spring5.version>
@@ -193,12 +196,13 @@
         <configuration>
           <packagesheader>asity</packagesheader>
           <links>
-            <link>http://docs.oracle.com/javaee/7/api/</link>
+            <link>https://docs.oracle.com/javaee/7/api/</link>
             <link>http://atmosphere.github.io/atmosphere/apidocs/</link>
             <link>http://vertx.io/vertx2/api/java/</link>
             <link>http://netty.io/4.1/api/</link>
             <link>https://docs.spring.io/spring/docs/5.1.8.RELEASE/javadoc-api/</link>
             <link>https://projectreactor.io/docs/core/release/api/</link>
+            <link>https://www.playframework.com/documentation/2.7.x/api/java/</link>
           </links>
           <additionalJOption>-Xdoclint:none</additionalJOption>
         </configuration>
