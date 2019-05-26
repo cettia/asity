@@ -24,6 +24,7 @@
     $announcement.find("p").css({visibility: "visible"});
   });
 */
+
   Foundation.SmoothScroll._scrollToLoc = Foundation.SmoothScroll.scrollToLoc;
   Foundation.SmoothScroll.scrollToLoc = function(loc, options, callback) {
     if (loc === "#") {
@@ -40,5 +41,15 @@
       }
     });
   };
+/*
+  var onscroll = function () {
+    if (window.scrollY) {
+      document.getElementById("top-bar-wrapper").classList.add("visible");
+    } else {
+      document.getElementById("top-bar-wrapper").classList.remove("visible");
+    }
+  };
+  onscroll();
+  window.onscroll = onscroll;*/
   $(document).foundation();
 })();
