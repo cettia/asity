@@ -40,7 +40,7 @@ public class GrizzlyServerWebSocketTest extends ServerWebSocketTestBase {
     server = HttpServer.createSimpleServer(null, port);
     NetworkListener listener = server.getListener("grizzly");
     listener.registerAddOn(new WebSocketAddOn());
-    WebSocketEngine.getEngine().register("", TEST_URI, new AsityWebSocketApplication()
+    WebSocketEngine.getEngine().register("", TEST_PATH, new AsityWebSocketApplication()
       .onwebsocket(websocketAction));
     server.start();
   }

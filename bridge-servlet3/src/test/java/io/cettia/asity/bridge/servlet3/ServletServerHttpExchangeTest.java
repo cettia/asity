@@ -55,7 +55,7 @@ public class ServletServerHttpExchangeTest extends ServerHttpExchangeTestBase {
         Servlet servlet = new AsityServlet().onhttp(requestAction);
         ServletRegistration.Dynamic reg = context.addServlet(AsityServlet.class.getName(), servlet);
         reg.setAsyncSupported(true);
-        reg.addMapping(TEST_URI);
+        reg.addMapping(TEST_PATH);
       }
 
       @Override

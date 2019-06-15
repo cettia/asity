@@ -38,7 +38,7 @@ public class VertxServerHttpExchangeTest extends ServerHttpExchangeTestBase {
     server = Vertx.vertx().createHttpServer();
     AsityRequestHandler requestHandler = new AsityRequestHandler().onhttp(requestAction);
     server.requestHandler(request -> {
-      if (request.path().equals(TEST_URI)) {
+      if (request.path().equals(TEST_PATH)) {
         requestHandler.handle(request);
       }
     });

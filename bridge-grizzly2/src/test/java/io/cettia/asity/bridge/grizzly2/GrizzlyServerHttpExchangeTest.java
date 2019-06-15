@@ -35,7 +35,7 @@ public class GrizzlyServerHttpExchangeTest extends ServerHttpExchangeTestBase {
   protected void startServer(int port, Action<ServerHttpExchange> requestAction) throws Exception {
     server = HttpServer.createSimpleServer(null, port);
     ServerConfiguration config = server.getServerConfiguration();
-    config.addHttpHandler(new AsityHttpHandler().onhttp(requestAction), TEST_URI);
+    config.addHttpHandler(new AsityHttpHandler().onhttp(requestAction), TEST_PATH);
     server.start();
   }
 

@@ -38,7 +38,7 @@ public class VertxServerWebSocketTest extends ServerWebSocketTestBase {
     server = VertxFactory.newVertx().createHttpServer();
     AsityWebSocketHandler websocketHandler = new AsityWebSocketHandler().onwebsocket(websocketAction);
     server.websocketHandler(socket -> {
-      if (socket.path().equals(TEST_URI)) {
+      if (socket.path().equals(TEST_PATH)) {
         websocketHandler.handle(socket);
       }
     });

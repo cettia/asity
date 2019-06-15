@@ -49,7 +49,7 @@ public class TestApplication {
   @Bean
   public RouterFunction<ServerResponse> httpMapping() {
     return RouterFunctions.route(
-      path(ServerHttpExchangeTestBase.TEST_URI)
+      path(ServerHttpExchangeTestBase.TEST_PATH)
         .and(headers(headers -> !"websocket".equalsIgnoreCase(headers.asHttpHeaders().getUpgrade()))), handlerFunction()
     );
   }
@@ -62,7 +62,7 @@ public class TestApplication {
   @Bean
   public HandlerMapping wsMapping() {
     Map<String, WebSocketHandler> map = new LinkedHashMap<>();
-    map.put(ServerWebSocketTestBase.TEST_URI, webSocketHandler());
+    map.put(ServerWebSocketTestBase.TEST_PATH, webSocketHandler());
 
     SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
     mapping.setUrlMap(map);

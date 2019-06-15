@@ -46,7 +46,7 @@ import java.util.concurrent.CountDownLatch;
  */
 public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
 
-  public static final String TEST_URI = "/http";
+  public static final String TEST_PATH = "/http";
   private static final CompleteListener ASYNC = new Response.Listener.Adapter();
 
   @Rule
@@ -78,7 +78,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
   protected abstract void stopServer() throws Exception;
 
   protected String uri() {
-    return uri(TEST_URI);
+    return uri(TEST_PATH);
   }
 
   protected String uri(String path) {

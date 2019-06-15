@@ -47,7 +47,7 @@ public class TestApplication implements WebSocketConfigurer {
     AbstractHandlerMapping mapping = new AbstractHandlerMapping() {
       @Override
       protected Object getHandlerInternal(HttpServletRequest request) {
-        return ServerHttpExchangeTestBase.TEST_URI.equals(request.getRequestURI()) &&
+        return ServerHttpExchangeTestBase.TEST_PATH.equals(request.getRequestURI()) &&
           // Delegates WebSocket handshake requests to a webSocketHandler bean
           !"websocket".equalsIgnoreCase(request.getHeader("upgrade")) ? asityController() : null;
       }
@@ -63,7 +63,7 @@ public class TestApplication implements WebSocketConfigurer {
 
   @Override
   public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-    registry.addHandler(webSocketHandler(), ServerWebSocketTestBase.TEST_URI);
+    registry.addHandler(webSocketHandler(), ServerWebSocketTestBase.TEST_PATH);
   }
 
 }

@@ -38,7 +38,7 @@ public class VertxServerHttpExchangeTest extends ServerHttpExchangeTestBase {
   protected void startServer(int port, Action<ServerHttpExchange> requestAction) throws Exception {
     server = VertxFactory.newVertx().createHttpServer();
     RouteMatcher matcher = new RouteMatcher();
-    matcher.all(TEST_URI, new AsityRequestHandler().onhttp(requestAction));
+    matcher.all(TEST_PATH, new AsityRequestHandler().onhttp(requestAction));
     server.requestHandler(matcher);
 
     CountDownLatch latch = new CountDownLatch(1);

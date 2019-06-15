@@ -40,7 +40,7 @@ import java.util.Arrays;
  */
 public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
 
-  public static final String TEST_URI = "/websocket";
+  public static final String TEST_PATH = "/websocket";
   private static final WebSocketListener NOOP = new WebSocketAdapter();
   private static final WriteCallback ASYNC = new WriteCallback() {
     @Override
@@ -81,7 +81,7 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
   protected abstract void stopServer() throws Exception;
 
   protected String uri() {
-    return uri(TEST_URI);
+    return uri(TEST_PATH);
   }
 
   protected String uri(String path) {

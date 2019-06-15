@@ -51,7 +51,7 @@ public class JwaServerWebSocketTest extends ServerWebSocketTestBase {
     server.setHandler(handler);
     ServerContainer container = WebSocketServerContainerInitializer.configureContext(handler);
     ServerEndpointConfig config = ServerEndpointConfig.Builder.create(AsityServerEndpoint.class,
-      TEST_URI)
+      TEST_PATH)
     .configurator(new Configurator() {
       @Override
       public <T> T getEndpointInstance(Class<T> endpointClass) {

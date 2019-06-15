@@ -59,7 +59,7 @@ public class NettyServerHttpExchangeTest extends ServerHttpExchangeTestBase {
             .addLast(new AsityServerCodec() {
               @Override
               protected boolean accept(HttpRequest req) {
-                return URI.create(req.getUri()).getPath().equals(TEST_URI);
+                return URI.create(req.getUri()).getPath().equals(TEST_PATH);
               }
             }.onhttp(requestAction));
         }
