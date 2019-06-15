@@ -57,7 +57,7 @@ Action<ServerWebSocket> action = ws -> {
           <li><code>org.<strong>springframework.web.socket</strong>.WebSocketHandler handler = new AsityWebSocketHandler().onwebsocket(action);</code></li>
           <li><code>io.<strong>vertx</strong>.core.Handler&lt;io.vertx.core.http.ServerWebSocket&gt; handler = new AsityWebSocketHandler().onwebsocket(action);</code></li>
           <li><code>io.<strong>netty</strong>.channel.ChannelHandler handler = new AsityServerCodec().onwebsocket(action);</code></li>
-          <li><code>org.<strong>glassfish</strong>.grizzly.websockets.WebSocketApplication app = new AsityWebSocketApplication().onwebsocket(action);</code></li>
+          <li><code>org.glassfish.<strong>grizzly</strong>.websockets.WebSocketApplication app = new AsityWebSocketApplication().onwebsocket(action);</code></li>
         </ul>
         <dl>
           <dt>Latest announcement</dt>
