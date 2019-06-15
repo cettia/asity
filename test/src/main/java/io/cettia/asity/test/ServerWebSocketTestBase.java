@@ -40,7 +40,7 @@ import java.util.Arrays;
  */
 public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
 
-  protected static final String TEST_URI = "/test";
+  public static final String TEST_URI = "/websocket";
   private static final WebSocketListener NOOP = new WebSocketAdapter();
   private static final WriteCallback ASYNC = new WriteCallback() {
     @Override
@@ -95,10 +95,10 @@ public abstract class ServerWebSocketTestBase extends ConcurrentTestCase {
   @Test
   public void testURI() throws Throwable {
     websocketAction(ws -> {
-      threadAssertEquals(ws.uri(), "/test?hello=there");
+      threadAssertEquals(ws.uri(), "/websocket?hello=there");
       resume();
     });
-    client.connect(NOOP, URI.create(uri("/test?hello=there")));
+    client.connect(NOOP, URI.create(uri("/websocket?hello=there")));
     await();
   }
 

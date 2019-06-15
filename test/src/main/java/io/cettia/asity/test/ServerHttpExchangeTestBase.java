@@ -46,7 +46,7 @@ import java.util.concurrent.CountDownLatch;
  */
 public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
 
-  protected static final String TEST_URI = "/test";
+  public static final String TEST_URI = "/http";
   private static final CompleteListener ASYNC = new Response.Listener.Adapter();
 
   @Rule
@@ -92,10 +92,10 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
   @Test
   public void testURI() throws Throwable {
     requestAction(http -> {
-      threadAssertEquals(http.uri(), "/test?hello=there");
+      threadAssertEquals(http.uri(), "/http?hello=there");
       resume();
     });
-    client.newRequest(uri("/test?hello=there")).send(ASYNC);
+    client.newRequest(uri("/http?hello=there")).send(ASYNC);
     await();
   }
 

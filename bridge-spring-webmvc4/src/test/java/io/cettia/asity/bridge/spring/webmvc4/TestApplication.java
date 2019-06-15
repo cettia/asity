@@ -15,6 +15,8 @@
  */
 package io.cettia.asity.bridge.spring.webmvc4;
 
+import io.cettia.asity.test.ServerHttpExchangeTestBase;
+import io.cettia.asity.test.ServerWebSocketTestBase;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
@@ -45,8 +47,7 @@ public class TestApplication implements WebSocketConfigurer {
     AbstractHandlerMapping mapping = new AbstractHandlerMapping() {
       @Override
       protected Object getHandlerInternal(HttpServletRequest request) {
-        // Check whether a path equals '/test'
-        return "/test".equals(request.getRequestURI()) &&
+        return ServerHttpExchangeTestBase.TEST_URI.equals(request.getRequestURI()) &&
           // Delegates WebSocket handshake requests to a webSocketHandler bean
           !"websocket".equalsIgnoreCase(request.getHeader("upgrade")) ? asityController() : null;
       }
@@ -62,7 +63,7 @@ public class TestApplication implements WebSocketConfigurer {
 
   @Override
   public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-    registry.addHandler(webSocketHandler(), "/test");
+    registry.addHandler(webSocketHandler(), ServerWebSocketTestBase.TEST_URI);
   }
 
 }

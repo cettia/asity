@@ -15,6 +15,8 @@
  */
 package io.cettia.asity.bridge.spring.webflux5;
 
+import io.cettia.asity.test.ServerHttpExchangeTestBase;
+import io.cettia.asity.test.ServerWebSocketTestBase;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.HandlerMapping;
@@ -47,8 +49,9 @@ public class TestApplication {
   @Bean
   public RouterFunction<ServerResponse> httpMapping() {
     return RouterFunctions.route(
-      path("/test")
-        .and(headers(headers -> !"websocket".equalsIgnoreCase(headers.asHttpHeaders().getUpgrade()))), handlerFunction());
+      path(ServerHttpExchangeTestBase.TEST_URI)
+        .and(headers(headers -> !"websocket".equalsIgnoreCase(headers.asHttpHeaders().getUpgrade()))), handlerFunction()
+    );
   }
 
   @Bean
@@ -59,7 +62,7 @@ public class TestApplication {
   @Bean
   public HandlerMapping wsMapping() {
     Map<String, WebSocketHandler> map = new LinkedHashMap<>();
-    map.put("/test", webSocketHandler());
+    map.put(ServerWebSocketTestBase.TEST_URI, webSocketHandler());
 
     SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
     mapping.setUrlMap(map);
