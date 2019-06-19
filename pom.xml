@@ -77,9 +77,6 @@
     <system>GitHub</system>
     <url>https://github.com/cettia/asity/issues</url>
   </issueManagement>
-  <prerequisites>
-    <maven>3.0</maven>
-  </prerequisites>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
