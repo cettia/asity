@@ -32,13 +32,12 @@ import play.mvc.WebSocket;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-/**
- * @author Donghwan Kim
- */
 public class EchoController extends Controller {
 
+  // Web fragments
   private final Action<ServerHttpExchange> httpAction = new HttpEchoServer();
   private final Action<ServerWebSocket> wsAction = new WebSocketEchoServer();
+
   private final ActorSystem actorSystem;
   private final Materializer materializer;
 
