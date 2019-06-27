@@ -122,11 +122,12 @@ public interface ServerHttpExchange {
   ServerHttpExchange readAsBinary();
 
   /**
-   * Attaches an action to be called with a chunk from the request body. The
-   * allowed data type is {@link String} for text body and {@link ByteBuffer}
-   * for binary body.
+   * Attaches an action to be called with a chunk from the request body.
+   *
+   * @param <T> The allowed data type. {@link String} for text body and {@link ByteBuffer} for
+   *           binary body.
    */
-  ServerHttpExchange onchunk(Action<?> action);
+  <T> ServerHttpExchange onchunk(Action<T> action);
 
   /**
    * Attaches an action to be called when the request is fully read. It's the
@@ -135,13 +136,14 @@ public interface ServerHttpExchange {
   ServerHttpExchange onend(Action<Void> action);
 
   /**
-   * Attaches an action to be called with the whole request body. The allowed
-   * data type is {@link String} for text body and {@link ByteBuffer} for
-   * binary body. If the body is quite big, it may drain memory quickly. If
-   * that's the case, use {@link ServerHttpExchange#onchunk(Action)} and
-   * {@link ServerHttpExchange#onend(Action)}.
+   * Attaches an action to be called with the whole request body. If the body is quite big, it
+   * may drain memory quickly. If that's the case, use {@link ServerHttpExchange#onchunk(Action)}
+   * and {@link ServerHttpExchange#onend(Action)}.
+   *
+   * @param <T> The allowed data type. {@link String} for text body and {@link ByteBuffer} for
+   *           binary body.
    */
-  ServerHttpExchange onbody(Action<?> action);
+  <T> ServerHttpExchange onbody(Action<T> action);
 
   /**
    * Sets the HTTP status for the response.

@@ -128,7 +128,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
   public void testReadText() throws Throwable {
     requestAction(http -> {
       final StringBuilder body = new StringBuilder();
-      http.onchunk((Action<String>) body::append)
+      http.<String>onchunk(body::append)
       .onend($ -> {
         threadAssertEquals(body.toString(), "A Breath Clad In Happiness");
         resume();
@@ -145,7 +145,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
   public void testReadAsText() throws Throwable {
     requestAction(http -> {
       final StringBuilder body = new StringBuilder();
-      http.onchunk((Action<String>) body::append)
+      http.<String>onchunk(body::append)
       .onend($ -> {
         threadAssertEquals(body.toString(), "Day 7: Poem of the Ocean");
         resume();
@@ -162,7 +162,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
   public void testReadAsTextWithCharset() throws Throwable {
     requestAction(http -> {
       final StringBuilder body = new StringBuilder();
-      http.onchunk((Action<String>) body::append)
+      http.<String>onchunk(body::append)
       .onend($ -> {
         threadAssertEquals(body.toString(), "시간 속에 만들어진 무대 위에 그대는 없다");
         resume();
@@ -179,7 +179,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
   public void testReadBinary() throws Throwable {
     requestAction(http -> {
       final ByteArrayOutputStream body = new ByteArrayOutputStream();
-      http.onchunk((Action<ByteBuffer>) data -> {
+      http.<ByteBuffer>onchunk(data -> {
         byte[] bytes = new byte[data.remaining()];
         data.get(bytes);
         body.write(bytes, 0, bytes.length);
@@ -200,7 +200,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
   public void testReadAsBinary() throws Throwable {
     requestAction(http -> {
       final ByteArrayOutputStream body = new ByteArrayOutputStream();
-      http.onchunk((Action<ByteBuffer>) data -> {
+      http.<ByteBuffer>onchunk(data -> {
         byte[] bytes = new byte[data.remaining()];
         data.get(bytes);
         body.write(bytes, 0, bytes.length);
@@ -251,7 +251,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
 
   @Test
   public void testOnbodyWithText() throws Throwable {
-    requestAction(http -> http.onbody((Action<String>) data -> {
+    requestAction(http -> http.onbody(data -> {
       threadAssertEquals(data, "A Breath Clad In Happiness");
       resume();
     })
@@ -264,7 +264,7 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
 
   @Test
   public void testOnbodyWithBinary() throws Throwable {
-    requestAction(http -> http.onbody((Action<ByteBuffer>) data -> {
+    requestAction(http -> http.<ByteBuffer>onbody(data -> {
       threadAssertEquals(data, ByteBuffer.wrap(new byte[]{'h', 'i'}));
       resume();
     })
