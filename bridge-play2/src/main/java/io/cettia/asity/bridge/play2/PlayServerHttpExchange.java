@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -50,7 +51,7 @@ public class PlayServerHttpExchange extends AbstractServerHttpExchange {
   private final Http.Request request;
   private final CompletableFuture<Result> resultFuture = new CompletableFuture<>();
   private HttpStatus status = HttpStatus.OK;
-  private final Map<String, String> responseHeaders = new LinkedHashMap<>();
+  private final Map<String, String> responseHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
   private final Actions<ActorRef> actorActions = new SimpleActions<>(new Actions.Options().once(true).memory(true));
   private boolean flushed;
 
@@ -104,7 +105,8 @@ public class PlayServerHttpExchange extends AbstractServerHttpExchange {
       this.actorActions.fire(actor);
       return NotUsed.getInstance();
     });
-    Result result = new Result(status.code(), status.reason(), responseHeaders, HttpEntity.chunked(chunks, Optional.empty()));
+    Result result = new Result(status.code(), status.reason(), responseHeaders,
+      HttpEntity.chunked(chunks, Optional.ofNullable(responseHeaders.remove("content-type"))));
     resultFuture.complete(result);
   }
 

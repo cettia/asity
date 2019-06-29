@@ -19,6 +19,7 @@ import io.cettia.asity.action.Action;
 import io.cettia.asity.http.ServerHttpExchange;
 import io.cettia.asity.test.ServerHttpExchangeTestBase;
 import org.eclipse.jetty.client.api.Response;
+import org.eclipse.jetty.http.HttpFields;
 import org.junit.Ignore;
 import org.junit.Test;
 import play.Application;
@@ -56,6 +57,22 @@ public class PlayServerHttpExchangeTest extends ServerHttpExchangeTestBase {
       resume();
     });
     client.newRequest(uri()).send(new Response.Listener.Adapter());
+    await();
+  }
+
+  @Test
+  public void setContentTypeHeader() throws Throwable {
+    requestAction(http -> {
+      http.setHeader("content-type", "application/json").end();
+    });
+    client.newRequest(uri()).send(new Response.Listener.Adapter() {
+      @Override
+      public void onSuccess(Response res) {
+        HttpFields headers = res.getHeaders();
+        threadAssertEquals(headers.get("content-type"), "application/json");
+        resume();
+      }
+    });
     await();
   }
 
