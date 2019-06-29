@@ -7,3 +7,5 @@ libraryDependencies += "io.cettia.asity" % "asity-bridge-play2" % "3.0.0-Beta1"
 libraryDependencies += "io.cettia.asity" % "asity-example" % "3.0.0-Beta1"
 
 resolvers += Resolver.mavenLocal
+
+PlayKeys.devSettings := Seq("play.server.http.port" -> "8080")
