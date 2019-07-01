@@ -167,11 +167,11 @@ public abstract class ServerHttpExchangeTestBase extends ConcurrentTestCase {
         threadAssertEquals(body.toString(), "시간 속에 만들어진 무대 위에 그대는 없다");
         resume();
       })
-      .readAsText("utf-8");
+      .readAsText("euc-kr");
     });
     client.newRequest(uri()).method(HttpMethod.POST)
-    .content(new StringContentProvider("시간 속에 만들어진 무대 위에 그대는 없다", "utf-8"),
-      "text/plain; charset=euc-kr").send(ASYNC);
+    .content(new StringContentProvider("시간 속에 만들어진 무대 위에 그대는 없다", "euc-kr"),
+      "text/plain; charset=utf-8").send(ASYNC);
     await();
   }
 

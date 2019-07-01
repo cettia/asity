@@ -24,6 +24,7 @@ import io.cettia.asity.example.echo.HttpEchoServer;
 import io.cettia.asity.example.echo.WebSocketEchoServer;
 import io.cettia.asity.http.ServerHttpExchange;
 import io.cettia.asity.websocket.ServerWebSocket;
+import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -47,6 +48,7 @@ public class EchoController extends Controller {
     this.materializer = materializer;
   }
 
+  @BodyParser.Of(BodyParser.Raw.class)
   public CompletionStage<Result> http(Http.Request request) {
     AsityHttpAction action = new AsityHttpAction();
     action.onhttp(httpAction);

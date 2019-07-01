@@ -17,6 +17,7 @@ package io.cettia.asity.bridge.play2;
 
 import io.cettia.asity.action.Action;
 import io.cettia.asity.http.ServerHttpExchange;
+import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -32,6 +33,7 @@ public class HttpController extends Controller {
 
   private Action<ServerHttpExchange> action;
 
+  @BodyParser.Of(BodyParser.Raw.class)
   public CompletionStage<Result> http(Http.Request request) {
     AsityHttpAction httpAction = new AsityHttpAction();
     httpAction.onhttp(action);
