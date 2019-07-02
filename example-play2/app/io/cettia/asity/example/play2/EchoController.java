@@ -49,7 +49,8 @@ public class EchoController extends Controller {
   }
 
   @BodyParser.Of(BodyParser.Raw.class)
-  public CompletionStage<Result> http(Http.Request request) {
+  public CompletionStage<Result> http() {
+    Http.Request request = request();
     AsityHttpAction action = new AsityHttpAction();
     action.onhttp(httpAction);
 

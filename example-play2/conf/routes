@@ -4,13 +4,13 @@
 
 # Routes for the echo example
 GET     /echo             io.cettia.asity.example.play2.EchoController.websocket
-POST    /echo             io.cettia.asity.example.play2.EchoController.http(request: Request)
+POST    /echo             io.cettia.asity.example.play2.EchoController.http
 
 # Routes for the bridge test
 GET     /websocket        io.cettia.asity.bridge.play2.WebSocketController.websocket
-GET     /http             io.cettia.asity.bridge.play2.HttpController.http(request: Request)
-POST    /http             io.cettia.asity.bridge.play2.HttpController.http(request: Request)
-PUT     /http             io.cettia.asity.bridge.play2.HttpController.http(request: Request)
-DELETE  /http             io.cettia.asity.bridge.play2.HttpController.http(request: Request)
-HEAD    /http             io.cettia.asity.bridge.play2.HttpController.http(request: Request)
-OPTIONS /http             io.cettia.asity.bridge.play2.HttpController.http(request: Request)
+GET     /http             io.cettia.asity.bridge.play2.HttpController.http
+POST    /http             io.cettia.asity.bridge.play2.HttpController.http
+PUT     /http             io.cettia.asity.bridge.play2.HttpController.http
+DELETE  /http             io.cettia.asity.bridge.play2.HttpController.http
+HEAD    /http             io.cettia.asity.bridge.play2.HttpController.http
+OPTIONS /http             io.cettia.asity.bridge.play2.HttpController.http

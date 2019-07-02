@@ -34,7 +34,8 @@ public class HttpController extends Controller {
   private Action<ServerHttpExchange> action;
 
   @BodyParser.Of(BodyParser.Raw.class)
-  public CompletionStage<Result> http(Http.Request request) {
+  public CompletionStage<Result> http() {
+    Http.Request request = request();
     AsityHttpAction httpAction = new AsityHttpAction();
     httpAction.onhttp(action);
 

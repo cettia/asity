@@ -21,7 +21,6 @@ import io.cettia.asity.action.ConcurrentActions;
 import io.cettia.asity.http.ServerHttpExchange;
 import play.mvc.Http;
 import play.mvc.Result;
-import play.routing.RequestFunctions;
 
 import java.util.concurrent.CompletionStage;
 
@@ -39,11 +38,13 @@ import java.util.concurrent.CompletionStage;
  *
  * @author Donghwan Kim
  */
-public class AsityHttpAction implements RequestFunctions.Params0<CompletionStage<Result>> {
+public class AsityHttpAction {
 
   private Actions<ServerHttpExchange> httpActions = new ConcurrentActions<>();
 
-  @Override
+  /**
+   * Handles the given request.
+   */
   public CompletionStage<Result> apply(Http.Request request) {
     PlayServerHttpExchange http = new PlayServerHttpExchange(request);
     httpActions.fire(http);
