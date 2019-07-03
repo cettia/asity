@@ -16,6 +16,7 @@ language: java
 jdk:
   - openjdk8
   - openjdk9
+  - openjdk10
 
 install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip
 script: mvn test -B -Dgpg.skip
