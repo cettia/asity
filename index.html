@@ -727,6 +727,7 @@ POST    /echo             io.cettia.asity.example.play2.EchoController.http(requ
             <p>Now you can handle POST HTTP requests and WebSocket connections from <code>/echo</code> asynchronously through a <code>AsityHttpAction</code>'s <code>onhttp</code> and a <code>AsityWebSocket</code>'s <code>onwebsocket</code> methods. Add more routes to handle requests using other HTTP methods with <code>AsityHttpAction</code>.</p>
             <h4>Quirks</h4>
             <ul>
+              <li>It requires Play Framework 2.6 and above.</li>
               <li><code>ServerHttpExchange</code>'s onclose isn't supported.</li>
               <li>Play Framework doesn't support to read request body by chunk asynchronously.</li>
             </ul>
