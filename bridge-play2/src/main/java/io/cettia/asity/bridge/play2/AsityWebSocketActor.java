@@ -17,13 +17,9 @@ package io.cettia.asity.bridge.play2;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
-import akka.actor.PoisonPill;
-import akka.util.ByteString;
 import io.cettia.asity.action.Actions;
 import io.cettia.asity.websocket.ServerWebSocket;
 import play.http.websocket.Message;
-
-import java.nio.ByteBuffer;
 
 /**
  * An actor to handle a WebSocket connection.
