@@ -19,7 +19,7 @@
   <parent>
     <groupId>io.cettia.asity</groupId>
     <artifactId>asity-parent</artifactId>
-    <version>3.0.0</version>
+    <version>4.0.0-Beta1-SNAPSHOT</version>
   </parent>
   <artifactId>asity-example-spring-webflux5</artifactId>
   <name>Asity/Example/Spring WebFlux 5</name>
