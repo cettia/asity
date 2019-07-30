@@ -69,7 +69,7 @@ ws.ontext(ws::send).onbinary(ws::send);
       <div class="cell auto">
         <dl>
           <dt>Latest announcement</dt>
-          <dd><a href="https://cettia.io/blog/asity-3-0-0-beta1-released/"><strong>Asity 3.0.0-Beta1 released</strong></a> on
+          <dd><a href="https://cettia.io/blog/asity-3-0-0-released/"><strong>Asity 3.0.0 released</strong></a> on
             <time>25 Jun 2019</time>
           </dd>
         </dl>
@@ -77,13 +77,13 @@ ws.ontext(ws::send).onbinary(ws::send);
       <div class="cell shrink">
         <dl>
           <dt>Pre</dt>
-          <dd><code>3.0.0-Beta1</code></dd>
+          <dd><code>WIP</code></dd>
         </dl>
       </div>
       <div class="cell shrink">
         <dl>
           <dt>Current</dt>
-          <dd><code>2.0.0</code></dd>
+          <dd><code>3.0.0</code></dd>
         </dl>
       </div>
     </div>
@@ -97,13 +97,13 @@ ws.ontext(ws::send).onbinary(ws::send);
         <p>At the code level, a web fragment is a set of <code>Action</code>s to handle <code>ServerHttpExchange</code> or <code>ServerWebSocket</code>, which represents HTTP request-response exchange and WebSocket connection, respectively. These APIs are asynchronous and designed to conform the relevant RFC specifications, i.e. RFC2616 and RFC6455, from a pragmatic perspective.</p>
         <p>Let's take a look at the APIs by building an echo fragment which simply respond to the client with whatever data the client sent. The data to exchange between server and client is a chunk of the Chunked transfer encoding in case of HTTP, and a text frame and a binary frame in case of WebSocket. Before getting started, be sure that you have Java 8+ installed.</p>
         <h3 id="http">HTTP</h3>
-        <p>Add a <code>io.cettia.asity:asity-http:2.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-http/" target="_blank">Javadoc</a>) as a dependency of your web fragment.</p>
+        <p>Add a <code>io.cettia.asity:asity-http:3.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-http/" target="_blank">Javadoc</a>) as a dependency of your web fragment.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-http</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -143,13 +143,13 @@ public class HttpEchoServer implements Action<ServerHttpExchange> {
 ```
 {% endcapture %}{{ panel | markdownify }}
         <h3 id="websocket">WebSocket</h3>
-        <p>Add a <code>io.cettia.asity:asity-websocket:2.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-websocket/" target="_blank">Javadoc</a>) as a dependency of your web fragment.</p>
+        <p>Add a <code>io.cettia.asity:asity-websocket:3.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-websocket/" target="_blank">Javadoc</a>) as a dependency of your web fragment.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-websocket</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -197,7 +197,7 @@ public class WebSocketEchoServer implements Action<ServerWebSocket> {
           <li class="tabs-title"><a href="#spring-mvc-4">Spring MVC 4</a></li>
           <li class="tabs-title"><a href="#vert-x-3">Vert.x 3</a></li>
           <li class="tabs-title"><a href="#netty-4">Netty 4</a></li>
-          <li class="tabs-title"><a href="#play-2">Play Framework 2 (Beta)</a></li>
+          <li class="tabs-title"><a href="#play-2">Play Framework 2</a></li>
           <li class="tabs-title"><a href="#grizzly-2">Grizzly 2</a></li>
           <li class="tabs-title"><a href="#vert-x-2">Vert.x 2</a></li>
           <li class="tabs-title"><a href="#atmosphere-2">Atmosphere 2</a></li>
@@ -205,13 +205,13 @@ public class WebSocketEchoServer implements Action<ServerWebSocket> {
         <div class="tabs-content" data-tabs-content="example-tabs">
           <div class="tabs-panel is-active" id="java-api-for-websocket-1">
             <h3>Java API for WebSocket 1</h3>
-            <p>Add a <code>io.cettia.asity:asity-bridge-jwa1:2.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-jwa1/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            <p>Add a <code>io.cettia.asity:asity-bridge-jwa1:3.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-jwa1/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-jwa1</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -274,13 +274,13 @@ public class EchoServerInitializer implements ServletContextListener {
           </div>
           <div class="tabs-panel" id="servlet-3">
             <h3>Servlet 3</h3>
-            <p>Add <code>io.cettia.asity:asity-bridge-servlet3:2.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-servlet3/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            <p>Add <code>io.cettia.asity:asity-bridge-servlet3:3.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-servlet3/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-servlet3</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -333,13 +333,13 @@ public class EchoServerInitializer implements ServletContextListener {
           </div>
           <div class="tabs-panel" id="spring-webflux-5">
             <h3>Spring WebFlux 5</h3>
-            <p>Add a <code>io.cettia.asity:asity-bridge-spring-webflux5:2.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-spring-webflux5/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            <p>Add a <code>io.cettia.asity:asity-bridge-spring-webflux5:3.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-spring-webflux5/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-spring-webflux5</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -432,13 +432,13 @@ public class EchoServer {
           </div>
           <div class="tabs-panel" id="spring-mvc-4">
             <h3>Spring MVC 4</h3>
-            <p>Add a <code>io.cettia.asity:asity-bridge-spring-webmvc4:2.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-spring-webmvc4/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            <p>Add a <code>io.cettia.asity:asity-bridge-spring-webmvc4:3.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-spring-webmvc4/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-spring-webmvc4</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -521,13 +521,13 @@ public class EchoServer implements WebSocketConfigurer {
           </div>
           <div class="tabs-panel" id="vert-x-3">
             <h3>Vert.x 3</h3>
-            <p>Add a <code>io.cettia.asity:asity-bridge-vertx3:2.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-vertx3/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            <p>Add a <code>io.cettia.asity:asity-bridge-vertx3:3.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-vertx3/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-vertx3</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -579,13 +579,13 @@ public class EchoServerVerticle extends AbstractVerticle {
           </div>
           <div class="tabs-panel" id="netty-4">
             <h3>Netty 4</h3>
-            <p>Add a <code>io.cettia.asity:asity-bridge-netty4:2.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-netty4/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            <p>Add a <code>io.cettia.asity:asity-bridge-netty4:3.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-netty4/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-netty4</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -657,11 +657,11 @@ public class EchoServer {
             <p>A full example is available at <a class="example-link" target="_blank" href="https://github.com/cettia/asity/tree/master/example-netty4">https://github.com/cettia/asity/tree/master/example-netty4</a>.</p>
           </div>
           <div class="tabs-panel" id="play-2">
-            <h3>Play Framework 2 (Beta)</h3>
-            <p>Add a <code>io.cettia.asity:asity-bridge-play2:3.0.0-Beta1</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-play2/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            <h3>Play Framework 2</h3>
+            <p>Add a <code>io.cettia.asity:asity-bridge-play2:3.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-play2/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```scala
-libraryDependencies += "io.cettia.asity" % "asity-bridge-play2" % "3.0.0-Beta1"
+libraryDependencies += "io.cettia.asity" % "asity-bridge-play2" % "3.0.0"
 ```
 {% endcapture %}{{ panel | markdownify }}
             <p>Then write an action that returns <code>AsityHttpAction</code>'s <code>CompletionStage&lt;Result&gt;</code> as a HTTP request handler and an action that returns <code>AsityWebSocket</code> as a WebSocket handler, and add them to the routes file.</p>
@@ -679,6 +679,7 @@ import io.cettia.asity.example.echo.HttpEchoServer;
 import io.cettia.asity.example.echo.WebSocketEchoServer;
 import io.cettia.asity.http.ServerHttpExchange;
 import io.cettia.asity.websocket.ServerWebSocket;
+import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -702,6 +703,7 @@ public class EchoController extends Controller {
     this.materializer = materializer;
   }
 
+  @BodyParser.Of(BodyParser.Raw.class)
   public CompletionStage<Result> http(Http.Request request) {
     AsityHttpAction action = new AsityHttpAction();
     action.onhttp(httpAction);
@@ -736,13 +738,13 @@ POST    /echo             io.cettia.asity.example.play2.EchoController.http(requ
           </div>
           <div class="tabs-panel" id="grizzly-2">
             <h3>Grizzly 2</h3>
-            <p>Add a <code>io.cettia.asity:asity-bridge-grizzly2:2.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-grizzly2/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            <p>Add a <code>io.cettia.asity:asity-bridge-grizzly2:3.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-grizzly2/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-grizzly2</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -795,13 +797,13 @@ public class EchoServer {
           </div>
           <div class="tabs-panel" id="vert-x-2">
             <h3>Vert.x 2</h3>
-            <p>Add a <code>io.cettia.asity:asity-bridge-vertx2:2.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-vertx2/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            <p>Add a <code>io.cettia.asity:asity-bridge-vertx2:3.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-vertx2/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-vertx2</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
@@ -852,13 +854,13 @@ public class EchoServerVerticle extends Verticle {
           </div>
           <div class="tabs-panel" id="atmosphere-2">
             <h3>Atmosphere 2</h3>
-            <p>Add a <code>io.cettia.asity:asity-bridge-atmosphere2:2.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-atmosphere2/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
+            <p>Add a <code>io.cettia.asity:asity-bridge-atmosphere2:3.0.0</code> (<a href="http://javadoc.io/doc/io.cettia.asity/asity-bridge-atmosphere2/" target="_blank">Javadoc</a>) as a dependency of your application.</p>
 {% capture panel %}
 ```xml
 <dependency>
   <groupId>io.cettia.asity</groupId>
   <artifactId>asity-bridge-atmosphere2</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 {% endcapture %}{{ panel | markdownify }}
